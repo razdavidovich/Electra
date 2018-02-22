@@ -16,7 +16,7 @@ namespace Electra_MAC_Printing
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new frmAppWizard());
         }
     }
 }
