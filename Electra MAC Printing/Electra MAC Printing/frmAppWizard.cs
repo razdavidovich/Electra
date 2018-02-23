@@ -44,7 +44,7 @@ namespace Electra_MAC_Printing
         private void frmAppWizard_Load(object sender, EventArgs e)
         {
             utcAppWizard.Tabs[clsVariables.strFrmAppWizardActiveTabKey].Selected = true;
-            utcAppWizard.Tabs["login"].Selected = true;
+            //utcAppWizard.Tabs["login"].Selected = true;
             formPageControlsResize();
             HideShowToolBar(0);
             txtEmpNo.Focus();
@@ -115,7 +115,7 @@ namespace Electra_MAC_Printing
         /****************************************************************************************************
          * NAME         : clearTools                                                                        *
          * DESCRIPTION  : Click Event call from Login Button control                                        *
-         * WRITTEN BY   : RajaSekar J                                                                      *
+         * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 14Feb18                                                                           *
          ****************************************************************************************************/
         private void btnLogin_Click(object sender, EventArgs e)
@@ -359,6 +359,58 @@ namespace Electra_MAC_Printing
                 btnLogin.PerformClick();
 
             }
+        }
+        #endregion
+
+        #region uToolBarManagerControl_ToolClick
+        /****************************************************************************************************
+         * NAME         : uToolBarManagerControl_ToolClick                                                *
+         * DESCRIPTION  : Click Event call from uToolbarsManagerControl control                             *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 14Feb18                                                                          
+         ****************************************************************************************************/
+        private void uToolBarManagerControl_ToolClick(object sender, Infragistics.Win.UltraWinToolbars.ToolClickEventArgs e)
+        {
+            string keyTool = e.Tool.Key;
+
+            switch (keyTool)
+            {
+
+                case "logoff":
+                    utcAppWizard.Tabs["login"].Selected = true;
+                    //clearControls();
+                   // ClearNewBatchControls();
+                    clsVariables.variableClearSetDefaultValues();
+                    break;
+
+                case "endbatch":
+                    utcAppWizard.Tabs["newbatch"].Selected = true;
+                    //ClearNewBatchControls();
+                    break;
+
+                case "newbatch":
+                    utcAppWizard.Tabs["newbatch"].Selected = true;
+                    //ClearNewBatchControls();
+                    break;
+
+                case "settings":
+                    this.Hide();
+                    Application.DoEvents();
+                    frmSettings frmSettings = new frmSettings();
+                    frmSettings.ShowDialog();
+                    this.Show();
+                    break;
+
+                case "logbook":
+                    utcAppWizard.Tabs["logbook"].Selected = true;
+                    DTP_LogBookFromDate.Value = DateTime.Now;
+                    DTP_LogBookToDate.Value = DateTime.Now;
+                    uGrid_LogBookDetails.DataSource = new DataTable();
+                    HideShowToolBar(1);
+                    break;
+            }
+
+            clsVariables.strFrmAppWizardActiveTabKey = utcAppWizard.ActiveTab.Key.ToString();
         }
         #endregion
     }
