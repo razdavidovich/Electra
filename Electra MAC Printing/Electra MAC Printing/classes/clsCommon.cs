@@ -19,7 +19,7 @@ namespace Electra_MAC_Printing.classes
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 08Feb18                                                                      *
          ****************************************************************************************************/
-        public static string ReadSingleConfigValue(string strItemName, string strConfigSection, string strConfigGroup, bool blnWinConfig = true)
+        public static string ReadSingleConfigValue(string strItemName, string strConfigSection, string strConfigGroup)
         {
             return Config.get_ReadConfigValue(strItemName, strConfigSection, strConfigGroup);
         }

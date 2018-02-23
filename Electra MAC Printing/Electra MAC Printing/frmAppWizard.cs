@@ -26,6 +26,7 @@ namespace Electra_MAC_Printing
         public frmAppWizard()
         {
             InitializeComponent();
+           
             /*Settings For Log File path for Debug the Errors.*/
             clsApplicationLogFile.LogFilePath = clsCommon.ReadSingleConfigValue("LogFilePath", "LogSettings", "Settings");
             clsApplicationLogFile.LogFileName = clsCommon.ReadSingleConfigValue("LogFileName", "LogSettings", "Settings");

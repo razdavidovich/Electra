@@ -103,8 +103,8 @@ namespace Electra_MAC_Printing.classes
             panelRightNewBatch.Height = panelMainNewBatchHeight;
             panelRightNewBatch.Left = newBatchPanelLeft;
          
-           // panelReprintbutton.Width = newBatchPanelWidth;
-            //panelReprintbutton.Height = panelMainNewBatchHeight;
+            panelReprintbutton.Width = newBatchPanelWidth;
+            panelReprintbutton.Height = panelMainNewBatchHeight;
 
 
         }
