@@ -64,7 +64,7 @@ namespace Electra_MAC_Printing.classes.DAL
             try
             {
                 DataSet ds = new DataSet();
-                using (DbCommand dbCommand = db.GetStoredProcCommand("MarkingLogBook_Sp"))
+                using (DbCommand dbCommand = db.GetStoredProcCommand("PrintingLogBook_Sp"))
                 {
                     db.AddInParameter(dbCommand, "Operation", DbType.Int32, intOperation);
                     db.AddInParameter(dbCommand, "datFromDate", DbType.DateTime, dtFromDate);
@@ -98,19 +98,14 @@ namespace Electra_MAC_Printing.classes.DAL
             try
             {
 
-                using (DbCommand dbCommand = db.GetStoredProcCommand("MarkingLogBook_Sp"))
+                using (DbCommand dbCommand = db.GetStoredProcCommand("PrintingLogBook_Sp"))
                 {
                     db.AddInParameter(dbCommand, "Operation", DbType.Int32, intOperation);
-                    db.AddInParameter(dbCommand, "datMarkingDate", DbType.DateTime, MarkingDate);
+                    db.AddInParameter(dbCommand, "datPrintingDate", DbType.DateTime, MarkingDate);
                     db.AddInParameter(dbCommand, "vchMachine", DbType.String, vchMachine);
-                    db.AddInParameter(dbCommand, "intUserID", DbType.Int32, intUserId);
-                    db.AddInParameter(dbCommand, "intPartNumber", DbType.Int32, intPartNumber);
-                    db.AddInParameter(dbCommand, "vchVLMName", DbType.String, vchVLMName);
-                    db.AddInParameter(dbCommand, "vchParameter1", DbType.String, vchParameter1);
-                    db.AddInParameter(dbCommand, "vchParameter2", DbType.String, vchParameter2);
-                    db.AddInParameter(dbCommand, "vchParameter3", DbType.String, vchParameter3);
-                    db.AddInParameter(dbCommand, "vchParameter4", DbType.String, vchParameter4);
-                    db.AddInParameter(dbCommand, "intMachineStatus", DbType.Int32, intMachineStatus);
+                    db.AddInParameter(dbCommand, "intUserID", DbType.Int32, intUserId);                  
+                    db.AddInParameter(dbCommand, "vchSerialNumber", DbType.String, vchVLMName);
+                    db.AddInParameter(dbCommand, "vchMACAddress", DbType.String, vchParameter1);                   
                     db.ExecuteNonQuery(dbCommand);
                 }
 
