@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAppWizard));
             Infragistics.Win.Appearance appearance1 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance2 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinTabControl.UltraTab ultraTab1 = new Infragistics.Win.UltraWinTabControl.UltraTab();
@@ -66,8 +67,8 @@
             this.panelRightNewBatch = new System.Windows.Forms.Panel();
             this.uPictureBox_NewBatch = new Infragistics.Win.UltraWinEditors.UltraPictureBox();
             this.panelLeftNewBatch = new System.Windows.Forms.Panel();
-            this.lblUnitMacAddress = new System.Windows.Forms.Label();
             this.BtnRePrint = new System.Windows.Forms.Button();
+            this.lblUnitMacAddress = new System.Windows.Forms.Label();
             this.lblUnitSerialNumber = new System.Windows.Forms.Label();
             this.txtunitMacAddress = new System.Windows.Forms.TextBox();
             this.txtUnitSerialNumber = new System.Windows.Forms.TextBox();
@@ -96,7 +97,6 @@
             this._panelFormHeader_Toolbars_Dock_Area_Right = new Infragistics.Win.UltraWinToolbars.UltraToolbarsDockArea();
             this._panelFormHeader_Toolbars_Dock_Area_Bottom = new Infragistics.Win.UltraWinToolbars.UltraToolbarsDockArea();
             this._panelFormHeader_Toolbars_Dock_Area_Top = new Infragistics.Win.UltraWinToolbars.UltraToolbarsDockArea();
-            this.panelReprintbutton = new System.Windows.Forms.Panel();
             this.ultraTabPageControl1.SuspendLayout();
             this.pnlLoginMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictLoginLogo)).BeginInit();
@@ -234,7 +234,7 @@
             // ultraTabPageControl2
             // 
             this.ultraTabPageControl2.Controls.Add(this.panelMainNewBatch);
-            this.ultraTabPageControl2.Location = new System.Drawing.Point(0, 0);
+            this.ultraTabPageControl2.Location = new System.Drawing.Point(-10000, -10000);
             this.ultraTabPageControl2.Name = "ultraTabPageControl2";
             this.ultraTabPageControl2.Size = new System.Drawing.Size(1004, 535);
             // 
@@ -250,7 +250,6 @@
             // 
             // panelRightNewBatch
             // 
-            this.panelRightNewBatch.Controls.Add(this.panelReprintbutton);
             this.panelRightNewBatch.Controls.Add(this.uPictureBox_NewBatch);
             this.panelRightNewBatch.Location = new System.Drawing.Point(523, 18);
             this.panelRightNewBatch.Name = "panelRightNewBatch";
@@ -264,9 +263,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.uPictureBox_NewBatch.BackColor = System.Drawing.Color.Gray;
             this.uPictureBox_NewBatch.BorderShadowColor = System.Drawing.Color.Empty;
-            this.uPictureBox_NewBatch.Location = new System.Drawing.Point(17, 12);
+            this.uPictureBox_NewBatch.Image = ((object)(resources.GetObject("uPictureBox_NewBatch.Image")));
+            this.uPictureBox_NewBatch.Location = new System.Drawing.Point(17, 3);
             this.uPictureBox_NewBatch.Name = "uPictureBox_NewBatch";
-            this.uPictureBox_NewBatch.Size = new System.Drawing.Size(436, 474);
+            this.uPictureBox_NewBatch.Size = new System.Drawing.Size(436, 483);
             this.uPictureBox_NewBatch.TabIndex = 1;
             // 
             // panelLeftNewBatch
@@ -281,16 +281,6 @@
             this.panelLeftNewBatch.Size = new System.Drawing.Size(485, 501);
             this.panelLeftNewBatch.TabIndex = 0;
             // 
-            // lblUnitMacAddress
-            // 
-            this.lblUnitMacAddress.AutoSize = true;
-            this.lblUnitMacAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUnitMacAddress.Location = new System.Drawing.Point(159, 141);
-            this.lblUnitMacAddress.Name = "lblUnitMacAddress";
-            this.lblUnitMacAddress.Size = new System.Drawing.Size(188, 25);
-            this.lblUnitMacAddress.TabIndex = 12;
-            this.lblUnitMacAddress.Text = "Unit MAC Address";
-            // 
             // BtnRePrint
             // 
             this.BtnRePrint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -304,6 +294,16 @@
             this.BtnRePrint.TabIndex = 17;
             this.BtnRePrint.Text = "Re-Print QR Label";
             this.BtnRePrint.UseVisualStyleBackColor = false;
+            // 
+            // lblUnitMacAddress
+            // 
+            this.lblUnitMacAddress.AutoSize = true;
+            this.lblUnitMacAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUnitMacAddress.Location = new System.Drawing.Point(159, 141);
+            this.lblUnitMacAddress.Name = "lblUnitMacAddress";
+            this.lblUnitMacAddress.Size = new System.Drawing.Size(188, 25);
+            this.lblUnitMacAddress.TabIndex = 12;
+            this.lblUnitMacAddress.Text = "Unit MAC Address";
             // 
             // lblUnitSerialNumber
             // 
@@ -345,7 +345,7 @@
             // 
             this.ultraTabPageControl5.Controls.Add(this.panelLogBookGridDetails);
             this.ultraTabPageControl5.Controls.Add(this.panelLogBookFilter);
-            this.ultraTabPageControl5.Location = new System.Drawing.Point(-10000, -10000);
+            this.ultraTabPageControl5.Location = new System.Drawing.Point(0, 0);
             this.ultraTabPageControl5.Name = "ultraTabPageControl5";
             this.ultraTabPageControl5.Size = new System.Drawing.Size(1004, 535);
             // 
@@ -372,10 +372,12 @@
             this.uGrid_LogBookDetails.DisplayLayout.Override.NoRowsInDataSourceMessageAppearance = appearance1;
             this.uGrid_LogBookDetails.DisplayLayout.Override.NoRowsInDataSourceMessageEnabled = Infragistics.Win.DefaultableBoolean.True;
             this.uGrid_LogBookDetails.DisplayLayout.Override.NoRowsInDataSourceMessageText = "Details Not Found for the date\'s";
+            this.uGrid_LogBookDetails.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uGrid_LogBookDetails.Location = new System.Drawing.Point(12, 7);
             this.uGrid_LogBookDetails.Name = "uGrid_LogBookDetails";
             this.uGrid_LogBookDetails.Size = new System.Drawing.Size(984, 450);
             this.uGrid_LogBookDetails.TabIndex = 1;
+            this.uGrid_LogBookDetails.InitializeLayout += new Infragistics.Win.UltraWinGrid.InitializeLayoutEventHandler(this.uGrid_LogBookDetails_InitializeLayout);
             // 
             // panelLogBookFilter
             // 
@@ -409,6 +411,7 @@
             this.uBTN_LogBook_Excel.Size = new System.Drawing.Size(221, 45);
             this.uBTN_LogBook_Excel.TabIndex = 6;
             this.uBTN_LogBook_Excel.Text = "Export to Excel";
+            this.uBTN_LogBook_Excel.Click += new System.EventHandler(this.uBTN_LogBook_Excel_Click);
             // 
             // panelLogBookFilter_Filter
             // 
@@ -431,6 +434,7 @@
             this.uBTN_LogBook_Filter.Size = new System.Drawing.Size(221, 45);
             this.uBTN_LogBook_Filter.TabIndex = 5;
             this.uBTN_LogBook_Filter.Text = "Filter";
+            this.uBTN_LogBook_Filter.Click += new System.EventHandler(this.uBTN_LogBook_Filter_Click);
             // 
             // panelLogBookFilter_To
             // 
@@ -673,14 +677,6 @@
             this._panelFormHeader_Toolbars_Dock_Area_Top.Size = new System.Drawing.Size(1002, 43);
             this._panelFormHeader_Toolbars_Dock_Area_Top.ToolbarsManager = this.uToolBarManagerControl;
             // 
-            // panelReprintbutton
-            // 
-            this.panelReprintbutton.Location = new System.Drawing.Point(48, 332);
-            this.panelReprintbutton.Name = "panelReprintbutton";
-            this.panelReprintbutton.Size = new System.Drawing.Size(496, 77);
-            this.panelReprintbutton.TabIndex = 18;
-            this.panelReprintbutton.Visible = false;
-            // 
             // frmAppWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -769,7 +765,6 @@
         private System.Windows.Forms.TextBox txtunitMacAddress;
         private System.Windows.Forms.TextBox txtUnitSerialNumber;
         private System.Windows.Forms.Button BtnRePrint;
-        private System.Windows.Forms.Panel panelReprintbutton;
     }
 }
 

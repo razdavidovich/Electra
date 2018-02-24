@@ -85,7 +85,7 @@ namespace Electra_MAC_Printing.classes
          * WRITTEN BY   : RajaSekar                                                                         *
          * DATE         : 14Feb18                                                                           *
          ****************************************************************************************************/
-        public void newBatchFormResize(Panel panelMainNewBatch, Panel panelLeftNewBatch, Panel panelRightNewBatch, Panel panelReprintbutton)
+        public void newBatchFormResize(Panel panelMainNewBatch, Panel panelLeftNewBatch, Panel panelRightNewBatch)
         {
             int panelMainNewBatchWidth = panelMainNewBatch.Width; /*Get the panelNewBatchBody Width when page is Resize. */
             //int panelMainNewBatchHeight = panelMainNewBatch.Height;
@@ -103,8 +103,8 @@ namespace Electra_MAC_Printing.classes
             panelRightNewBatch.Height = panelMainNewBatchHeight;
             panelRightNewBatch.Left = newBatchPanelLeft;
          
-            panelReprintbutton.Width = newBatchPanelWidth;
-            panelReprintbutton.Height = panelMainNewBatchHeight;
+            //panelReprintbutton.Width = newBatchPanelWidth;
+            //panelReprintbutton.Height = panelMainNewBatchHeight;
 
 
         }

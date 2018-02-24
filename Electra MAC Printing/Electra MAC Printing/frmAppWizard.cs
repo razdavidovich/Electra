@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using IWIN = Infragistics.Win;
+using IWUG = Infragistics.Win.UltraWinGrid;
 
 namespace Electra_MAC_Printing
 {
@@ -97,7 +99,7 @@ namespace Electra_MAC_Printing
                     clsAppWizardAlign.LoginFormResize(pnlLoginMain, pnlLogin, lblFormHead, PictLoginLogo);
                     break;
                 case "newbatch":
-                    clsAppWizardAlign.newBatchFormResize(panelMainNewBatch, panelLeftNewBatch, panelRightNewBatch, panelReprintbutton);
+                    clsAppWizardAlign.newBatchFormResize(panelMainNewBatch, panelLeftNewBatch, panelRightNewBatch);
                     break;
                 case "startbatch":
                    // clsAppWizardAlign.panelStartBatchLabelResize(panelStartBatch, lblBarCode, lblStartMarking, txtBarCode, lblStartBatchErroMessage, panelStartBatchHeader);
@@ -379,7 +381,7 @@ namespace Electra_MAC_Printing
 
                 case "logoff":
                     utcAppWizard.Tabs["login"].Selected = true;
-                    //clearControls();
+                    clearControls();
                    // ClearNewBatchControls();
                     clsVariables.variableClearSetDefaultValues();
                     break;
@@ -412,6 +414,140 @@ namespace Electra_MAC_Printing
             }
 
             clsVariables.strFrmAppWizardActiveTabKey = utcAppWizard.ActiveTab.Key.ToString();
+        }
+        #endregion
+
+        #region clearTools
+        /****************************************************************************************************
+         * NAME         : clearTools                                                                        *
+         * DESCRIPTION  : Clear all the Label and Textbox                                                   *
+         * WRITTEN BY   : RajaSekar J                                                                      *
+         * DATE         : 14Feb18                                                                           *
+         ****************************************************************************************************/
+        private void clearControls()
+        {
+            panelFormHeader.Visible = false;
+            txtEmpNo.Focus();
+            txtEmpNo.Text = "";
+            lblErrorMesaage.Visible = false;
+        }
+        #endregion
+
+        #region uGrid_LogBookDetails_InitializeLayout
+        /****************************************************************************************************
+         * NAME         : uGrid_LogBookDetails_InitializeLayout                                             *
+         * DESCRIPTION  : Initialize Layout Event call from uGrid_LogBookDetails control.                   *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 19Febr2018                                                                         *
+         ****************************************************************************************************/
+        private void uGrid_LogBookDetails_InitializeLayout(object sender, Infragistics.Win.UltraWinGrid.InitializeLayoutEventArgs e)
+        {
+            uGrid_LogBookDetails.DisplayLayout.Override.RowSelectors = IWIN.DefaultableBoolean.False;
+
+            foreach (IWUG.UltraGridColumn col in uGrid_LogBookDetails.DisplayLayout.Bands[0].Columns)
+            {
+                // Here we "turn off" theming for the column header.
+                col.Header.Appearance.ThemedElementAlpha = Infragistics.Win.Alpha.Transparent;
+                col.Header.Appearance.BackColor = Color.LightGray;
+                col.Header.Appearance.ForeColor = Color.Black;
+                col.Header.Appearance.FontData.Bold = Infragistics.Win.DefaultableBoolean.True;
+
+                string strColumnName = col.ToString();
+                if ("datMarkingDate" == strColumnName)
+                {
+                    col.Format = "dd-MM-yyyy hh:mm:ss tt";
+                }
+
+                col.Header.Caption = clsCommon.ReadSingleConfigValue(strColumnName, "uGrid_LogBookDetails_HeaderCaption", "Settings");
+
+            }
+
+            if ("0" == clsCommon.ReadSingleConfigValue("Default", "LanguageDirection", "LanguageSupport"))
+            {
+                uGrid_LogBookDetails.DisplayLayout.Bands[0].Override.HeaderAppearance.TextHAlign = Infragistics.Win.HAlign.Left;
+                uGrid_LogBookDetails.DisplayLayout.Bands[0].Override.CellAppearance.TextHAlign = Infragistics.Win.HAlign.Left;
+            }
+            else
+            {
+                uGrid_LogBookDetails.DisplayLayout.Bands[0].Override.HeaderAppearance.TextHAlign = Infragistics.Win.HAlign.Right;
+                uGrid_LogBookDetails.DisplayLayout.Bands[0].Override.CellAppearance.TextHAlign = Infragistics.Win.HAlign.Right;
+            }
+        }
+        #endregion
+
+        #region uBTN_LogBook_Filter_Click
+        /****************************************************************************************************
+         * NAME         : uBTN_LogBook_Filter_Click                                                         *
+         * DESCRIPTION  : Click Event call from uBTN_LogBook_Filter_Click control.                          *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 19Febr2018                                                                         *
+         ****************************************************************************************************/
+        private void uBTN_LogBook_Filter_Click(object sender, EventArgs e)
+        {
+            DateTime dtFromDate = DateTime.Parse(DTP_LogBookFromDate.Value.ToString());
+            DateTime dtToDate = Convert.ToDateTime(DTP_LogBookToDate.Value.ToString());
+
+            uGrid_LogBookDetails.DataSource = clsappWizardBAL.getEletraLogBookDetails(4, dtFromDate, dtToDate);
+            uGrid_LogBookDetails.DataBind();
+        }
+        #endregion
+
+        #region uBTN_LogBook_Excel_Click
+        /****************************************************************************************************
+         * NAME         : uBTN_LogBook_Excel_Click                                                          *
+         * DESCRIPTION  : Export Grid Data to Excel .                                                       *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 19Febr2018                                                                         *
+         ****************************************************************************************************/
+        private void uBTN_LogBook_Excel_Click(object sender, EventArgs e)
+        {
+            string[] FolderPath = clsCommon.FileFolderOpenFileDialog();
+
+            try
+            {
+                if ("True" == FolderPath[0])
+                {
+                    ultraGridExcelExporter.Export(uGrid_LogBookDetails, FolderPath[1] + "\\MarkerLogBookDetails.xls");
+                    clsCommon.commonGeneralDisplayMessageBox(1);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                clsCommon.clsApplicationLogFileWriteLog(ex);
+            }
+        }
+        #endregion
+
+        #region SaveLogBookDetails
+        /****************************************************************************************************
+         * NAME         : SaveLogBookDetails                                                                *
+         * DESCRIPTION  : Set the SaveLogBookDetails details.                                               *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 21Feb2018                                                                         *
+         ****************************************************************************************************/
+        private void SaveLogBookDetails()
+        {
+            try
+            {
+                string[] strParameterValue = new string[4];
+                //int GridRows = ultraBarCodeGrid.Rows.Count;
+
+                //if (0 < GridRows)
+                //{
+                //    for (int i = 0; i < GridRows; i++)
+                //    {
+                //        strParameterValue[i] = string.Format("{0} => {1}", ultraBarCodeGrid.Rows[i].Cells[3].Value.ToString(), ultraBarCodeGrid.Rows[i].Cells[4].Value.ToString());
+                //    }
+                //}
+                string strMachineName = clsCommon.ReadSingleConfigValue("MachineNumber", "GetSetGeneralSettings", "Settings");
+                clsappWizardBAL.SetEletraLogBookDetails(2, DateTime.Now, strMachineName, clsVariables.intLoginUserID, clsVariablesWorkOrderDetails.intPartNumberID, clsVariablesWorkOrderDetails.strVLMName, strParameterValue[0], strParameterValue[1], strParameterValue[2], strParameterValue[3], 0);
+            }
+            catch (Exception ex)
+            {
+                clsCommon.clsApplicationLogFileWriteLog(ex);
+            }
+
         }
         #endregion
     }
