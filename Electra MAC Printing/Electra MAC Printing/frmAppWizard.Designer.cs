@@ -124,7 +124,7 @@
             // ultraTabPageControl1
             // 
             this.ultraTabPageControl1.Controls.Add(this.pnlLoginMain);
-            this.ultraTabPageControl1.Location = new System.Drawing.Point(-10000, -10000);
+            this.ultraTabPageControl1.Location = new System.Drawing.Point(0, 0);
             this.ultraTabPageControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ultraTabPageControl1.Name = "ultraTabPageControl1";
             this.ultraTabPageControl1.Size = new System.Drawing.Size(1004, 535);
@@ -152,9 +152,9 @@
             // lblFormHead
             // 
             this.lblFormHead.Font = new System.Drawing.Font("Microsoft Sans Serif", 26F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFormHead.Location = new System.Drawing.Point(131, 64);
+            this.lblFormHead.Location = new System.Drawing.Point(12, 64);
             this.lblFormHead.Name = "lblFormHead";
-            this.lblFormHead.Size = new System.Drawing.Size(743, 39);
+            this.lblFormHead.Size = new System.Drawing.Size(980, 39);
             this.lblFormHead.TabIndex = 6;
             this.lblFormHead.Text = "Welcome to the Electra MAC Address Printing System";
             this.lblFormHead.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -221,20 +221,20 @@
             // 
             // lblHeadlogin
             // 
-            this.lblHeadlogin.AutoSize = true;
             this.lblHeadlogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHeadlogin.ForeColor = System.Drawing.Color.ForestGreen;
-            this.lblHeadlogin.Location = new System.Drawing.Point(110, 34);
+            this.lblHeadlogin.Location = new System.Drawing.Point(4, 34);
             this.lblHeadlogin.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblHeadlogin.Name = "lblHeadlogin";
-            this.lblHeadlogin.Size = new System.Drawing.Size(530, 32);
+            this.lblHeadlogin.Size = new System.Drawing.Size(724, 32);
             this.lblHeadlogin.TabIndex = 0;
             this.lblHeadlogin.Text = "Please enter your employee card to login";
+            this.lblHeadlogin.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ultraTabPageControl2
             // 
             this.ultraTabPageControl2.Controls.Add(this.panelMainNewBatch);
-            this.ultraTabPageControl2.Location = new System.Drawing.Point(0, 0);
+            this.ultraTabPageControl2.Location = new System.Drawing.Point(-10000, -10000);
             this.ultraTabPageControl2.Name = "ultraTabPageControl2";
             this.ultraTabPageControl2.Size = new System.Drawing.Size(1004, 535);
             // 

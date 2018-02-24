@@ -122,6 +122,36 @@ namespace Electra_MAC_Printing.classes.DAL
         }
         #endregion
 
-       
+        #region getLanguageCapion
+        /****************************************************************************************************
+         * NAME         : getLanguageCapion                                                              *
+         * DESCRIPTION  : Get Language Caption Details(SELECT).                                                   *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 15Feb2018                                                                         *
+         ****************************************************************************************************/
+        public DataSet getLanguageCapion(int intOperation,string vchLanguageCode)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                using (DbCommand dbCommand = db.GetStoredProcCommand("TranslationGlossary_SP"))
+                {
+                    db.AddInParameter(dbCommand, "Operation", DbType.String, intOperation);
+                    db.AddInParameter(dbCommand, "vchLanguageCode", DbType.String, vchLanguageCode);
+                    db.AddInParameter(dbCommand, "vchValues", DbType.String, "");                    
+                    ds = db.ExecuteDataSet(dbCommand);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return ds;
+        }
+        #endregion
+
+
     }
 }

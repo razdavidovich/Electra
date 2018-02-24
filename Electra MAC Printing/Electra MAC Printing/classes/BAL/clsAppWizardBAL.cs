@@ -93,5 +93,29 @@ namespace Electra_MAC_Printing.classes.BAL
             }
         }
         #endregion
+
+        #region getLanguageCapion
+        /****************************************************************************************************
+         * NAME         : getLanguageCapion                                                              *
+         * DESCRIPTION  : Get Language Caption Details(SELECT).                                                   *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 15Feb2018                                                                         *
+         ****************************************************************************************************/
+        public DataTable getLanguageCapion(int intOperation ,string vchLanguageCode)
+        {
+
+            try
+            {
+                DataTable dt = new DataTable();
+                dt = clsAppWizardDAL.getLanguageCapion(intOperation, vchLanguageCode).Tables[0];
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+        }
+        #endregion
     }
 }

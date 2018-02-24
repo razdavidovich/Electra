@@ -24,6 +24,7 @@ namespace Electra_MAC_Printing
         clsAppWizardBAL clsappWizardBAL = new clsAppWizardBAL();
         //clsSettingsBAL clsSettingsBAL = new clsSettingsBAL();
 
+        private Dictionary<string, object> dicLanguageCaptions;
 
         public frmAppWizard()
         {
@@ -35,6 +36,7 @@ namespace Electra_MAC_Printing
             clsApplicationLogFile.LogFileExtension = clsCommon.ReadSingleConfigValue("LogFileExtension", "LogSettings", "Settings");
             clsCommon.clsApplicationLogFileWriteLog(null, "Form Login Load : Success");
             clsVariables.variableClearSetDefaultValues();
+            LoadLanugageCaptions();
         }
 
         #region frmAppWizard_Load
@@ -52,10 +54,59 @@ namespace Electra_MAC_Printing
             HideShowToolBar(0);
             txtEmpNo.Focus();
             txtEmpNo.Text = "";
-
+            LoadControlCaption();
             //Adding_uGridWorkDetails_From_Form_Load();
 
             // RunStartMarking();
+        }
+        #endregion
+        #region LoadLanugageCaptions
+        /****************************************************************************************************
+         * NAME         : LoadLanugageCaptions                                                              *
+         * DESCRIPTION  : Load Language Captions                                                            *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 24Feb18                                                                           *
+         ****************************************************************************************************/
+        private void LoadLanugageCaptions()
+        {
+            try
+            {
+                string strCaption = clsCommon.ReadSingleConfigValue("Default", "LanguageCodes", "LanguageSupport");
+                DataTable dt = (DataTable)clsappWizardBAL.getLanguageCapion(1, strCaption);
+
+                int intRowCount = dt.Rows.Count;
+                dicLanguageCaptions = new Dictionary<string, object>();
+
+                if (0 < intRowCount)
+                {
+                    for (int i = 0; i < intRowCount; i++)
+                    {                        
+                        dicLanguageCaptions.Add((string)dt.Rows[i]["vchKey"], (string)dt.Rows[i]["vchTranslation"]);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                clsCommon.clsApplicationLogFileWriteLog(ex);
+            }
+        }
+        #endregion
+        #region LoadControlCaption
+        /****************************************************************************************************
+         * NAME         : LoadControlCaption                                                                *
+         * DESCRIPTION  : Load Control Captions                                                            *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 24Feb18                                                                           *
+         ****************************************************************************************************/
+        private void LoadControlCaption()
+        {
+            string strLanguage = clsCommon.ReadSingleConfigValue("Default", "LanguageCodes", "LanguageSupport");
+
+            lblFormHead.Text = (string)dicLanguageCaptions[string.Format("loginHeaderCaption_{0}", strLanguage)];
+            lblHeadlogin.Text = (string)dicLanguageCaptions[string.Format("loginHeaderemployeeCardCaption_{0}", strLanguage)];
+            lblEmpNo.Text = (string)dicLanguageCaptions[string.Format("loginEmployeeNumberCaption_{0}", strLanguage)];
+            btnLogin.Text = (string)dicLanguageCaptions[string.Format("loginButtonCaption_{0}", strLanguage)];
         }
         #endregion
 
