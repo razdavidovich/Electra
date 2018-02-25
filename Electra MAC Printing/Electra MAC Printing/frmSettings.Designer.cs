@@ -369,6 +369,7 @@
             this.Controls.Add(this.panelSettings);
             this.Name = "frmSettings";
             this.Text = "frmSettings";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.frmSettings_Load);
             this.utpcAppSettingsWizard_GeneralSettings.ResumeLayout(false);
             this.panelGeneralSettings.ResumeLayout(false);

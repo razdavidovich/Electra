@@ -111,7 +111,7 @@ namespace Electra_MAC_Printing
                     
                 }
 
-                clsCommon.commonGeneralDisplayMessageBox(7);
+                clsCommon.commonGeneralDisplayMessageBox(1);
 
             }
             catch (Exception ex)

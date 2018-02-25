@@ -124,9 +124,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="images\InstructionImage.png" />
     <Content Include="images\logbook.png" />
     <Content Include="images\plussquare.png" />
     <Content Include="images\settings.png" />

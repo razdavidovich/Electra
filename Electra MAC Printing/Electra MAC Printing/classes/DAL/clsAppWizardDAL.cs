@@ -51,5 +51,107 @@ namespace Electra_MAC_Printing.classes.DAL
 
         }
         #endregion
+        #region getEletraLogBookDetails
+        /****************************************************************************************************
+         * NAME         : getEletraLogBookDetails                                                          *
+         * DESCRIPTION  : Get the Marking Log Book Details.                                                 *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 17Feb18                                                                           *
+         ****************************************************************************************************/
+        public DataSet getEletraLogBookDetails(int intOperation, DateTime? dtFromDate = null, DateTime? dtToDate = null)
+        {
+
+            try
+            {
+                DataSet ds = new DataSet();
+                using (DbCommand dbCommand = db.GetStoredProcCommand("PrintingLogBook_Sp"))
+                {
+                    db.AddInParameter(dbCommand, "Operation", DbType.Int32, intOperation);
+                    db.AddInParameter(dbCommand, "datFromDate", DbType.DateTime, dtFromDate);
+                    db.AddInParameter(dbCommand, "datToDate", DbType.DateTime, dtToDate);
+                    ds = db.ExecuteDataSet(dbCommand);
+                }
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+
+            }
+
+
+        }
+        #endregion
+
+        #region SetEletraLogBookDetails
+        /****************************************************************************************************
+         * NAME         : SetEletraLogBookDetails                                                          *
+         * DESCRIPTION  : Get the Marking Log Book Details.                                                 *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 17Feb18                                                                           *
+         ****************************************************************************************************/
+        public bool SetEletraLogBookDetails(int intOperation, DateTime MarkingDate, string vchMachine, int intUserId, int intPartNumber, string vchVLMName, string vchParameter1, string vchParameter2, string vchParameter3, string vchParameter4, int intMachineStatus)
+        {
+
+            try
+            {
+
+                using (DbCommand dbCommand = db.GetStoredProcCommand("PrintingLogBook_Sp"))
+                {
+                    db.AddInParameter(dbCommand, "Operation", DbType.Int32, intOperation);
+                    db.AddInParameter(dbCommand, "datPrintingDate", DbType.DateTime, MarkingDate);
+                    db.AddInParameter(dbCommand, "vchMachine", DbType.String, vchMachine);
+                    db.AddInParameter(dbCommand, "intUserID", DbType.Int32, intUserId);                  
+                    db.AddInParameter(dbCommand, "vchSerialNumber", DbType.String, vchVLMName);
+                    db.AddInParameter(dbCommand, "vchMACAddress", DbType.String, vchParameter1);                   
+                    db.ExecuteNonQuery(dbCommand);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+
+            }
+
+
+        }
+        #endregion
+
+        #region getLanguageCapion
+        /****************************************************************************************************
+         * NAME         : getLanguageCapion                                                              *
+         * DESCRIPTION  : Get Language Caption Details(SELECT).                                                   *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 15Feb2018                                                                         *
+         ****************************************************************************************************/
+        public DataSet getLanguageCapion(int intOperation,string vchLanguageCode)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                using (DbCommand dbCommand = db.GetStoredProcCommand("TranslationGlossary_SP"))
+                {
+                    db.AddInParameter(dbCommand, "Operation", DbType.String, intOperation);
+                    db.AddInParameter(dbCommand, "vchLanguageCode", DbType.String, vchLanguageCode);
+                    db.AddInParameter(dbCommand, "vchValues", DbType.String, "");                    
+                    ds = db.ExecuteDataSet(dbCommand);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return ds;
+        }
+        #endregion
+
+
     }
 }

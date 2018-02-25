@@ -50,5 +50,72 @@ namespace Electra_MAC_Printing.classes.BAL
             }
         }
         #endregion
+
+        #region getEletraLogBookDetails
+        /****************************************************************************************************
+         * NAME         : getEletraLogBookDetails                                                          *
+         * DESCRIPTION  : Get the Marking Log Book Details.                                                 *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 17Feb18                                                                           *
+         ****************************************************************************************************/
+        public DataTable getEletraLogBookDetails(int intOperation, DateTime? dtFromDate = null, DateTime? dtToDate = null)
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                dt = clsAppWizardDAL.getEletraLogBookDetails(intOperation, dtFromDate, dtToDate).Tables[0];
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+
+        #region SetEletraLogBookDetails
+        /****************************************************************************************************
+         * NAME         : SetEletraLogBookDetails                                                          *
+         * DESCRIPTION  : Get the Marking Log Book Details.                                                 *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 17Feb18                                                                           *
+         ****************************************************************************************************/
+        public bool SetEletraLogBookDetails(int intOperation, DateTime MarkingDate, string vchMachine, int intUserId, int intPartNumber, string vchVLMName, string vchParameter1, string vchParameter2, string vchParameter3, string vchParameter4, int intMachineStatus)
+        {
+            try
+            {
+                return clsAppWizardDAL.SetEletraLogBookDetails(intOperation, MarkingDate, vchMachine, intUserId, intPartNumber, vchVLMName, vchParameter1, vchParameter2, vchParameter3, vchParameter4, intMachineStatus);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+
+        #region getLanguageCapion
+        /****************************************************************************************************
+         * NAME         : getLanguageCapion                                                              *
+         * DESCRIPTION  : Get Language Caption Details(SELECT).                                                   *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 15Feb2018                                                                         *
+         ****************************************************************************************************/
+        public DataTable getLanguageCapion(int intOperation ,string vchLanguageCode)
+        {
+
+            try
+            {
+                DataTable dt = new DataTable();
+                dt = clsAppWizardDAL.getLanguageCapion(intOperation, vchLanguageCode).Tables[0];
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+        }
+        #endregion
     }
 }
