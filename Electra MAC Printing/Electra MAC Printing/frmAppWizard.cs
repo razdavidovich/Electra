@@ -12,6 +12,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using IWIN = Infragistics.Win;
 using IWUG = Infragistics.Win.UltraWinGrid;
+using System.IO.Ports;
+using Modbus.Data;
+using Modbus.Device;
+using Modbus.Utility;
+using System.Text;
 
 namespace Electra_MAC_Printing
 {
@@ -39,6 +44,152 @@ namespace Electra_MAC_Printing
             LoadLanugageCaptions();
         }
 
+        #region "Modbus"
+
+        private string ConvertToMACAddress(ushort[] modbusValues)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            //Setup the Electra prefix
+            sb.Append("E");
+
+            //Loop the array values
+            foreach (ushort value in modbusValues)
+            {
+                string hexValue = value.ToString("X").ToUpper().PadLeft(4, '0');
+                sb.Append(hexValue.Substring(2));
+                sb.Append(hexValue.Substring(0, 2));
+            }
+
+            return sb.ToString();
+
+        }
+
+        private string ConvertToSerialNumber(ushort[] modbusValues)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            //Loop the array values
+            foreach (ushort value in modbusValues)
+            {
+                string hexValue = value.ToString("X").ToUpper().PadLeft(4, '0');
+                if (hexValue == "FFFF")
+                {
+                    return "0000000000";
+                }
+
+                sb.Append(HexString2Ascii(hexValue.Substring(2)));
+                sb.Append(HexString2Ascii(hexValue.Substring(0, 2)));
+            }
+
+            return sb.ToString();
+
+        }
+
+        private string HexString2Ascii(string hexString)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i <= hexString.Length - 2; i += 2)
+            {
+                sb.Append(Convert.ToString(Convert.ToChar(Int32.Parse(hexString.Substring(i, 2), System.Globalization.NumberStyles.HexNumber))));
+            }
+            return sb.ToString();
+        }
+
+        private ushort[] ReadModbusRegisters(byte slaveId, ushort startAddress, ushort numberOfPoints)
+        {
+            using (SerialPort port = new SerialPort("COM3"))
+            {
+                // configure serial port
+                port.BaudRate = 115200;
+                port.DataBits = 8;
+                port.Parity = Parity.Even;
+                port.StopBits = StopBits.One;
+                port.ReadTimeout = 1000;
+                port.Open();
+
+                // create modbus master
+                IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(port);
+
+                // Read the registers
+                var values = master.ReadHoldingRegisters(slaveId, startAddress, numberOfPoints);
+                return values;
+            }
+        }
+
+        private void clearData()
+        {
+
+            txtUnitSerialNumber.Text = string.Empty;
+            txtUnitSerialNumber.BackColor = Color.Red;
+
+            txtunitMacAddress.Text = string.Empty;
+            txtunitMacAddress.BackColor = Color.Red;
+
+            BtnRePrint.Hide();
+        }
+
+        private void setUnitInformationAndPrint()
+        {
+
+        }
+
+        private void tmrModbus_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!BtnRePrint.Visible)
+                {
+                    // Read Serial number (expecting 6153320000 from test unit)
+                    var serialValue = ReadModbusRegisters(2, 0x00, 5);
+                    txtUnitSerialNumber.Text = ConvertToSerialNumber(serialValue);
+
+                    // Read MAC ADDRESS (expecting A8 1B 6A 9C 7A 9C from test unit)
+                    var macValue = ReadModbusRegisters(2, 0x10, 3);
+                    txtunitMacAddress.Text = ConvertToMACAddress(macValue);
+
+                    if (txtunitMacAddress.TextLength > 0)
+                    {
+                        // Set background
+                        txtUnitSerialNumber.BackColor = Color.Green;
+                        txtunitMacAddress.BackColor = Color.Green;
+
+                        // Print label
+                        printLabel(txtUnitSerialNumber.Text, txtunitMacAddress.Text);
+
+                        // Allow re-print
+                        BtnRePrint.Show();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                clearControls();
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+
+        #endregion
+
+        #region "Print Label"
+        private void printLabel(string serialNumber, string unitMACAddress)
+        {
+            // Get ZPL and printer name from the settings
+            string printerName = "ZDesigner GX430t";
+
+            // Setup the ZPL to print
+            string zpl = string.Format("{0} {1}",serialNumber,unitMACAddress);
+
+            // Print the label
+            clsPrintUtility.SendStringToPrinter(printerName, zpl);
+
+            // Svae the print information to the logbook
+
+        }
+
+        #endregion
+
         #region frmAppWizard_Load
         /****************************************************************************************************
          * NAME         : frmAppWizard_Load                                                                 *
@@ -60,6 +211,7 @@ namespace Electra_MAC_Printing
             // RunStartMarking();
         }
         #endregion
+
         #region LoadLanugageCaptions
         /****************************************************************************************************
          * NAME         : LoadLanugageCaptions                                                              *
@@ -92,6 +244,7 @@ namespace Electra_MAC_Printing
             }
         }
         #endregion
+
         #region LoadControlCaption
         /****************************************************************************************************
          * NAME         : LoadControlCaption                                                                *
@@ -122,6 +275,7 @@ namespace Electra_MAC_Printing
             formPageControlsResize();
         }
         #endregion
+
         #region formPageControlsResize
         /****************************************************************************************************
          * NAME         : formPageControlsResize                                                            *
@@ -601,5 +755,8 @@ namespace Electra_MAC_Printing
 
         }
         #endregion
+
+
     }
+
 }

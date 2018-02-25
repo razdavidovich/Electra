@@ -55,6 +55,9 @@
       <HintPath>..\packages\Microsoft.Practices.ObjectBuilder.dll.3.1.0\lib\2.0\Microsoft.Practices.ObjectBuilder.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="NModbus4, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NModbus4.2.1.0\lib\net40\NModbus4.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -81,6 +84,7 @@
     <Compile Include="classes\DAL\clsAppWizardDAL.cs" />
     <Compile Include="classes\DAL\clsCommonDAL.cs" />
     <Compile Include="classes\DAL\clsSettingsDAL.cs" />
+    <Compile Include="clsPrintUtility.cs" />
     <Compile Include="frmAppWizard.cs">
       <SubType>Form</SubType>
     </Compile>
