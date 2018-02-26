@@ -31,6 +31,8 @@ namespace Electra_MAC_Printing
 
         private Dictionary<string, object> dicLanguageCaptions;
 
+        string strLanguage = clsCommon.ReadSingleConfigValue("Default", "LanguageCodes", "LanguageSupport");
+
         public frmAppWizard()
         {
             InitializeComponent();
@@ -248,18 +250,32 @@ namespace Electra_MAC_Printing
         #region LoadControlCaption
         /****************************************************************************************************
          * NAME         : LoadControlCaption                                                                *
-         * DESCRIPTION  : Load Control Captions                                                            *
+         * DESCRIPTION  : Load Control Captions                                                             *
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 24Feb18                                                                           *
          ****************************************************************************************************/
         private void LoadControlCaption()
-        {
-            string strLanguage = clsCommon.ReadSingleConfigValue("Default", "LanguageCodes", "LanguageSupport");
-
+        {           
             lblFormHead.Text = (string)dicLanguageCaptions[string.Format("loginHeaderCaption_{0}", strLanguage)];
             lblHeadlogin.Text = (string)dicLanguageCaptions[string.Format("loginHeaderemployeeCardCaption_{0}", strLanguage)];
             lblEmpNo.Text = (string)dicLanguageCaptions[string.Format("loginEmployeeNumberCaption_{0}", strLanguage)];
             btnLogin.Text = (string)dicLanguageCaptions[string.Format("loginButtonCaption_{0}", strLanguage)];
+            lblUnitSerialNumber.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitSerialNumberCaption_{0}", strLanguage)];
+            lblUnitMacAddress.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitMacAddressCaption_{0}", strLanguage)];
+            lblUnitMacAddress.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitMacAddressCaption_{0}", strLanguage)];
+            LBL_LogBook_From.Text = (string)dicLanguageCaptions[string.Format("LBLLogBookFromCaption_{0}", strLanguage)];
+            LBL_LogBook_To.Text = (string)dicLanguageCaptions[string.Format("LBLLogBookToCaption_{0}", strLanguage)];
+            uBTN_LogBook_Excel.Text = (string)dicLanguageCaptions[string.Format("BtnLogBookExportCaption_{0}", strLanguage)];
+            uBTN_LogBook_Filter.Text = (string)dicLanguageCaptions[string.Format("BtnLogBookFilterCaption_{0}", strLanguage)];
+            BtnRePrint.Text = (string)dicLanguageCaptions[string.Format("BtnRePrintCaption_{0}", strLanguage)];
+            lblErrorMesaage.Text = (string)dicLanguageCaptions[string.Format("LoginLabelErrorMessageCaption_{0}", strLanguage)];
+
+            uToolBarManagerControl.Tools[0].SharedProps.Caption = (string)dicLanguageCaptions[string.Format("ToolBarNewBatchCaption_{0}", strLanguage)];
+            uToolBarManagerControl.Tools[1].SharedProps.Caption = (string)dicLanguageCaptions[string.Format("ToolBarEndBatchCaption_{0}", strLanguage)];            
+            uToolBarManagerControl.Tools[3].SharedProps.Caption = (string)dicLanguageCaptions[string.Format("ToolBarLogbookCaption_{0}", strLanguage)];
+            uToolBarManagerControl.Tools[4].SharedProps.Caption = (string)dicLanguageCaptions[string.Format("ToolBarSettingsCaption_{0}", strLanguage)];
+            uToolBarManagerControl.Tools[5].SharedProps.Caption = (string)dicLanguageCaptions[string.Format("ToolBarLogOffCaption_{0}", strLanguage)];
+
         }
         #endregion
 
@@ -658,12 +674,14 @@ namespace Electra_MAC_Printing
                 col.Header.Appearance.FontData.Bold = Infragistics.Win.DefaultableBoolean.True;
 
                 string strColumnName = col.ToString();
-                if ("datMarkingDate" == strColumnName)
+                if ("datPrintingDate" == strColumnName)
                 {
                     col.Format = "dd-MM-yyyy hh:mm:ss tt";
                 }
 
-                col.Header.Caption = clsCommon.ReadSingleConfigValue(strColumnName, "uGrid_LogBookDetails_HeaderCaption", "Settings");
+                //col.Header.Caption = clsCommon.ReadSingleConfigValue(strColumnName, "uGrid_LogBookDetails_HeaderCaption", "Settings");
+
+                col.Header.Caption = (string)dicLanguageCaptions[string.Format("{0}_{1}", col.Key, strLanguage)];
 
             }
 
@@ -712,9 +730,12 @@ namespace Electra_MAC_Printing
             {
                 if ("True" == FolderPath[0])
                 {
-                    ultraGridExcelExporter.Export(uGrid_LogBookDetails, FolderPath[1] + "\\MarkerLogBookDetails.xls");
-                    clsCommon.commonGeneralDisplayMessageBox(1);
+                    ultraGridExcelExporter.Export(uGrid_LogBookDetails, FolderPath[1] + "\\ElectraLogBookDetails.xls");
 
+                    clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("ExportExcelTextCaption_{0}", strLanguage)]);
+                    clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "64");
+                    clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("ExportExcelTtitleCaption_{0}", strLanguage)]);
+                    clsCommon.commonGeneralDisplayMessageBox(0);                   
                 }
             }
             catch (Exception ex)

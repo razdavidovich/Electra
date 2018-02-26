@@ -22,19 +22,19 @@ namespace Electra_MAC_Printing
        // clsSerialPort clsSerialPort = new clsSerialPort();
         clsSettingsBAL clsSettingsBAL = new clsSettingsBAL();
         clsCommonBAL clsCommonBAL = new clsCommonBAL();
+        clsAppWizardBAL clsappWizardBAL = new clsAppWizardBAL();
 
         /*Variable Declaration*/
         private int intuGrid_Users_DeleteRowId = 0;
-        private int intuGrid_ParameterstoPartNumbers_DeleteRowId = 0;
-        private int intuGrid_ParameterstoPartNumbers_DeleteParameterID = 0;
-        private int intGrid_PartNumbers_DeleteRowId = 0;
 
-        private int intuGrid_Parameters = 0;
+        string strLanguage = clsCommon.ReadSingleConfigValue("Default", "LanguageCodes", "LanguageSupport");
 
+        private Dictionary<string, object> dicLanguageCaptions;
 
         public frmSettings()
         {
             InitializeComponent();
+            LoadLanugageCaptions();
         }
 
 
@@ -53,9 +53,66 @@ namespace Electra_MAC_Printing
             
             /*General Settings*/
             GeneralSettings();
-            //uGrid_Parameters_Load();
-            //uGrid_ParameterstoPartNumbers_Load();
+            LoadControlCaption();
+        }
+        #endregion
 
+        #region LoadLanugageCaptions
+        /****************************************************************************************************
+         * NAME         : LoadLanugageCaptions                                                              *
+         * DESCRIPTION  : Load Language Captions                                                            *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 24Feb18                                                                           *
+         ****************************************************************************************************/
+        private void LoadLanugageCaptions()
+        {
+            try
+            {
+                string strCaption = clsCommon.ReadSingleConfigValue("Default", "LanguageCodes", "LanguageSupport");
+                DataTable dt = (DataTable)clsappWizardBAL.getLanguageCapion(1, strCaption);
+
+                int intRowCount = dt.Rows.Count;
+                dicLanguageCaptions = new Dictionary<string, object>();
+
+                if (0 < intRowCount)
+                {
+                    for (int i = 0; i < intRowCount; i++)
+                    {
+                        dicLanguageCaptions.Add((string)dt.Rows[i]["vchKey"], (string)dt.Rows[i]["vchTranslation"]);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                clsCommon.clsApplicationLogFileWriteLog(ex);
+            }
+        }
+        #endregion
+
+        #region LoadControlCaption
+        /****************************************************************************************************
+         * NAME         : LoadControlCaption                                                                *
+         * DESCRIPTION  : Load Control Captions                                                             *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 24Feb18                                                                           *
+         ****************************************************************************************************/
+        private void LoadControlCaption()
+        {            
+            LBL_StationName.Text = (string)dicLanguageCaptions[string.Format("SettingslabelStationNameCaption_{0}", strLanguage)];
+            LBL_UnitSettings.Text = (string)dicLanguageCaptions[string.Format("SettingslabelUnitSettingsCaption_{0}", strLanguage)];
+            LBL_ModbuSlaveAddress.Text = (string)dicLanguageCaptions[string.Format("SettingslabelModbusslaveCaption_{0}", strLanguage)];
+
+            LBL_SerialNumberAddress.Text = (string)dicLanguageCaptions[string.Format("SettingslabelSerialNumberCaption_{0}", strLanguage)];
+            LBL_DataAddress.Text = (string)dicLanguageCaptions[string.Format("SettingslabelDataAddressCaption_{0}", strLanguage)];
+            LBL_PrinterSettings.Text = (string)dicLanguageCaptions[string.Format("SettingslabelPrinterSettingsCaption_{0}", strLanguage)];
+
+            grpCommunicationSettings.Text = (string)dicLanguageCaptions[string.Format("SettingsGroupboxCaption_{0}", strLanguage)];
+
+            uBTN_Settings_OK.Text = (string)dicLanguageCaptions[string.Format("SettingsButtonSaveCaption_{0}", strLanguage)];
+            uBTN_Settings_Cancel.Text = (string)dicLanguageCaptions[string.Format("SettingsbuttonCancelCaption_{0}", strLanguage)];
+            utcAppSettingsWizard.Tabs[0].Text= (string)dicLanguageCaptions[string.Format("SettingsTabGeneralSettingsCaption_{0}", strLanguage)];
+            utcAppSettingsWizard.Tabs[1].Text = (string)dicLanguageCaptions[string.Format("SettingsTabUsersCaption_{0}", strLanguage)];
         }
         #endregion
 
@@ -111,7 +168,10 @@ namespace Electra_MAC_Printing
                     
                 }
 
-                clsCommon.commonGeneralDisplayMessageBox(1);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsSaveSuccessCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "64");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
 
             }
             catch (Exception ex)
@@ -146,7 +206,11 @@ namespace Electra_MAC_Printing
             }
             else
             {
-                clsCommon.commonGeneralDisplayMessageBox(3);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsStationNameCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+
+                clsCommon.commonGeneralDisplayMessageBox(0);                
                 return false;
             }
 
@@ -157,7 +221,10 @@ namespace Electra_MAC_Printing
             }
             else
             {
-                clsCommon.commonGeneralDisplayMessageBox(4);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsUnitsettingsCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
                 return false;
             }
 
@@ -168,7 +235,10 @@ namespace Electra_MAC_Printing
             }
             else
             {
-                clsCommon.commonGeneralDisplayMessageBox(5);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsModbusSlaveAddressCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
                 return false;
             }
 
@@ -179,7 +249,10 @@ namespace Electra_MAC_Printing
             }
             else
             {
-                clsCommon.commonGeneralDisplayMessageBox(6);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsSerialNumberCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
                 return false;
             }
 
@@ -190,7 +263,10 @@ namespace Electra_MAC_Printing
             }
             else
             {
-                clsCommon.commonGeneralDisplayMessageBox(6);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsDataAddressCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
                 return false;
             }
 
@@ -201,10 +277,13 @@ namespace Electra_MAC_Printing
             }
             else
             {
-                clsCommon.commonGeneralDisplayMessageBox(6);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsPrinterSettingsCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
                 return false;
             }
-
+            GeneralSettings();
             return true;
         }
         #endregion
@@ -226,7 +305,6 @@ namespace Electra_MAC_Printing
         #endregion
 
        
-
         // General Settings
         #region GeneralSettings
         /****************************************************************************************************
@@ -246,7 +324,6 @@ namespace Electra_MAC_Printing
             TXT_PrinterSettings.Text = clsCommon.ReadSingleConfigValue("PrinterSettings", "GetSetGeneralSettings", "Settings");
         }
         #endregion
-
 
         //User Grid
 
@@ -317,10 +394,9 @@ namespace Electra_MAC_Printing
                 col.Header.Appearance.BackColor = Color.LightGray;
                 col.Header.Appearance.ForeColor = Color.Black;
                 col.Header.Appearance.FontData.Bold = Infragistics.Win.DefaultableBoolean.True;
-                col.Header.Caption = clsCommon.ReadSingleConfigValue(col.ToString(), "uGrid_Users_HeaderCaption", "Settings");
 
-            }
-
+                col.Header.Caption = (string)dicLanguageCaptions[string.Format("{0}_{1}", col.Key,strLanguage)];              
+            }            
             e.Layout.Bands[0].Columns[0].CellActivation = Infragistics.Win.UltraWinGrid.Activation.NoEdit;
 
             if ("0" == clsCommon.ReadSingleConfigValue("Default", "LanguageDirection", "LanguageSupport"))
@@ -388,19 +464,14 @@ namespace Electra_MAC_Printing
 
                 else
                 {
-
                     if (0 != uGrid_Users.ActiveRow.Index)
                     {
-                        clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", "Column Should not be Null or Empty");
+                        clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("SettingsGridUsersErrorMessageCaption_{0}", strLanguage)]);                        
                         clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
-                        clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", "Invalied Data");
-
+                        clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("SettingsGridUsersErrorMessageTitleCaption_{0}", strLanguage)]);
                         clsCommon.commonGeneralDisplayMessageBox(0);
-
                     }
-
                 }
-
             }
             catch (Exception ex)
             {

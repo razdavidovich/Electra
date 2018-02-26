@@ -63,6 +63,16 @@ namespace Electra_MAC_Printing.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Electra {
+            get {
+                object obj = ResourceManager.GetObject("Electra", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap logbook {
             get {
                 object obj = ResourceManager.GetObject("logbook", resourceCulture);
