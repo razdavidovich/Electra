@@ -50,10 +50,114 @@ namespace Electra_MAC_Printing
             utcAppSettingsWizard.Tabs["general"].Selected = true;
 
             uGrid_Users_Form_Load();
-            
+
+
+            Common_COMPORT_DataBinding(uCBO_GS_StripeCom);
+            Common_BaudRate_DataBinding(uCBO_GS_StripeBaudRate);
+            Common_Parity_DataBinding(uCBO_GS_StripeParity);
+            Common_DataBits_DataBinding(uCBO_GS_StripeDataBits);
+            Common_StopBits_DataBinding(uCBO_GS_StripeStopBits);
+
+
             /*General Settings*/
             GeneralSettings();
             LoadControlCaption();
+        }
+        #endregion
+
+        #region Common_COMPORT_DataBinding
+        /****************************************************************************************************
+         * NAME         : Common_COMPORT_DataBinding                                                        *
+         * DESCRIPTION  : Initial ComboEditorBox datasource load when the form load funcrion .              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        private void Common_COMPORT_DataBinding(Infragistics.Win.UltraWinEditors.UltraComboEditor UCE_COMPort_Control)
+        {
+            DataTable dt = clsCommon.getSerialPort();
+
+            UCE_COMPort_Control.ValueMember = "ValueText";
+            UCE_COMPort_Control.DisplayMember = "DisplayText";
+            UCE_COMPort_Control.DataSource = dt;
+            UCE_COMPort_Control.DataBind();
+            UCE_COMPort_Control.SelectedIndex = 0;
+        }
+        #endregion
+
+        #region Common_BaudRate_DataBinding
+        /****************************************************************************************************
+         * NAME         : Common_BaudRate_DataBinding                                                       *
+         * DESCRIPTION  : Initial ComboEditorBox datasource load when the form load funcrion .              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        private void Common_BaudRate_DataBinding(Infragistics.Win.UltraWinEditors.UltraComboEditor UCE_BaudRate_Control)
+        {
+            DataTable dt = clsCommon.getBaudRate();
+
+            UCE_BaudRate_Control.ValueMember = "ValueText";
+            UCE_BaudRate_Control.DisplayMember = "DisplayText";
+            UCE_BaudRate_Control.DataSource = dt;
+            UCE_BaudRate_Control.DataBind();
+            UCE_BaudRate_Control.SelectedIndex = 0;
+        }
+        #endregion
+
+
+        #region Common_Parity_DataBinding
+        /****************************************************************************************************
+         * NAME         : Common_Parity_DataBinding                                                         *
+         * DESCRIPTION  : Initial ComboEditorBox datasource load when the form load funcrion .              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        private void Common_Parity_DataBinding(Infragistics.Win.UltraWinEditors.UltraComboEditor UCE_Parity_Control)
+        {
+            DataTable dt = clsCommon.getParity();
+
+            UCE_Parity_Control.ValueMember = "ValueText";
+            UCE_Parity_Control.DisplayMember = "DisplayText";
+            UCE_Parity_Control.DataSource = dt;
+            UCE_Parity_Control.DataBind();
+            UCE_Parity_Control.SelectedIndex = 0;
+        }
+        #endregion
+
+        #region Common_DataBits_DataBinding
+        /****************************************************************************************************
+         * NAME         : Common_DataBits_DataBinding                                                       *
+         * DESCRIPTION  : Initial ComboEditorBox datasource load when the form load funcrion .              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        private void Common_DataBits_DataBinding(Infragistics.Win.UltraWinEditors.UltraComboEditor UCE_DataBits_Control)
+        {
+            DataTable dt = clsCommon.getDataBits();
+
+            UCE_DataBits_Control.ValueMember = "ValueText";
+            UCE_DataBits_Control.DisplayMember = "DisplayText";
+            UCE_DataBits_Control.DataSource = dt;
+            UCE_DataBits_Control.DataBind();
+            UCE_DataBits_Control.SelectedIndex = 0;
+        }
+        #endregion
+
+        #region Common_StopBits_DataBinding
+        /****************************************************************************************************
+         * NAME         : Common_StopBits_DataBinding                                                       *
+         * DESCRIPTION  : Initial ComboEditorBox datasource load when the form load funcrion .              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        private void Common_StopBits_DataBinding(Infragistics.Win.UltraWinEditors.UltraComboEditor UCE_StopBits_Control)
+        {
+            DataTable dt = clsCommon.getStopBits();
+
+            UCE_StopBits_Control.ValueMember = "ValueText";
+            UCE_StopBits_Control.DisplayMember = "DisplayText";
+            UCE_StopBits_Control.DataSource = dt;
+            UCE_StopBits_Control.DataBind();
+            UCE_StopBits_Control.SelectedIndex = 0;
         }
         #endregion
 
@@ -164,10 +268,8 @@ namespace Electra_MAC_Printing
                         break;
                     case "users":
                         uGrid_Users_Form_Load();
-                        break;
-                    
+                        break;                    
                 }
-
                 clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsSaveSuccessCaption_{0}", strLanguage)]);
                 clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "64");
                 clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
@@ -193,11 +295,16 @@ namespace Electra_MAC_Printing
 
             /*Variable Declaration and Assign the Controls values*/
             string strTXT_StationName = TXT_StationName.Text,
-                strTxt_UnitSettings = Txt_UnitSettings.Text,
+               
                    strTxt_ModbusSlaveAddress = Txt_ModbusSlaveAddress.Text,
                    strTXT_SerialNumberAddress = TXT_SerialNumberAddress.Text,
                    strTXT_DataAddress = TXT_DataAddress.Text,
-                    strTXT_PrinterSettings = TXT_PrinterSettings.Text;
+                    strTXT_PrinterSettings = TXT_PrinterSettings.Text,
+            struCBO_GS_StripeCom = uCBO_GS_StripeCom.Value.ToString(),
+                   struCBO_GS_StripeBaudRate = uCBO_GS_StripeBaudRate.Value.ToString(),
+                   struCBO_GS_StripeParity = uCBO_GS_StripeParity.Value.ToString(),
+                   struCBO_GS_StripeDataBits = uCBO_GS_StripeDataBits.Value.ToString(),
+                   struCBO_GS_StripeStopBits = uCBO_GS_StripeStopBits.Value.ToString();
 
             /*Validate TXT_StationName Controls*/
             if (!string.IsNullOrEmpty(strTXT_StationName))
@@ -214,20 +321,7 @@ namespace Electra_MAC_Printing
                 return false;
             }
 
-            /*Validate Txt_UnitSettings Controls*/
-            if (!string.IsNullOrEmpty(strTxt_UnitSettings))
-            {
-                clsCommon.SaveConfigSettingsValue("UnitSettings", "GetSetGeneralSettings", "Settings", strTxt_UnitSettings);
-            }
-            else
-            {
-                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsUnitsettingsCaption_{0}", strLanguage)]);
-                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
-                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
-                clsCommon.commonGeneralDisplayMessageBox(0);
-                return false;
-            }
-
+          
             /*Validate Txt_ModbusSlaveAddress Controls*/
             if (!string.IsNullOrEmpty(strTxt_ModbusSlaveAddress))
             {
@@ -283,6 +377,23 @@ namespace Electra_MAC_Printing
                 clsCommon.commonGeneralDisplayMessageBox(0);
                 return false;
             }
+
+            /*Validate uCBO_GS_StripeCom Controls*/
+            if (!string.IsNullOrEmpty(struCBO_GS_StripeCom))
+            {
+                StringBuilder strBuilder = new StringBuilder();
+                strBuilder.AppendFormat("{0},{1},{2},{3},{4}", struCBO_GS_StripeCom, struCBO_GS_StripeBaudRate, struCBO_GS_StripeParity, struCBO_GS_StripeDataBits, struCBO_GS_StripeStopBits);
+                clsCommon.SaveConfigSettingsValue("UnitSettings", "GetSetGeneralSettings", "Settings", strBuilder.ToString());
+            }
+            else
+            {
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMagneticStripeCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
+                uCBO_GS_StripeCom.Focus();
+                return false;
+            }
             GeneralSettings();
             return true;
         }
@@ -316,12 +427,18 @@ namespace Electra_MAC_Printing
         private void GeneralSettings()
         {
 
-            TXT_StationName.Text = clsCommon.ReadSingleConfigValue("StationName", "GetSetGeneralSettings", "Settings");
-            Txt_UnitSettings.Text = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings");
+            TXT_StationName.Text = clsCommon.ReadSingleConfigValue("StationName", "GetSetGeneralSettings", "Settings");            
             Txt_ModbusSlaveAddress.Text = clsCommon.ReadSingleConfigValue("ModbusSlaveAddress", "GetSetGeneralSettings", "Settings");
             TXT_SerialNumberAddress.Text = clsCommon.ReadSingleConfigValue("SerialNumberAddress", "GetSetGeneralSettings", "Settings");
             TXT_DataAddress.Text = clsCommon.ReadSingleConfigValue("DataAddress", "GetSetGeneralSettings", "Settings");
             TXT_PrinterSettings.Text = clsCommon.ReadSingleConfigValue("PrinterSettings", "GetSetGeneralSettings", "Settings");
+
+            string[] strCOMSettings = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings").Split(',');
+            uCBO_GS_StripeCom.Value = strCOMSettings[0];
+            uCBO_GS_StripeBaudRate.Value = strCOMSettings[1];
+            uCBO_GS_StripeParity.Value = strCOMSettings[2];
+            uCBO_GS_StripeDataBits.Value = strCOMSettings[3];
+            uCBO_GS_StripeStopBits.Value = strCOMSettings[4];
         }
         #endregion
 

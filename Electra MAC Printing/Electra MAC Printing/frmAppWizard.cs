@@ -16,7 +16,7 @@ using System.IO.Ports;
 using Modbus.Data;
 using Modbus.Device;
 using Modbus.Utility;
-using System.Text;
+
 
 namespace Electra_MAC_Printing
 {
@@ -32,6 +32,7 @@ namespace Electra_MAC_Printing
         private Dictionary<string, object> dicLanguageCaptions;
 
         string strLanguage = clsCommon.ReadSingleConfigValue("Default", "LanguageCodes", "LanguageSupport");
+        private string[] strSettingsArray;
 
         public frmAppWizard()
         {
@@ -100,14 +101,16 @@ namespace Electra_MAC_Printing
 
         private ushort[] ReadModbusRegisters(byte slaveId, ushort startAddress, ushort numberOfPoints)
         {
-            using (SerialPort port = new SerialPort("COM3"))
+            strSettingsArray = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings").Split(',');
+            string strSettingsTimeOut = clsCommon.ReadSingleConfigValue("TimeOut", "GetSetGeneralSettings", "Settings");
+            using (SerialPort port = new SerialPort(strSettingsArray[0]))
             {
                 // configure serial port
-                port.BaudRate = 115200;
-                port.DataBits = 8;
-                port.Parity = Parity.Even;
-                port.StopBits = StopBits.One;
-                port.ReadTimeout = 1000;
+                port.BaudRate = Convert.ToInt32(strSettingsArray[1]);
+                port.DataBits = Convert.ToInt32(strSettingsArray[3]);
+                port.Parity = (Parity)Enum.Parse(typeof(Parity), strSettingsArray[2]);
+                port.StopBits = (StopBits)Enum.Parse(typeof(StopBits), strSettingsArray[4]);
+                port.ReadTimeout = Convert.ToInt32(strSettingsTimeOut);
                 port.Open();
 
                 // create modbus master
@@ -121,7 +124,6 @@ namespace Electra_MAC_Printing
 
         private void clearData()
         {
-
             txtUnitSerialNumber.Text = string.Empty;
             txtUnitSerialNumber.BackColor = Color.Red;
 
@@ -138,16 +140,30 @@ namespace Electra_MAC_Printing
 
         private void tmrModbus_Tick(object sender, EventArgs e)
         {
+            Application.DoEvents();
+            MethodInvoker tmrDelegate = delegate
+            {
+                tmrModbusTickWorker();
+            };
+            tmrDelegate.BeginInvoke(null, null);
+        }
+
+        #endregion
+        private void tmrModbusTickWorker()
+        {
             try
             {
+                string strDataAddress = clsCommon.ReadSingleConfigValue("DataAddress", "GetSetGeneralSettings", "Settings");
+                string strSerialNumberAddress = clsCommon.ReadSingleConfigValue("SerialNumberAddress", "GetSetGeneralSettings", "Settings");
+
                 if (!BtnRePrint.Visible)
                 {
                     // Read Serial number (expecting 6153320000 from test unit)
-                    var serialValue = ReadModbusRegisters(2, 0x00, 5);
+                    var serialValue = ReadModbusRegisters(2, Convert.ToUInt16(strSerialNumberAddress, 16), 5);
                     txtUnitSerialNumber.Text = ConvertToSerialNumber(serialValue);
 
                     // Read MAC ADDRESS (expecting A8 1B 6A 9C 7A 9C from test unit)
-                    var macValue = ReadModbusRegisters(2, 0x10, 3);
+                    var macValue = ReadModbusRegisters(2, Convert.ToUInt16(strDataAddress, 16), 3);
                     txtunitMacAddress.Text = ConvertToMACAddress(macValue);
 
                     if (txtunitMacAddress.TextLength > 0)
@@ -166,13 +182,11 @@ namespace Electra_MAC_Printing
             }
             catch (Exception ex)
             {
-                clearControls();
-                Console.WriteLine(ex.Message);
+
+                clearData();
+                clsCommon.clsApplicationLogFileWriteLog(ex);
             }
-
         }
-
-        #endregion
 
         #region "Print Label"
         private void printLabel(string serialNumber, string unitMACAddress)
@@ -357,6 +371,8 @@ namespace Electra_MAC_Printing
                         panelFormHeader.Visible = true;
                         HideShowToolBar(0);
                         ProcessPreviousNextCurrentTab(true);
+                        Application.DoEvents();
+                        tmrModbus.Enabled = true;
                     }
                     else
                     {
@@ -602,22 +618,18 @@ namespace Electra_MAC_Printing
 
                 case "logoff":
                     utcAppWizard.Tabs["login"].Selected = true;
-                    clearControls();
-                   // ClearNewBatchControls();
+                    clearControls();               
                     clsVariables.variableClearSetDefaultValues();
+                    tmrModbus.Enabled = false;
                     break;
-
-                case "endbatch":
-                    utcAppWizard.Tabs["newbatch"].Selected = true;
-                    //ClearNewBatchControls();
-                    break;
-
+               
                 case "newbatch":
                     utcAppWizard.Tabs["newbatch"].Selected = true;
-                    //ClearNewBatchControls();
+                    tmrModbus.Enabled = true;
                     break;
 
                 case "settings":
+                    tmrModbus.Enabled = false;
                     this.Hide();
                     Application.DoEvents();
                     frmSettings frmSettings = new frmSettings();
@@ -626,11 +638,12 @@ namespace Electra_MAC_Printing
                     break;
 
                 case "logbook":
+                    tmrModbus.Enabled = false;
                     utcAppWizard.Tabs["logbook"].Selected = true;
                     DTP_LogBookFromDate.Value = DateTime.Now;
                     DTP_LogBookToDate.Value = DateTime.Now;
                     uGrid_LogBookDetails.DataSource = new DataTable();
-                    HideShowToolBar(1);
+                    HideShowToolBar(1);                    
                     break;
             }
 
@@ -678,8 +691,6 @@ namespace Electra_MAC_Printing
                 {
                     col.Format = "dd-MM-yyyy hh:mm:ss tt";
                 }
-
-                //col.Header.Caption = clsCommon.ReadSingleConfigValue(strColumnName, "uGrid_LogBookDetails_HeaderCaption", "Settings");
 
                 col.Header.Caption = (string)dicLanguageCaptions[string.Format("{0}_{1}", col.Key, strLanguage)];
 
