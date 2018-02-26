@@ -145,6 +145,15 @@ namespace Electra_MAC_Printing
 
         private void setUnitInformationAndPrint()
         {
+            // Set background
+            txtUnitSerialNumber.BackColor = Color.Green;
+            txtunitMacAddress.BackColor = Color.Green;
+
+            // Print label
+            printLabel(txtUnitSerialNumber.Text, txtunitMacAddress.Text);
+
+            // Allow re-print
+            BtnRePrint.Show();
 
         }
 
@@ -187,15 +196,7 @@ namespace Electra_MAC_Printing
 
                         if (txtunitMacAddress.TextLength > 0)
                         {
-                            // Set background
-                            txtUnitSerialNumber.BackColor = Color.Green;
-                            txtunitMacAddress.BackColor = Color.Green;
-
-                            // Print label
-                            printLabel(txtUnitSerialNumber.Text, txtunitMacAddress.Text);
-
-                            // Allow re-print
-                            BtnRePrint.Show();
+                          setUnitInformationAndPrint();
                         }
                     }
                     blnTimerRunning = false;
@@ -203,7 +204,6 @@ namespace Electra_MAC_Printing
                 }
                 catch (Exception ex)
                 {
-
                     clearData();
                     clsCommon.clsApplicationLogFileWriteLog(ex);
                 }
@@ -215,10 +215,10 @@ namespace Electra_MAC_Printing
         private void printLabel(string serialNumber, string unitMACAddress)
         {
             // Get ZPL and printer name from the settings
-            string printerName = "ZDesigner GX430t";
+            string printerName = clsCommon.ReadSingleConfigValue("PrinterName", "GetSetGeneralSettings", "Settings");
 
             // Setup the ZPL to print
-            string zpl = string.Format("{0} {1}", serialNumber, unitMACAddress);
+            string zpl = string.Format(clsCommon.ReadSingleConfigValue("ZPL", "GetSetGeneralSettings", "Settings"), serialNumber,unitMACAddress,unitMACAddress.Substring(0,7),unitMACAddress.Substring(6));
 
             // Print the label
             clsPrintUtility.SendStringToPrinter(printerName, zpl);
