@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAppWizard));
             Infragistics.Win.Appearance appearance1 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance2 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinTabControl.UltraTab ultraTab1 = new Infragistics.Win.UltraWinTabControl.UltraTab();
@@ -51,9 +52,9 @@
             Infragistics.Win.Appearance appearance6 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool10 = new Infragistics.Win.UltraWinToolbars.ButtonTool("logoff");
             Infragistics.Win.Appearance appearance7 = new Infragistics.Win.Appearance();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAppWizard));
             this.ultraTabPageControl1 = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
             this.pnlLoginMain = new System.Windows.Forms.Panel();
+            this.PictLoginLogo = new System.Windows.Forms.PictureBox();
             this.lblFormHead = new System.Windows.Forms.Label();
             this.pnlLogin = new System.Windows.Forms.Panel();
             this.lblErrorMesaage = new System.Windows.Forms.Label();
@@ -63,6 +64,7 @@
             this.lblHeadlogin = new System.Windows.Forms.Label();
             this.ultraTabPageControl2 = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
             this.panelMainNewBatch = new System.Windows.Forms.Panel();
+            this.panelRightNewBatch = new System.Windows.Forms.Panel();
             this.panelLeftNewBatch = new System.Windows.Forms.Panel();
             this.BtnRePrint = new System.Windows.Forms.Button();
             this.lblUnitMacAddress = new System.Windows.Forms.Label();
@@ -95,10 +97,9 @@
             this._panelFormHeader_Toolbars_Dock_Area_Bottom = new Infragistics.Win.UltraWinToolbars.UltraToolbarsDockArea();
             this._panelFormHeader_Toolbars_Dock_Area_Top = new Infragistics.Win.UltraWinToolbars.UltraToolbarsDockArea();
             this.tmrModbus = new System.Windows.Forms.Timer(this.components);
-            this.PictLoginLogo = new System.Windows.Forms.PictureBox();
-            this.panelRightNewBatch = new System.Windows.Forms.Panel();
             this.ultraTabPageControl1.SuspendLayout();
             this.pnlLoginMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PictLoginLogo)).BeginInit();
             this.pnlLogin.SuspendLayout();
             this.ultraTabPageControl2.SuspendLayout();
             this.panelMainNewBatch.SuspendLayout();
@@ -117,7 +118,6 @@
             this.utcAppWizard.SuspendLayout();
             this.panelFormHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uToolBarManagerControl)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PictLoginLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // ultraTabPageControl1
@@ -138,6 +138,16 @@
             this.pnlLoginMain.Name = "pnlLoginMain";
             this.pnlLoginMain.Size = new System.Drawing.Size(717, 536);
             this.pnlLoginMain.TabIndex = 0;
+            // 
+            // PictLoginLogo
+            // 
+            this.PictLoginLogo.Image = global::Electra_MAC_Printing.Properties.Resources.Electra;
+            this.PictLoginLogo.Location = new System.Drawing.Point(131, 399);
+            this.PictLoginLogo.Name = "PictLoginLogo";
+            this.PictLoginLogo.Size = new System.Drawing.Size(743, 115);
+            this.PictLoginLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.PictLoginLogo.TabIndex = 7;
+            this.PictLoginLogo.TabStop = false;
             // 
             // lblFormHead
             // 
@@ -224,7 +234,7 @@
             // ultraTabPageControl2
             // 
             this.ultraTabPageControl2.Controls.Add(this.panelMainNewBatch);
-            this.ultraTabPageControl2.Location = new System.Drawing.Point(-10000, -10000);
+            this.ultraTabPageControl2.Location = new System.Drawing.Point(0, 0);
             this.ultraTabPageControl2.Name = "ultraTabPageControl2";
             this.ultraTabPageControl2.Size = new System.Drawing.Size(717, 536);
             // 
@@ -238,6 +248,15 @@
             this.panelMainNewBatch.Size = new System.Drawing.Size(717, 536);
             this.panelMainNewBatch.TabIndex = 0;
             // 
+            // panelRightNewBatch
+            // 
+            this.panelRightNewBatch.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelRightNewBatch.BackgroundImage")));
+            this.panelRightNewBatch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panelRightNewBatch.Location = new System.Drawing.Point(523, 18);
+            this.panelRightNewBatch.Name = "panelRightNewBatch";
+            this.panelRightNewBatch.Size = new System.Drawing.Size(469, 501);
+            this.panelRightNewBatch.TabIndex = 1;
+            // 
             // panelLeftNewBatch
             // 
             this.panelLeftNewBatch.Controls.Add(this.BtnRePrint);
@@ -245,7 +264,7 @@
             this.panelLeftNewBatch.Controls.Add(this.lblUnitSerialNumber);
             this.panelLeftNewBatch.Controls.Add(this.txtunitMacAddress);
             this.panelLeftNewBatch.Controls.Add(this.txtUnitSerialNumber);
-            this.panelLeftNewBatch.Location = new System.Drawing.Point(12, 18);
+            this.panelLeftNewBatch.Location = new System.Drawing.Point(13, 18);
             this.panelLeftNewBatch.Name = "panelLeftNewBatch";
             this.panelLeftNewBatch.Size = new System.Drawing.Size(485, 501);
             this.panelLeftNewBatch.TabIndex = 0;
@@ -255,7 +274,6 @@
             this.BtnRePrint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnRePrint.BackColor = System.Drawing.Color.White;
-            this.BtnRePrint.Enabled = false;
             this.BtnRePrint.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnRePrint.Location = new System.Drawing.Point(5, 418);
             this.BtnRePrint.Name = "BtnRePrint";
@@ -269,7 +287,7 @@
             // 
             this.lblUnitMacAddress.AutoSize = true;
             this.lblUnitMacAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUnitMacAddress.Location = new System.Drawing.Point(159, 141);
+            this.lblUnitMacAddress.Location = new System.Drawing.Point(161, 141);
             this.lblUnitMacAddress.Name = "lblUnitMacAddress";
             this.lblUnitMacAddress.Size = new System.Drawing.Size(188, 25);
             this.lblUnitMacAddress.TabIndex = 12;
@@ -315,7 +333,7 @@
             // 
             this.ultraTabPageControl5.Controls.Add(this.panelLogBookGridDetails);
             this.ultraTabPageControl5.Controls.Add(this.panelLogBookFilter);
-            this.ultraTabPageControl5.Location = new System.Drawing.Point(0, 0);
+            this.ultraTabPageControl5.Location = new System.Drawing.Point(-10000, -10000);
             this.ultraTabPageControl5.Name = "ultraTabPageControl5";
             this.ultraTabPageControl5.Size = new System.Drawing.Size(717, 536);
             // 
@@ -652,25 +670,6 @@
             this.tmrModbus.Interval = 500;
             this.tmrModbus.Tick += new System.EventHandler(this.tmrModbus_Tick);
             // 
-            // PictLoginLogo
-            // 
-            this.PictLoginLogo.Image = global::Electra_MAC_Printing.Properties.Resources.Electra;
-            this.PictLoginLogo.Location = new System.Drawing.Point(131, 399);
-            this.PictLoginLogo.Name = "PictLoginLogo";
-            this.PictLoginLogo.Size = new System.Drawing.Size(743, 115);
-            this.PictLoginLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.PictLoginLogo.TabIndex = 7;
-            this.PictLoginLogo.TabStop = false;
-            // 
-            // panelRightNewBatch
-            // 
-            this.panelRightNewBatch.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelRightNewBatch.BackgroundImage")));
-            this.panelRightNewBatch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panelRightNewBatch.Location = new System.Drawing.Point(523, 18);
-            this.panelRightNewBatch.Name = "panelRightNewBatch";
-            this.panelRightNewBatch.Size = new System.Drawing.Size(469, 501);
-            this.panelRightNewBatch.TabIndex = 1;
-            // 
             // frmAppWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -685,6 +684,7 @@
             this.Resize += new System.EventHandler(this.frmAppWizard_Resize);
             this.ultraTabPageControl1.ResumeLayout(false);
             this.pnlLoginMain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.PictLoginLogo)).EndInit();
             this.pnlLogin.ResumeLayout(false);
             this.pnlLogin.PerformLayout();
             this.ultraTabPageControl2.ResumeLayout(false);
@@ -707,7 +707,6 @@
             this.utcAppWizard.ResumeLayout(false);
             this.panelFormHeader.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.uToolBarManagerControl)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PictLoginLogo)).EndInit();
             this.ResumeLayout(false);
 
         }
