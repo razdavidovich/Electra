@@ -105,23 +105,31 @@ namespace Electra_MAC_Printing
         {
             strSettingsArray = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings").Split(',');
             string strSettingsTimeOut = clsCommon.ReadSingleConfigValue("TimeOut", "GetSetGeneralSettings", "Settings");
-            using (SerialPort port = new SerialPort(strSettingsArray[0]))
+            try
             {
-                // configure serial port
-                port.BaudRate = Convert.ToInt32(strSettingsArray[1]);
-                port.DataBits = Convert.ToInt32(strSettingsArray[3]);
-                port.Parity = (Parity)Enum.Parse(typeof(Parity), strSettingsArray[2]);
-                port.StopBits = (StopBits)Enum.Parse(typeof(StopBits), strSettingsArray[4]);
-                port.ReadTimeout = Convert.ToInt32(strSettingsTimeOut);
-                port.Open();
+                using (SerialPort port = new SerialPort(strSettingsArray[0]))
+                {
+                    // configure serial port
+                    port.BaudRate = Convert.ToInt32(strSettingsArray[1]);
+                    port.DataBits = Convert.ToInt32(strSettingsArray[3]);
+                    port.Parity = (Parity)Enum.Parse(typeof(Parity), strSettingsArray[2]);
+                    port.StopBits = (StopBits)Enum.Parse(typeof(StopBits), strSettingsArray[4]);
+                    port.ReadTimeout = Convert.ToInt32(strSettingsTimeOut);
+                    port.Open();
 
-                // create modbus master
-                IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(port);
+                    // create modbus master
+                    IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(port);
 
-                // Read the registers
-                var values = master.ReadHoldingRegisters(slaveId, startAddress, numberOfPoints);
-                return values;
+                    // Read the registers
+                    var values = master.ReadHoldingRegisters(slaveId, startAddress, numberOfPoints);
+                    return values;
+                }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         private void clearData()
@@ -158,9 +166,9 @@ namespace Electra_MAC_Printing
         #endregion
         private void tmrModbusTickWorker()
         {
-            try
+            this.BeginInvoke((MethodInvoker)delegate
             {
-                this.BeginInvoke((MethodInvoker)delegate
+                try
                 {
 
                     blnTimerRunning = true;
@@ -171,7 +179,7 @@ namespace Electra_MAC_Printing
                     {
                         // Read Serial number (expecting 6153320000 from test unit)
                         var serialValue = ReadModbusRegisters(2, Convert.ToUInt16(strSerialNumberAddress, 16), 5);
-                        txtUnitSerialNumber.Text = ConvertToSerialNumber(serialValue);                         
+                        txtUnitSerialNumber.Text = ConvertToSerialNumber(serialValue);
 
                         // Read MAC ADDRESS (expecting A8 1B 6A 9C 7A 9C from test unit)
                         var macValue = ReadModbusRegisters(2, Convert.ToUInt16(strDataAddress, 16), 3);
@@ -191,14 +199,15 @@ namespace Electra_MAC_Printing
                         }
                     }
                     blnTimerRunning = false;
-                });
-            }
-            catch (Exception ex)
-            {
 
-                clearData();
-                clsCommon.clsApplicationLogFileWriteLog(ex);
-            }
+                }
+                catch (Exception ex)
+                {
+
+                    clearData();
+                    clsCommon.clsApplicationLogFileWriteLog(ex);
+                }
+            });
 
         }
 

@@ -285,6 +285,7 @@
             // 
             // lblUnitMacAddress
             // 
+            this.lblUnitMacAddress.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lblUnitMacAddress.AutoSize = true;
             this.lblUnitMacAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUnitMacAddress.Location = new System.Drawing.Point(161, 141);
@@ -295,6 +296,7 @@
             // 
             // lblUnitSerialNumber
             // 
+            this.lblUnitSerialNumber.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lblUnitSerialNumber.AutoSize = true;
             this.lblUnitSerialNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUnitSerialNumber.Location = new System.Drawing.Point(159, 26);
@@ -315,6 +317,7 @@
             this.txtunitMacAddress.ReadOnly = true;
             this.txtunitMacAddress.Size = new System.Drawing.Size(472, 62);
             this.txtunitMacAddress.TabIndex = 10;
+            this.txtunitMacAddress.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtUnitSerialNumber
             // 
@@ -328,6 +331,7 @@
             this.txtUnitSerialNumber.ReadOnly = true;
             this.txtUnitSerialNumber.Size = new System.Drawing.Size(472, 62);
             this.txtUnitSerialNumber.TabIndex = 9;
+            this.txtUnitSerialNumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // ultraTabPageControl5
             // 
