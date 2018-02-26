@@ -102,11 +102,11 @@ namespace Electra_MAC_Printing
         }
 
         private ushort[] ReadModbusRegisters(byte slaveId, ushort startAddress, ushort numberOfPoints)
-        {
-            strSettingsArray = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings").Split(',');
-            string strSettingsTimeOut = clsCommon.ReadSingleConfigValue("TimeOut", "GetSetGeneralSettings", "Settings");
+        {           
             try
             {
+                strSettingsArray = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings").Split(',');
+                string strSettingsTimeOut = clsCommon.ReadSingleConfigValue("TimeOut", "GetSetGeneralSettings", "Settings");
                 using (SerialPort port = new SerialPort(strSettingsArray[0]))
                 {
                     // configure serial port
