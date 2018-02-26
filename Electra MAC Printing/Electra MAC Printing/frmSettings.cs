@@ -22,19 +22,19 @@ namespace Electra_MAC_Printing
        // clsSerialPort clsSerialPort = new clsSerialPort();
         clsSettingsBAL clsSettingsBAL = new clsSettingsBAL();
         clsCommonBAL clsCommonBAL = new clsCommonBAL();
+        clsAppWizardBAL clsappWizardBAL = new clsAppWizardBAL();
 
         /*Variable Declaration*/
         private int intuGrid_Users_DeleteRowId = 0;
-        private int intuGrid_ParameterstoPartNumbers_DeleteRowId = 0;
-        private int intuGrid_ParameterstoPartNumbers_DeleteParameterID = 0;
-        private int intGrid_PartNumbers_DeleteRowId = 0;
 
-        private int intuGrid_Parameters = 0;
+        string strLanguage = clsCommon.ReadSingleConfigValue("Default", "LanguageCodes", "LanguageSupport");
 
+        private Dictionary<string, object> dicLanguageCaptions;
 
         public frmSettings()
         {
             InitializeComponent();
+            LoadLanugageCaptions();
         }
 
 
@@ -50,12 +50,173 @@ namespace Electra_MAC_Printing
             utcAppSettingsWizard.Tabs["general"].Selected = true;
 
             uGrid_Users_Form_Load();
-            
+
+
+            Common_COMPORT_DataBinding(uCBO_GS_StripeCom);
+            Common_BaudRate_DataBinding(uCBO_GS_StripeBaudRate);
+            Common_Parity_DataBinding(uCBO_GS_StripeParity);
+            Common_DataBits_DataBinding(uCBO_GS_StripeDataBits);
+            Common_StopBits_DataBinding(uCBO_GS_StripeStopBits);
+
+
             /*General Settings*/
             GeneralSettings();
-            //uGrid_Parameters_Load();
-            //uGrid_ParameterstoPartNumbers_Load();
+            LoadControlCaption();
+        }
+        #endregion
 
+        #region Common_COMPORT_DataBinding
+        /****************************************************************************************************
+         * NAME         : Common_COMPORT_DataBinding                                                        *
+         * DESCRIPTION  : Initial ComboEditorBox datasource load when the form load funcrion .              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        private void Common_COMPORT_DataBinding(Infragistics.Win.UltraWinEditors.UltraComboEditor UCE_COMPort_Control)
+        {
+            DataTable dt = clsCommon.getSerialPort();
+
+            UCE_COMPort_Control.ValueMember = "ValueText";
+            UCE_COMPort_Control.DisplayMember = "DisplayText";
+            UCE_COMPort_Control.DataSource = dt;
+            UCE_COMPort_Control.DataBind();
+            UCE_COMPort_Control.SelectedIndex = 0;
+        }
+        #endregion
+
+        #region Common_BaudRate_DataBinding
+        /****************************************************************************************************
+         * NAME         : Common_BaudRate_DataBinding                                                       *
+         * DESCRIPTION  : Initial ComboEditorBox datasource load when the form load funcrion .              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        private void Common_BaudRate_DataBinding(Infragistics.Win.UltraWinEditors.UltraComboEditor UCE_BaudRate_Control)
+        {
+            DataTable dt = clsCommon.getBaudRate();
+
+            UCE_BaudRate_Control.ValueMember = "ValueText";
+            UCE_BaudRate_Control.DisplayMember = "DisplayText";
+            UCE_BaudRate_Control.DataSource = dt;
+            UCE_BaudRate_Control.DataBind();
+            UCE_BaudRate_Control.SelectedIndex = 0;
+        }
+        #endregion
+
+
+        #region Common_Parity_DataBinding
+        /****************************************************************************************************
+         * NAME         : Common_Parity_DataBinding                                                         *
+         * DESCRIPTION  : Initial ComboEditorBox datasource load when the form load funcrion .              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        private void Common_Parity_DataBinding(Infragistics.Win.UltraWinEditors.UltraComboEditor UCE_Parity_Control)
+        {
+            DataTable dt = clsCommon.getParity();
+
+            UCE_Parity_Control.ValueMember = "ValueText";
+            UCE_Parity_Control.DisplayMember = "DisplayText";
+            UCE_Parity_Control.DataSource = dt;
+            UCE_Parity_Control.DataBind();
+            UCE_Parity_Control.SelectedIndex = 0;
+        }
+        #endregion
+
+        #region Common_DataBits_DataBinding
+        /****************************************************************************************************
+         * NAME         : Common_DataBits_DataBinding                                                       *
+         * DESCRIPTION  : Initial ComboEditorBox datasource load when the form load funcrion .              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        private void Common_DataBits_DataBinding(Infragistics.Win.UltraWinEditors.UltraComboEditor UCE_DataBits_Control)
+        {
+            DataTable dt = clsCommon.getDataBits();
+
+            UCE_DataBits_Control.ValueMember = "ValueText";
+            UCE_DataBits_Control.DisplayMember = "DisplayText";
+            UCE_DataBits_Control.DataSource = dt;
+            UCE_DataBits_Control.DataBind();
+            UCE_DataBits_Control.SelectedIndex = 0;
+        }
+        #endregion
+
+        #region Common_StopBits_DataBinding
+        /****************************************************************************************************
+         * NAME         : Common_StopBits_DataBinding                                                       *
+         * DESCRIPTION  : Initial ComboEditorBox datasource load when the form load funcrion .              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        private void Common_StopBits_DataBinding(Infragistics.Win.UltraWinEditors.UltraComboEditor UCE_StopBits_Control)
+        {
+            DataTable dt = clsCommon.getStopBits();
+
+            UCE_StopBits_Control.ValueMember = "ValueText";
+            UCE_StopBits_Control.DisplayMember = "DisplayText";
+            UCE_StopBits_Control.DataSource = dt;
+            UCE_StopBits_Control.DataBind();
+            UCE_StopBits_Control.SelectedIndex = 0;
+        }
+        #endregion
+
+        #region LoadLanugageCaptions
+        /****************************************************************************************************
+         * NAME         : LoadLanugageCaptions                                                              *
+         * DESCRIPTION  : Load Language Captions                                                            *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 24Feb18                                                                           *
+         ****************************************************************************************************/
+        private void LoadLanugageCaptions()
+        {
+            try
+            {
+                string strCaption = clsCommon.ReadSingleConfigValue("Default", "LanguageCodes", "LanguageSupport");
+                DataTable dt = (DataTable)clsappWizardBAL.getLanguageCapion(1, strCaption);
+
+                int intRowCount = dt.Rows.Count;
+                dicLanguageCaptions = new Dictionary<string, object>();
+
+                if (0 < intRowCount)
+                {
+                    for (int i = 0; i < intRowCount; i++)
+                    {
+                        dicLanguageCaptions.Add((string)dt.Rows[i]["vchKey"], (string)dt.Rows[i]["vchTranslation"]);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                clsCommon.clsApplicationLogFileWriteLog(ex);
+            }
+        }
+        #endregion
+
+        #region LoadControlCaption
+        /****************************************************************************************************
+         * NAME         : LoadControlCaption                                                                *
+         * DESCRIPTION  : Load Control Captions                                                             *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 24Feb18                                                                           *
+         ****************************************************************************************************/
+        private void LoadControlCaption()
+        {            
+            LBL_StationName.Text = (string)dicLanguageCaptions[string.Format("SettingslabelStationNameCaption_{0}", strLanguage)];
+            LBL_UnitSettings.Text = (string)dicLanguageCaptions[string.Format("SettingslabelUnitSettingsCaption_{0}", strLanguage)];
+            LBL_ModbuSlaveAddress.Text = (string)dicLanguageCaptions[string.Format("SettingslabelModbusslaveCaption_{0}", strLanguage)];
+
+            LBL_SerialNumberAddress.Text = (string)dicLanguageCaptions[string.Format("SettingslabelSerialNumberCaption_{0}", strLanguage)];
+            LBL_DataAddress.Text = (string)dicLanguageCaptions[string.Format("SettingslabelDataAddressCaption_{0}", strLanguage)];
+            LBL_PrinterSettings.Text = (string)dicLanguageCaptions[string.Format("SettingslabelPrinterSettingsCaption_{0}", strLanguage)];
+
+            grpCommunicationSettings.Text = (string)dicLanguageCaptions[string.Format("SettingsGroupboxCaption_{0}", strLanguage)];
+
+            uBTN_Settings_OK.Text = (string)dicLanguageCaptions[string.Format("SettingsButtonSaveCaption_{0}", strLanguage)];
+            uBTN_Settings_Cancel.Text = (string)dicLanguageCaptions[string.Format("SettingsbuttonCancelCaption_{0}", strLanguage)];
+            utcAppSettingsWizard.Tabs[0].Text= (string)dicLanguageCaptions[string.Format("SettingsTabGeneralSettingsCaption_{0}", strLanguage)];
+            utcAppSettingsWizard.Tabs[1].Text = (string)dicLanguageCaptions[string.Format("SettingsTabUsersCaption_{0}", strLanguage)];
         }
         #endregion
 
@@ -107,11 +268,12 @@ namespace Electra_MAC_Printing
                         break;
                     case "users":
                         uGrid_Users_Form_Load();
-                        break;
-                    
+                        break;                    
                 }
-
-                clsCommon.commonGeneralDisplayMessageBox(1);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsSaveSuccessCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "64");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
 
             }
             catch (Exception ex)
@@ -133,11 +295,16 @@ namespace Electra_MAC_Printing
 
             /*Variable Declaration and Assign the Controls values*/
             string strTXT_StationName = TXT_StationName.Text,
-                strTxt_UnitSettings = Txt_UnitSettings.Text,
+               
                    strTxt_ModbusSlaveAddress = Txt_ModbusSlaveAddress.Text,
                    strTXT_SerialNumberAddress = TXT_SerialNumberAddress.Text,
                    strTXT_DataAddress = TXT_DataAddress.Text,
-                    strTXT_PrinterSettings = TXT_PrinterSettings.Text;
+                    strTXT_PrinterSettings = TXT_PrinterSettings.Text,
+            struCBO_GS_StripeCom = uCBO_GS_StripeCom.Value.ToString(),
+                   struCBO_GS_StripeBaudRate = uCBO_GS_StripeBaudRate.Value.ToString(),
+                   struCBO_GS_StripeParity = uCBO_GS_StripeParity.Value.ToString(),
+                   struCBO_GS_StripeDataBits = uCBO_GS_StripeDataBits.Value.ToString(),
+                   struCBO_GS_StripeStopBits = uCBO_GS_StripeStopBits.Value.ToString();
 
             /*Validate TXT_StationName Controls*/
             if (!string.IsNullOrEmpty(strTXT_StationName))
@@ -146,21 +313,15 @@ namespace Electra_MAC_Printing
             }
             else
             {
-                clsCommon.commonGeneralDisplayMessageBox(3);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsStationNameCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+
+                clsCommon.commonGeneralDisplayMessageBox(0);                
                 return false;
             }
 
-            /*Validate Txt_UnitSettings Controls*/
-            if (!string.IsNullOrEmpty(strTxt_UnitSettings))
-            {
-                clsCommon.SaveConfigSettingsValue("UnitSettings", "GetSetGeneralSettings", "Settings", strTxt_UnitSettings);
-            }
-            else
-            {
-                clsCommon.commonGeneralDisplayMessageBox(4);
-                return false;
-            }
-
+          
             /*Validate Txt_ModbusSlaveAddress Controls*/
             if (!string.IsNullOrEmpty(strTxt_ModbusSlaveAddress))
             {
@@ -168,7 +329,10 @@ namespace Electra_MAC_Printing
             }
             else
             {
-                clsCommon.commonGeneralDisplayMessageBox(5);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsModbusSlaveAddressCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
                 return false;
             }
 
@@ -179,7 +343,10 @@ namespace Electra_MAC_Printing
             }
             else
             {
-                clsCommon.commonGeneralDisplayMessageBox(6);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsSerialNumberCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
                 return false;
             }
 
@@ -190,7 +357,10 @@ namespace Electra_MAC_Printing
             }
             else
             {
-                clsCommon.commonGeneralDisplayMessageBox(6);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsDataAddressCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
                 return false;
             }
 
@@ -201,10 +371,30 @@ namespace Electra_MAC_Printing
             }
             else
             {
-                clsCommon.commonGeneralDisplayMessageBox(6);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsPrinterSettingsCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
                 return false;
             }
 
+            /*Validate uCBO_GS_StripeCom Controls*/
+            if (!string.IsNullOrEmpty(struCBO_GS_StripeCom))
+            {
+                StringBuilder strBuilder = new StringBuilder();
+                strBuilder.AppendFormat("{0},{1},{2},{3},{4}", struCBO_GS_StripeCom, struCBO_GS_StripeBaudRate, struCBO_GS_StripeParity, struCBO_GS_StripeDataBits, struCBO_GS_StripeStopBits);
+                clsCommon.SaveConfigSettingsValue("UnitSettings", "GetSetGeneralSettings", "Settings", strBuilder.ToString());
+            }
+            else
+            {
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMagneticStripeCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
+                uCBO_GS_StripeCom.Focus();
+                return false;
+            }
+            GeneralSettings();
             return true;
         }
         #endregion
@@ -226,7 +416,6 @@ namespace Electra_MAC_Printing
         #endregion
 
        
-
         // General Settings
         #region GeneralSettings
         /****************************************************************************************************
@@ -238,15 +427,20 @@ namespace Electra_MAC_Printing
         private void GeneralSettings()
         {
 
-            TXT_StationName.Text = clsCommon.ReadSingleConfigValue("StationName", "GetSetGeneralSettings", "Settings");
-            Txt_UnitSettings.Text = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings");
+            TXT_StationName.Text = clsCommon.ReadSingleConfigValue("StationName", "GetSetGeneralSettings", "Settings");            
             Txt_ModbusSlaveAddress.Text = clsCommon.ReadSingleConfigValue("ModbusSlaveAddress", "GetSetGeneralSettings", "Settings");
             TXT_SerialNumberAddress.Text = clsCommon.ReadSingleConfigValue("SerialNumberAddress", "GetSetGeneralSettings", "Settings");
             TXT_DataAddress.Text = clsCommon.ReadSingleConfigValue("DataAddress", "GetSetGeneralSettings", "Settings");
             TXT_PrinterSettings.Text = clsCommon.ReadSingleConfigValue("PrinterSettings", "GetSetGeneralSettings", "Settings");
+
+            string[] strCOMSettings = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings").Split(',');
+            uCBO_GS_StripeCom.Value = strCOMSettings[0];
+            uCBO_GS_StripeBaudRate.Value = strCOMSettings[1];
+            uCBO_GS_StripeParity.Value = strCOMSettings[2];
+            uCBO_GS_StripeDataBits.Value = strCOMSettings[3];
+            uCBO_GS_StripeStopBits.Value = strCOMSettings[4];
         }
         #endregion
-
 
         //User Grid
 
@@ -317,10 +511,9 @@ namespace Electra_MAC_Printing
                 col.Header.Appearance.BackColor = Color.LightGray;
                 col.Header.Appearance.ForeColor = Color.Black;
                 col.Header.Appearance.FontData.Bold = Infragistics.Win.DefaultableBoolean.True;
-                col.Header.Caption = clsCommon.ReadSingleConfigValue(col.ToString(), "uGrid_Users_HeaderCaption", "Settings");
 
-            }
-
+                col.Header.Caption = (string)dicLanguageCaptions[string.Format("{0}_{1}", col.Key,strLanguage)];              
+            }            
             e.Layout.Bands[0].Columns[0].CellActivation = Infragistics.Win.UltraWinGrid.Activation.NoEdit;
 
             if ("0" == clsCommon.ReadSingleConfigValue("Default", "LanguageDirection", "LanguageSupport"))
@@ -388,19 +581,14 @@ namespace Electra_MAC_Printing
 
                 else
                 {
-
                     if (0 != uGrid_Users.ActiveRow.Index)
                     {
-                        clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", "Column Should not be Null or Empty");
+                        clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("SettingsGridUsersErrorMessageCaption_{0}", strLanguage)]);                        
                         clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
-                        clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", "Invalied Data");
-
+                        clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("SettingsGridUsersErrorMessageTitleCaption_{0}", strLanguage)]);
                         clsCommon.commonGeneralDisplayMessageBox(0);
-
                     }
-
                 }
-
             }
             catch (Exception ex)
             {

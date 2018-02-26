@@ -41,15 +41,19 @@
             this.utpcAppSettingsWizard_GeneralSettings = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
             this.panelGeneralSettings = new System.Windows.Forms.Panel();
             this.grpCommunicationSettings = new System.Windows.Forms.GroupBox();
+            this.uCBO_GS_StripeStopBits = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this.TXT_PrinterSettings = new System.Windows.Forms.TextBox();
+            this.uCBO_GS_StripeParity = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this.LBL_PrinterSettings = new System.Windows.Forms.Label();
+            this.uCBO_GS_StripeBaudRate = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this.TXT_DataAddress = new System.Windows.Forms.TextBox();
+            this.uCBO_GS_StripeDataBits = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this.LBL_DataAddress = new System.Windows.Forms.Label();
+            this.uCBO_GS_StripeCom = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this.TXT_SerialNumberAddress = new System.Windows.Forms.TextBox();
             this.LBL_SerialNumberAddress = new System.Windows.Forms.Label();
             this.Txt_ModbusSlaveAddress = new System.Windows.Forms.TextBox();
             this.LBL_ModbuSlaveAddress = new System.Windows.Forms.Label();
-            this.Txt_UnitSettings = new System.Windows.Forms.TextBox();
             this.LBL_UnitSettings = new System.Windows.Forms.Label();
             this.TXT_StationName = new System.Windows.Forms.TextBox();
             this.LBL_StationName = new System.Windows.Forms.Label();
@@ -64,6 +68,11 @@
             this.utpcAppSettingsWizard_GeneralSettings.SuspendLayout();
             this.panelGeneralSettings.SuspendLayout();
             this.grpCommunicationSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeStopBits)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeParity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeBaudRate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeDataBits)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeCom)).BeginInit();
             this.utpcAppSettingsWizard_Users.SuspendLayout();
             this.panelUsersSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uGrid_Users)).BeginInit();
@@ -94,80 +103,129 @@
             // 
             this.grpCommunicationSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpCommunicationSettings.Controls.Add(this.uCBO_GS_StripeStopBits);
             this.grpCommunicationSettings.Controls.Add(this.TXT_PrinterSettings);
+            this.grpCommunicationSettings.Controls.Add(this.uCBO_GS_StripeParity);
             this.grpCommunicationSettings.Controls.Add(this.LBL_PrinterSettings);
+            this.grpCommunicationSettings.Controls.Add(this.uCBO_GS_StripeBaudRate);
             this.grpCommunicationSettings.Controls.Add(this.TXT_DataAddress);
+            this.grpCommunicationSettings.Controls.Add(this.uCBO_GS_StripeDataBits);
             this.grpCommunicationSettings.Controls.Add(this.LBL_DataAddress);
+            this.grpCommunicationSettings.Controls.Add(this.uCBO_GS_StripeCom);
             this.grpCommunicationSettings.Controls.Add(this.TXT_SerialNumberAddress);
             this.grpCommunicationSettings.Controls.Add(this.LBL_SerialNumberAddress);
             this.grpCommunicationSettings.Controls.Add(this.Txt_ModbusSlaveAddress);
             this.grpCommunicationSettings.Controls.Add(this.LBL_ModbuSlaveAddress);
-            this.grpCommunicationSettings.Controls.Add(this.Txt_UnitSettings);
             this.grpCommunicationSettings.Controls.Add(this.LBL_UnitSettings);
             this.grpCommunicationSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.grpCommunicationSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpCommunicationSettings.Location = new System.Drawing.Point(18, 129);
+            this.grpCommunicationSettings.Location = new System.Drawing.Point(18, 87);
             this.grpCommunicationSettings.Name = "grpCommunicationSettings";
-            this.grpCommunicationSettings.Size = new System.Drawing.Size(918, 278);
+            this.grpCommunicationSettings.Size = new System.Drawing.Size(918, 348);
             this.grpCommunicationSettings.TabIndex = 15;
             this.grpCommunicationSettings.TabStop = false;
             this.grpCommunicationSettings.Text = "Communication Settings";
+            // 
+            // uCBO_GS_StripeStopBits
+            // 
+            this.uCBO_GS_StripeStopBits.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Suggest;
+            this.uCBO_GS_StripeStopBits.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uCBO_GS_StripeStopBits.Location = new System.Drawing.Point(782, 32);
+            this.uCBO_GS_StripeStopBits.Name = "uCBO_GS_StripeStopBits";
+            this.uCBO_GS_StripeStopBits.Size = new System.Drawing.Size(127, 31);
+            this.uCBO_GS_StripeStopBits.TabIndex = 33;
             // 
             // TXT_PrinterSettings
             // 
             this.TXT_PrinterSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TXT_PrinterSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TXT_PrinterSettings.Location = new System.Drawing.Point(270, 229);
+            this.TXT_PrinterSettings.Location = new System.Drawing.Point(270, 248);
             this.TXT_PrinterSettings.Name = "TXT_PrinterSettings";
-            this.TXT_PrinterSettings.Size = new System.Drawing.Size(534, 29);
+            this.TXT_PrinterSettings.Size = new System.Drawing.Size(639, 29);
             this.TXT_PrinterSettings.TabIndex = 28;
+            // 
+            // uCBO_GS_StripeParity
+            // 
+            this.uCBO_GS_StripeParity.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Suggest;
+            this.uCBO_GS_StripeParity.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uCBO_GS_StripeParity.Location = new System.Drawing.Point(524, 32);
+            this.uCBO_GS_StripeParity.Name = "uCBO_GS_StripeParity";
+            this.uCBO_GS_StripeParity.Size = new System.Drawing.Size(127, 31);
+            this.uCBO_GS_StripeParity.TabIndex = 32;
             // 
             // LBL_PrinterSettings
             // 
             this.LBL_PrinterSettings.AutoSize = true;
             this.LBL_PrinterSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LBL_PrinterSettings.Location = new System.Drawing.Point(10, 234);
+            this.LBL_PrinterSettings.Location = new System.Drawing.Point(10, 251);
             this.LBL_PrinterSettings.Name = "LBL_PrinterSettings";
             this.LBL_PrinterSettings.Size = new System.Drawing.Size(135, 24);
             this.LBL_PrinterSettings.TabIndex = 27;
             this.LBL_PrinterSettings.Text = "Printer Settings";
+            // 
+            // uCBO_GS_StripeBaudRate
+            // 
+            this.uCBO_GS_StripeBaudRate.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Suggest;
+            this.uCBO_GS_StripeBaudRate.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uCBO_GS_StripeBaudRate.Location = new System.Drawing.Point(395, 32);
+            this.uCBO_GS_StripeBaudRate.Name = "uCBO_GS_StripeBaudRate";
+            this.uCBO_GS_StripeBaudRate.Size = new System.Drawing.Size(127, 31);
+            this.uCBO_GS_StripeBaudRate.TabIndex = 31;
             // 
             // TXT_DataAddress
             // 
             this.TXT_DataAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TXT_DataAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TXT_DataAddress.Location = new System.Drawing.Point(270, 166);
+            this.TXT_DataAddress.Location = new System.Drawing.Point(270, 193);
             this.TXT_DataAddress.Name = "TXT_DataAddress";
-            this.TXT_DataAddress.Size = new System.Drawing.Size(534, 29);
+            this.TXT_DataAddress.Size = new System.Drawing.Size(639, 29);
             this.TXT_DataAddress.TabIndex = 26;
+            // 
+            // uCBO_GS_StripeDataBits
+            // 
+            this.uCBO_GS_StripeDataBits.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Suggest;
+            this.uCBO_GS_StripeDataBits.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uCBO_GS_StripeDataBits.Location = new System.Drawing.Point(653, 32);
+            this.uCBO_GS_StripeDataBits.Name = "uCBO_GS_StripeDataBits";
+            this.uCBO_GS_StripeDataBits.Size = new System.Drawing.Size(127, 31);
+            this.uCBO_GS_StripeDataBits.TabIndex = 30;
             // 
             // LBL_DataAddress
             // 
             this.LBL_DataAddress.AutoSize = true;
             this.LBL_DataAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LBL_DataAddress.Location = new System.Drawing.Point(10, 181);
+            this.LBL_DataAddress.Location = new System.Drawing.Point(10, 196);
             this.LBL_DataAddress.Name = "LBL_DataAddress";
             this.LBL_DataAddress.Size = new System.Drawing.Size(122, 24);
             this.LBL_DataAddress.TabIndex = 25;
             this.LBL_DataAddress.Text = "Data Address";
+            // 
+            // uCBO_GS_StripeCom
+            // 
+            this.uCBO_GS_StripeCom.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Suggest;
+            this.uCBO_GS_StripeCom.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uCBO_GS_StripeCom.Location = new System.Drawing.Point(266, 32);
+            this.uCBO_GS_StripeCom.Name = "uCBO_GS_StripeCom";
+            this.uCBO_GS_StripeCom.Size = new System.Drawing.Size(127, 31);
+            this.uCBO_GS_StripeCom.TabIndex = 29;
             // 
             // TXT_SerialNumberAddress
             // 
             this.TXT_SerialNumberAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TXT_SerialNumberAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TXT_SerialNumberAddress.Location = new System.Drawing.Point(270, 131);
+            this.TXT_SerialNumberAddress.Location = new System.Drawing.Point(266, 138);
             this.TXT_SerialNumberAddress.Name = "TXT_SerialNumberAddress";
-            this.TXT_SerialNumberAddress.Size = new System.Drawing.Size(534, 29);
+            this.TXT_SerialNumberAddress.Size = new System.Drawing.Size(643, 29);
             this.TXT_SerialNumberAddress.TabIndex = 24;
             // 
             // LBL_SerialNumberAddress
             // 
             this.LBL_SerialNumberAddress.AutoSize = true;
             this.LBL_SerialNumberAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LBL_SerialNumberAddress.Location = new System.Drawing.Point(10, 136);
+            this.LBL_SerialNumberAddress.Location = new System.Drawing.Point(10, 141);
             this.LBL_SerialNumberAddress.Name = "LBL_SerialNumberAddress";
             this.LBL_SerialNumberAddress.Size = new System.Drawing.Size(206, 24);
             this.LBL_SerialNumberAddress.TabIndex = 23;
@@ -178,36 +236,26 @@
             this.Txt_ModbusSlaveAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Txt_ModbusSlaveAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Txt_ModbusSlaveAddress.Location = new System.Drawing.Point(270, 76);
+            this.Txt_ModbusSlaveAddress.Location = new System.Drawing.Point(266, 83);
             this.Txt_ModbusSlaveAddress.Name = "Txt_ModbusSlaveAddress";
-            this.Txt_ModbusSlaveAddress.Size = new System.Drawing.Size(534, 29);
+            this.Txt_ModbusSlaveAddress.Size = new System.Drawing.Size(643, 29);
             this.Txt_ModbusSlaveAddress.TabIndex = 22;
             // 
             // LBL_ModbuSlaveAddress
             // 
             this.LBL_ModbuSlaveAddress.AutoSize = true;
             this.LBL_ModbuSlaveAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LBL_ModbuSlaveAddress.Location = new System.Drawing.Point(10, 81);
+            this.LBL_ModbuSlaveAddress.Location = new System.Drawing.Point(11, 86);
             this.LBL_ModbuSlaveAddress.Name = "LBL_ModbuSlaveAddress";
             this.LBL_ModbuSlaveAddress.Size = new System.Drawing.Size(205, 24);
             this.LBL_ModbuSlaveAddress.TabIndex = 21;
             this.LBL_ModbuSlaveAddress.Text = "Modbus Slave Address";
             // 
-            // Txt_UnitSettings
-            // 
-            this.Txt_UnitSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Txt_UnitSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Txt_UnitSettings.Location = new System.Drawing.Point(270, 28);
-            this.Txt_UnitSettings.Name = "Txt_UnitSettings";
-            this.Txt_UnitSettings.Size = new System.Drawing.Size(534, 29);
-            this.Txt_UnitSettings.TabIndex = 20;
-            // 
             // LBL_UnitSettings
             // 
             this.LBL_UnitSettings.AutoSize = true;
             this.LBL_UnitSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LBL_UnitSettings.Location = new System.Drawing.Point(10, 32);
+            this.LBL_UnitSettings.Location = new System.Drawing.Point(19, 36);
             this.LBL_UnitSettings.Name = "LBL_UnitSettings";
             this.LBL_UnitSettings.Size = new System.Drawing.Size(113, 24);
             this.LBL_UnitSettings.TabIndex = 1;
@@ -218,16 +266,16 @@
             this.TXT_StationName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TXT_StationName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TXT_StationName.Location = new System.Drawing.Point(288, 66);
+            this.TXT_StationName.Location = new System.Drawing.Point(288, 30);
             this.TXT_StationName.Name = "TXT_StationName";
-            this.TXT_StationName.Size = new System.Drawing.Size(534, 29);
+            this.TXT_StationName.Size = new System.Drawing.Size(639, 29);
             this.TXT_StationName.TabIndex = 6;
             // 
             // LBL_StationName
             // 
             this.LBL_StationName.AutoSize = true;
             this.LBL_StationName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LBL_StationName.Location = new System.Drawing.Point(28, 69);
+            this.LBL_StationName.Location = new System.Drawing.Point(28, 33);
             this.LBL_StationName.Name = "LBL_StationName";
             this.LBL_StationName.Size = new System.Drawing.Size(122, 24);
             this.LBL_StationName.TabIndex = 1;
@@ -251,9 +299,6 @@
             // 
             // uGrid_Users
             // 
-            this.uGrid_Users.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.uGrid_Users.DisplayLayout.AutoFitStyle = Infragistics.Win.UltraWinGrid.AutoFitStyle.ResizeAllColumns;
             this.uGrid_Users.DisplayLayout.BorderStyle = Infragistics.Win.UIElementBorderStyle.Solid;
             this.uGrid_Users.DisplayLayout.CaptionVisible = Infragistics.Win.DefaultableBoolean.False;
@@ -261,10 +306,11 @@
             this.uGrid_Users.DisplayLayout.Override.AllowDelete = Infragistics.Win.DefaultableBoolean.True;
             this.uGrid_Users.DisplayLayout.Override.AllowRowFiltering = Infragistics.Win.DefaultableBoolean.True;
             this.uGrid_Users.DisplayLayout.Override.AllowUpdate = Infragistics.Win.DefaultableBoolean.True;
-            this.uGrid_Users.Location = new System.Drawing.Point(10, 10);
+            this.uGrid_Users.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uGrid_Users.Location = new System.Drawing.Point(0, 0);
             this.uGrid_Users.Margin = new System.Windows.Forms.Padding(5);
             this.uGrid_Users.Name = "uGrid_Users";
-            this.uGrid_Users.Size = new System.Drawing.Size(938, 434);
+            this.uGrid_Users.Size = new System.Drawing.Size(958, 454);
             this.uGrid_Users.TabIndex = 1;
             this.uGrid_Users.AfterCellUpdate += new Infragistics.Win.UltraWinGrid.CellEventHandler(this.uGrid_Users_AfterCellUpdate);
             this.uGrid_Users.InitializeLayout += new Infragistics.Win.UltraWinGrid.InitializeLayoutEventHandler(this.uGrid_Users_InitializeLayout);
@@ -280,7 +326,7 @@
             this.uBTN_Settings_Cancel.Appearance = appearance1;
             this.uBTN_Settings_Cancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uBTN_Settings_Cancel.ImageSize = new System.Drawing.Size(32, 32);
-            this.uBTN_Settings_Cancel.Location = new System.Drawing.Point(770, 522);
+            this.uBTN_Settings_Cancel.Location = new System.Drawing.Point(800, 522);
             this.uBTN_Settings_Cancel.Name = "uBTN_Settings_Cancel";
             this.uBTN_Settings_Cancel.Size = new System.Drawing.Size(180, 45);
             this.uBTN_Settings_Cancel.TabIndex = 5;
@@ -295,7 +341,7 @@
             this.uBTN_Settings_OK.Appearance = appearance2;
             this.uBTN_Settings_OK.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uBTN_Settings_OK.ImageSize = new System.Drawing.Size(35, 30);
-            this.uBTN_Settings_OK.Location = new System.Drawing.Point(565, 522);
+            this.uBTN_Settings_OK.Location = new System.Drawing.Point(595, 522);
             this.uBTN_Settings_OK.Name = "uBTN_Settings_OK";
             this.uBTN_Settings_OK.Size = new System.Drawing.Size(180, 45);
             this.uBTN_Settings_OK.TabIndex = 4;
@@ -376,6 +422,11 @@
             this.panelGeneralSettings.PerformLayout();
             this.grpCommunicationSettings.ResumeLayout(false);
             this.grpCommunicationSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeStopBits)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeParity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeBaudRate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeDataBits)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeCom)).EndInit();
             this.utpcAppSettingsWizard_Users.ResumeLayout(false);
             this.panelUsersSettings.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.uGrid_Users)).EndInit();
@@ -397,8 +448,6 @@
         private System.Windows.Forms.GroupBox grpCommunicationSettings;
         private System.Windows.Forms.TextBox Txt_ModbusSlaveAddress;
         private System.Windows.Forms.Label LBL_ModbuSlaveAddress;
-        private System.Windows.Forms.TextBox Txt_UnitSettings;
-        private System.Windows.Forms.Label LBL_UnitSettings;
         private System.Windows.Forms.TextBox TXT_StationName;
         private System.Windows.Forms.Label LBL_StationName;
         private Infragistics.Win.UltraWinTabControl.UltraTabPageControl utpcAppSettingsWizard_Users;
@@ -411,5 +460,11 @@
         private System.Windows.Forms.TextBox TXT_SerialNumberAddress;
         private System.Windows.Forms.Label LBL_SerialNumberAddress;
         private Infragistics.Win.UltraWinGrid.UltraGrid uGrid_Users;
+        private Infragistics.Win.UltraWinEditors.UltraComboEditor uCBO_GS_StripeStopBits;
+        private Infragistics.Win.UltraWinEditors.UltraComboEditor uCBO_GS_StripeParity;
+        private Infragistics.Win.UltraWinEditors.UltraComboEditor uCBO_GS_StripeBaudRate;
+        private Infragistics.Win.UltraWinEditors.UltraComboEditor uCBO_GS_StripeDataBits;
+        private Infragistics.Win.UltraWinEditors.UltraComboEditor uCBO_GS_StripeCom;
+        private System.Windows.Forms.Label LBL_UnitSettings;
     }
 }

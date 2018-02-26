@@ -16,7 +16,7 @@ using System.IO.Ports;
 using Modbus.Data;
 using Modbus.Device;
 using Modbus.Utility;
-using System.Text;
+
 
 namespace Electra_MAC_Printing
 {
@@ -31,10 +31,15 @@ namespace Electra_MAC_Printing
 
         private Dictionary<string, object> dicLanguageCaptions;
 
+        string strLanguage = clsCommon.ReadSingleConfigValue("Default", "LanguageCodes", "LanguageSupport");
+        private string[] strSettingsArray;
+
+        private bool blnTimerRunning = false;
+
         public frmAppWizard()
         {
             InitializeComponent();
-           
+
             /*Settings For Log File path for Debug the Errors.*/
             clsApplicationLogFile.LogFilePath = clsCommon.ReadSingleConfigValue("LogFilePath", "LogSettings", "Settings");
             clsApplicationLogFile.LogFileName = clsCommon.ReadSingleConfigValue("LogFileName", "LogSettings", "Settings");
@@ -97,29 +102,38 @@ namespace Electra_MAC_Printing
         }
 
         private ushort[] ReadModbusRegisters(byte slaveId, ushort startAddress, ushort numberOfPoints)
-        {
-            using (SerialPort port = new SerialPort("COM3"))
+        {           
+            try
             {
-                // configure serial port
-                port.BaudRate = 115200;
-                port.DataBits = 8;
-                port.Parity = Parity.Even;
-                port.StopBits = StopBits.One;
-                port.ReadTimeout = 1000;
-                port.Open();
+                strSettingsArray = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings").Split(',');
+                string strSettingsTimeOut = clsCommon.ReadSingleConfigValue("TimeOut", "GetSetGeneralSettings", "Settings");
+                using (SerialPort port = new SerialPort(strSettingsArray[0]))
+                {
+                    // configure serial port
+                    port.BaudRate = Convert.ToInt32(strSettingsArray[1]);
+                    port.DataBits = Convert.ToInt32(strSettingsArray[3]);
+                    port.Parity = (Parity)Enum.Parse(typeof(Parity), strSettingsArray[2]);
+                    port.StopBits = (StopBits)Enum.Parse(typeof(StopBits), strSettingsArray[4]);
+                    port.ReadTimeout = Convert.ToInt32(strSettingsTimeOut);
+                    port.Open();
 
-                // create modbus master
-                IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(port);
+                    // create modbus master
+                    IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(port);
 
-                // Read the registers
-                var values = master.ReadHoldingRegisters(slaveId, startAddress, numberOfPoints);
-                return values;
+                    // Read the registers
+                    var values = master.ReadHoldingRegisters(slaveId, startAddress, numberOfPoints);
+                    return values;
+                }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         private void clearData()
         {
-
             txtUnitSerialNumber.Text = string.Empty;
             txtUnitSerialNumber.BackColor = Color.Red;
 
@@ -145,33 +159,57 @@ namespace Electra_MAC_Printing
 
         private void tmrModbus_Tick(object sender, EventArgs e)
         {
-            try
+
+            if (!blnTimerRunning)
             {
-                if (!BtnRePrint.Visible)
+                Application.DoEvents();
+
+                MethodInvoker tmrDelegate = delegate
                 {
-                    // Read Serial number (expecting 6153320000 from test unit)
-                    var serialValue = ReadModbusRegisters(2, 0x00, 5);
-                    txtUnitSerialNumber.Text = ConvertToSerialNumber(serialValue);
-
-                    // Read MAC ADDRESS (expecting A8 1B 6A 9C 7A 9C from test unit)
-                    var macValue = ReadModbusRegisters(2, 0x10, 3);
-                    txtunitMacAddress.Text = ConvertToMACAddress(macValue);
-
-                    if (txtunitMacAddress.TextLength > 0)
-                    {
-                        setUnitInformationAndPrint();
-                    }
-                }
+                    tmrModbusTickWorker();
+                };
+                tmrDelegate.BeginInvoke(null, null);
             }
-            catch (Exception ex)
-            {
-                clearControls();
-                Console.WriteLine(ex.Message);
-            }
-
         }
 
         #endregion
+        private void tmrModbusTickWorker()
+        {
+            this.BeginInvoke((MethodInvoker)delegate
+            {
+                try
+                {
+
+                    blnTimerRunning = true;
+                    string strDataAddress = clsCommon.ReadSingleConfigValue("DataAddress", "GetSetGeneralSettings", "Settings");
+                    string strSerialNumberAddress = clsCommon.ReadSingleConfigValue("SerialNumberAddress", "GetSetGeneralSettings", "Settings");
+
+                    if (!BtnRePrint.Visible)
+                    {
+                        // Read Serial number (expecting 6153320000 from test unit)
+                        var serialValue = ReadModbusRegisters(2, Convert.ToUInt16(strSerialNumberAddress, 16), 5);
+                        txtUnitSerialNumber.Text = ConvertToSerialNumber(serialValue);
+
+                        // Read MAC ADDRESS (expecting A8 1B 6A 9C 7A 9C from test unit)
+                        var macValue = ReadModbusRegisters(2, Convert.ToUInt16(strDataAddress, 16), 3);
+                        txtunitMacAddress.Text = ConvertToMACAddress(macValue);
+
+                        if (txtunitMacAddress.TextLength > 0)
+                        {
+                          setUnitInformationAndPrint();
+                        }
+                    }
+                    blnTimerRunning = false;
+
+                }
+                catch (Exception ex)
+                {
+                    clearData();
+                    clsCommon.clsApplicationLogFileWriteLog(ex);
+                }
+            });
+
+        }
 
         #region "Print Label"
         private void printLabel(string serialNumber, string unitMACAddress)
@@ -233,7 +271,7 @@ namespace Electra_MAC_Printing
                 if (0 < intRowCount)
                 {
                     for (int i = 0; i < intRowCount; i++)
-                    {                        
+                    {
                         dicLanguageCaptions.Add((string)dt.Rows[i]["vchKey"], (string)dt.Rows[i]["vchTranslation"]);
                     }
 
@@ -249,18 +287,32 @@ namespace Electra_MAC_Printing
         #region LoadControlCaption
         /****************************************************************************************************
          * NAME         : LoadControlCaption                                                                *
-         * DESCRIPTION  : Load Control Captions                                                            *
+         * DESCRIPTION  : Load Control Captions                                                             *
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 24Feb18                                                                           *
          ****************************************************************************************************/
         private void LoadControlCaption()
         {
-            string strLanguage = clsCommon.ReadSingleConfigValue("Default", "LanguageCodes", "LanguageSupport");
-
             lblFormHead.Text = (string)dicLanguageCaptions[string.Format("loginHeaderCaption_{0}", strLanguage)];
             lblHeadlogin.Text = (string)dicLanguageCaptions[string.Format("loginHeaderemployeeCardCaption_{0}", strLanguage)];
             lblEmpNo.Text = (string)dicLanguageCaptions[string.Format("loginEmployeeNumberCaption_{0}", strLanguage)];
             btnLogin.Text = (string)dicLanguageCaptions[string.Format("loginButtonCaption_{0}", strLanguage)];
+            lblUnitSerialNumber.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitSerialNumberCaption_{0}", strLanguage)];
+            lblUnitMacAddress.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitMacAddressCaption_{0}", strLanguage)];
+            lblUnitMacAddress.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitMacAddressCaption_{0}", strLanguage)];
+            LBL_LogBook_From.Text = (string)dicLanguageCaptions[string.Format("LBLLogBookFromCaption_{0}", strLanguage)];
+            LBL_LogBook_To.Text = (string)dicLanguageCaptions[string.Format("LBLLogBookToCaption_{0}", strLanguage)];
+            uBTN_LogBook_Excel.Text = (string)dicLanguageCaptions[string.Format("BtnLogBookExportCaption_{0}", strLanguage)];
+            uBTN_LogBook_Filter.Text = (string)dicLanguageCaptions[string.Format("BtnLogBookFilterCaption_{0}", strLanguage)];
+            BtnRePrint.Text = (string)dicLanguageCaptions[string.Format("BtnRePrintCaption_{0}", strLanguage)];
+            lblErrorMesaage.Text = (string)dicLanguageCaptions[string.Format("LoginLabelErrorMessageCaption_{0}", strLanguage)];
+
+            uToolBarManagerControl.Tools[0].SharedProps.Caption = (string)dicLanguageCaptions[string.Format("ToolBarNewBatchCaption_{0}", strLanguage)];
+            uToolBarManagerControl.Tools[1].SharedProps.Caption = (string)dicLanguageCaptions[string.Format("ToolBarEndBatchCaption_{0}", strLanguage)];
+            uToolBarManagerControl.Tools[3].SharedProps.Caption = (string)dicLanguageCaptions[string.Format("ToolBarLogbookCaption_{0}", strLanguage)];
+            uToolBarManagerControl.Tools[4].SharedProps.Caption = (string)dicLanguageCaptions[string.Format("ToolBarSettingsCaption_{0}", strLanguage)];
+            uToolBarManagerControl.Tools[5].SharedProps.Caption = (string)dicLanguageCaptions[string.Format("ToolBarLogOffCaption_{0}", strLanguage)];
+
         }
         #endregion
 
@@ -308,7 +360,7 @@ namespace Electra_MAC_Printing
                     clsAppWizardAlign.newBatchFormResize(panelMainNewBatch, panelLeftNewBatch, panelRightNewBatch);
                     break;
                 case "startbatch":
-                   // clsAppWizardAlign.panelStartBatchLabelResize(panelStartBatch, lblBarCode, lblStartMarking, txtBarCode, lblStartBatchErroMessage, panelStartBatchHeader);
+                    // clsAppWizardAlign.panelStartBatchLabelResize(panelStartBatch, lblBarCode, lblStartMarking, txtBarCode, lblStartBatchErroMessage, panelStartBatchHeader);
                     break;
                 case "endbatch":
 
@@ -342,6 +394,8 @@ namespace Electra_MAC_Printing
                         panelFormHeader.Visible = true;
                         HideShowToolBar(0);
                         ProcessPreviousNextCurrentTab(true);
+                        Application.DoEvents();
+                        tmrModbus.Enabled = true;
                     }
                     else
                     {
@@ -588,21 +642,17 @@ namespace Electra_MAC_Printing
                 case "logoff":
                     utcAppWizard.Tabs["login"].Selected = true;
                     clearControls();
-                   // ClearNewBatchControls();
                     clsVariables.variableClearSetDefaultValues();
-                    break;
-
-                case "endbatch":
-                    utcAppWizard.Tabs["newbatch"].Selected = true;
-                    //ClearNewBatchControls();
+                    tmrModbus.Enabled = false;
                     break;
 
                 case "newbatch":
                     utcAppWizard.Tabs["newbatch"].Selected = true;
-                    //ClearNewBatchControls();
+                    tmrModbus.Enabled = true;
                     break;
 
                 case "settings":
+                    tmrModbus.Enabled = false;
                     this.Hide();
                     Application.DoEvents();
                     frmSettings frmSettings = new frmSettings();
@@ -611,6 +661,7 @@ namespace Electra_MAC_Printing
                     break;
 
                 case "logbook":
+                    tmrModbus.Enabled = false;
                     utcAppWizard.Tabs["logbook"].Selected = true;
                     DTP_LogBookFromDate.Value = DateTime.Now;
                     DTP_LogBookToDate.Value = DateTime.Now;
@@ -659,12 +710,12 @@ namespace Electra_MAC_Printing
                 col.Header.Appearance.FontData.Bold = Infragistics.Win.DefaultableBoolean.True;
 
                 string strColumnName = col.ToString();
-                if ("datMarkingDate" == strColumnName)
+                if ("datPrintingDate" == strColumnName)
                 {
                     col.Format = "dd-MM-yyyy hh:mm:ss tt";
                 }
 
-                col.Header.Caption = clsCommon.ReadSingleConfigValue(strColumnName, "uGrid_LogBookDetails_HeaderCaption", "Settings");
+                col.Header.Caption = (string)dicLanguageCaptions[string.Format("{0}_{1}", col.Key, strLanguage)];
 
             }
 
@@ -713,9 +764,12 @@ namespace Electra_MAC_Printing
             {
                 if ("True" == FolderPath[0])
                 {
-                    ultraGridExcelExporter.Export(uGrid_LogBookDetails, FolderPath[1] + "\\MarkerLogBookDetails.xls");
-                    clsCommon.commonGeneralDisplayMessageBox(1);
+                    ultraGridExcelExporter.Export(uGrid_LogBookDetails, FolderPath[1] + "\\ElectraLogBookDetails.xls");
 
+                    clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("ExportExcelTextCaption_{0}", strLanguage)]);
+                    clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "64");
+                    clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("ExportExcelTtitleCaption_{0}", strLanguage)]);
+                    clsCommon.commonGeneralDisplayMessageBox(0);
                 }
             }
             catch (Exception ex)

@@ -7,11 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Assembly.Software.Utilities;
 using System.Windows.Forms;
+using System.Data;
+using System.IO.Ports;
 
 namespace Electra_MAC_Printing.classes
 {
-    class clsCommon
+   public class clsCommon
     {
+
+     
         #region ReadSingleConfigValue
         /****************************************************************************************************
          * NAME         : ReadSingleConfigValue                                                             *
@@ -24,6 +28,7 @@ namespace Electra_MAC_Printing.classes
             return Config.get_ReadConfigValue(strItemName, strConfigSection, strConfigGroup);
         }
         #endregion
+
 
         #region FileFolderOpenFileDialog
         /****************************************************************************************************
@@ -159,5 +164,155 @@ namespace Electra_MAC_Printing.classes
             //clsCommon.commonGeneralDisplayMessageBox(0);
         }
         #endregion
+
+
+        #region getSerialPort
+        /****************************************************************************************************
+         * NAME         : getSerialPort                                                                     *
+         * DESCRIPTION  : Get the Serial Port details and Return the Details in to Datatables.              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        public DataTable getSerialPort()
+        {
+            DataTable dtPorts = new DataTable();
+
+            string[] ports = SerialPort.GetPortNames();
+
+            dtPorts.Columns.Add("ValueText");
+            dtPorts.Columns.Add("DisplayText");
+
+            dtPorts.Rows.Add("", "None");
+            foreach (string port in ports)
+            {
+                dtPorts.Rows.Add(port, port);
+            }
+            return dtPorts;
+        }
+
+      
+        #endregion
+
+
+
+        #region getBaudRate
+        /****************************************************************************************************
+         * NAME         : getBaudRate                                                                       *
+         * DESCRIPTION  : Get the Serial Port details and Return the Details in to Datatables.              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        public DataTable getBaudRate()
+        {
+            DataTable dtBaudRate = new DataTable();
+            dtBaudRate.Columns.Add("ValueText");
+            dtBaudRate.Columns.Add("DisplayText");
+
+            try
+            {
+                NameValueCollection columnDetails = clsCommon.ReadConfigGetSectionGroup("SerialPortSettings/SettingBaudRate");
+                if (columnDetails != null)
+                {
+                    foreach (string key in columnDetails.AllKeys)
+                    {
+                        DataRow row = dtBaudRate.NewRow();
+                        row[0] = key;
+                        row[1] = columnDetails[key];
+                        dtBaudRate.Rows.Add(row);
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                clsCommon.clsApplicationLogFileWriteLog(ex);
+            }
+
+            return dtBaudRate;
+        }
+        #endregion
+
+        #region getParity
+        /****************************************************************************************************
+         * NAME         : getParity                                                                         *
+         * DESCRIPTION  : Get the Serial Port details and Return the Details in to Datatables.              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        public DataTable getParity()
+        {
+            DataTable dtParity = new DataTable();
+            string[] StrStopBits = Enum.GetNames(typeof(Parity));
+            dtParity.Columns.Add("ValueText");
+            dtParity.Columns.Add("DisplayText");
+            foreach (string port in StrStopBits)
+            {
+                dtParity.Rows.Add(port, port);
+            }
+            return dtParity;
+
+        }
+        #endregion
+
+        #region getDataBits
+        /****************************************************************************************************
+         * NAME         : getDataBits                                                                       *
+         * DESCRIPTION  : Get the Serial Port details and Return the Details in to Datatables.              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        public DataTable getDataBits()
+        {
+            DataTable dtDataBits = new DataTable();
+            dtDataBits.Columns.Add("ValueText");
+            dtDataBits.Columns.Add("DisplayText");
+
+            try
+            {
+                NameValueCollection columnDetails = clsCommon.ReadConfigGetSectionGroup("SerialPortSettings/SettingDataBits");
+                if (columnDetails != null)
+                {
+                    foreach (string key in columnDetails.AllKeys)
+                    {
+                        DataRow row = dtDataBits.NewRow();
+                        row[0] = key;
+                        row[1] = columnDetails[key];
+                        dtDataBits.Rows.Add(row);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                clsCommon.clsApplicationLogFileWriteLog(ex);
+            }
+
+            return dtDataBits;
+        }
+        #endregion
+
+        #region getStopBits
+        /****************************************************************************************************
+         * NAME         : getStopBits                                                                       *
+         * DESCRIPTION  : Get the Serial Port details and Return the Details in to Datatables.              *
+         * WRITTEN BY   : PrabakaranG                                                                       *
+         * DATE         : 20Mar15                                                                           *
+         ****************************************************************************************************/
+        public DataTable getStopBits()
+        {
+            DataTable dtStopBits = new DataTable();
+            string[] StrStopBits = Enum.GetNames(typeof(StopBits));
+            dtStopBits.Columns.Add("ValueText");
+            dtStopBits.Columns.Add("DisplayText");
+            foreach (string port in StrStopBits)
+            {
+                dtStopBits.Rows.Add(port, port);
+            }
+            return dtStopBits;
+
+        }
+        #endregion
+
+        
     }
 }
