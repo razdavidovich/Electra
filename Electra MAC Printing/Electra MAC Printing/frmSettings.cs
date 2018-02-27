@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using IWIN = Infragistics.Win;
 using IWUG = Infragistics.Win.UltraWinGrid;
 
+using System.Drawing.Printing;
+
 
 namespace Electra_MAC_Printing
 {
@@ -58,12 +60,60 @@ namespace Electra_MAC_Printing
             Common_DataBits_DataBinding(uCBO_GS_StripeDataBits);
             Common_StopBits_DataBinding(uCBO_GS_StripeStopBits);
 
+           
 
             /*General Settings*/
             GeneralSettings();
             LoadControlCaption();
         }
         #endregion
+
+        private void GetPrinter()
+        {
+            try
+            {
+                string strPrinterName = clsCommon.ReadSingleConfigValue("PrinterName", "GetSetGeneralSettings", "Settings");
+                int index = 0;
+                int intselectedIndex = 0;
+                DataTable dt = new DataTable();
+                dt.Columns.Add("ValueText");
+                dt.Columns.Add("DisplayText");
+                DataRow row = dt.NewRow();
+                row[0] = "";
+                row[1] = "None";
+                dt.Rows.Add(row);
+                index++;
+                foreach (string printer in PrinterSettings.InstalledPrinters)
+                {
+                    row = dt.NewRow();
+                    row[0] = printer;
+                    row[1] = printer;
+                    dt.Rows.Add(row);
+                   
+                    if (strPrinterName == printer)
+                    {
+                       intselectedIndex = index;
+                    }
+                    index++;
+                }
+
+                UltraPrinter.ValueMember = "ValueText";
+                UltraPrinter.DisplayMember = "DisplayText";
+                UltraPrinter.DataSource = dt;
+                UltraPrinter.DataBind();
+                UltraPrinter.SelectedIndex = intselectedIndex;
+                if(intselectedIndex == 0)
+                {
+                  clsCommon.SaveConfigSettingsValue("PrinterName", "GetSetGeneralSettings", "Settings", "");                           
+                }
+               // UltraPrinter.Value = strPrinterName;
+
+            }
+            catch (Exception ex)
+            {
+                clsCommon.clsApplicationLogFileWriteLog(ex);
+            }
+        }
 
         #region Common_COMPORT_DataBinding
         /****************************************************************************************************
@@ -209,7 +259,7 @@ namespace Electra_MAC_Printing
 
             LBL_SerialNumberAddress.Text = (string)dicLanguageCaptions[string.Format("SettingslabelSerialNumberCaption_{0}", strLanguage)];
             LBL_DataAddress.Text = (string)dicLanguageCaptions[string.Format("SettingslabelDataAddressCaption_{0}", strLanguage)];
-            LBL_PrinterSettings.Text = (string)dicLanguageCaptions[string.Format("SettingslabelPrinterSettingsCaption_{0}", strLanguage)];
+            LBL_PrinterName.Text = (string)dicLanguageCaptions[string.Format("SettingslabelPrinterSettingsCaption_{0}", strLanguage)];
 
             grpCommunicationSettings.Text = (string)dicLanguageCaptions[string.Format("SettingsGroupboxCaption_{0}", strLanguage)];
 
@@ -254,7 +304,7 @@ namespace Electra_MAC_Printing
          * DATE         : 20Mar15                                                                           *
          ****************************************************************************************************/
         private void uBTN_Settings_OK_Click(object sender, EventArgs e)
-        {
+        {                      
             try
             {
                 /*Variable Declaration*/
@@ -299,7 +349,7 @@ namespace Electra_MAC_Printing
                    strTxt_ModbusSlaveAddress = Txt_ModbusSlaveAddress.Text,
                    strTXT_SerialNumberAddress = TXT_SerialNumberAddress.Text,
                    strTXT_DataAddress = TXT_DataAddress.Text,
-                    strTXT_PrinterSettings = TXT_PrinterSettings.Text,
+                    strTXT_PrinterName = UltraPrinter.Value.ToString(),
             struCBO_GS_StripeCom = uCBO_GS_StripeCom.Value.ToString(),
                    struCBO_GS_StripeBaudRate = uCBO_GS_StripeBaudRate.Value.ToString(),
                    struCBO_GS_StripeParity = uCBO_GS_StripeParity.Value.ToString(),
@@ -364,10 +414,10 @@ namespace Electra_MAC_Printing
                 return false;
             }
 
-            /*Validate TXT_PrinterSettings Controls*/
-            if (!string.IsNullOrEmpty(strTXT_PrinterSettings))
+            /*Validate TXT_PrinterName Controls*/
+            if (!string.IsNullOrEmpty(strTXT_PrinterName))
             {
-                clsCommon.SaveConfigSettingsValue("PrinterSettings", "GetSetGeneralSettings", "Settings", strTXT_PrinterSettings);
+                clsCommon.SaveConfigSettingsValue("PrinterName", "GetSetGeneralSettings", "Settings", strTXT_PrinterName);
             }
             else
             {
@@ -427,11 +477,15 @@ namespace Electra_MAC_Printing
         private void GeneralSettings()
         {
 
+         
+
+
             TXT_StationName.Text = clsCommon.ReadSingleConfigValue("StationName", "GetSetGeneralSettings", "Settings");            
             Txt_ModbusSlaveAddress.Text = clsCommon.ReadSingleConfigValue("ModbusSlaveAddress", "GetSetGeneralSettings", "Settings");
             TXT_SerialNumberAddress.Text = clsCommon.ReadSingleConfigValue("SerialNumberAddress", "GetSetGeneralSettings", "Settings");
             TXT_DataAddress.Text = clsCommon.ReadSingleConfigValue("DataAddress", "GetSetGeneralSettings", "Settings");
-            TXT_PrinterSettings.Text = clsCommon.ReadSingleConfigValue("PrinterSettings", "GetSetGeneralSettings", "Settings");
+            //UltraPrinter.Text = clsCommon.ReadSingleConfigValue("PrinterSettings", "GetSetGeneralSettings", "Settings");
+            GetPrinter();
 
             string[] strCOMSettings = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings").Split(',');
             uCBO_GS_StripeCom.Value = strCOMSettings[0];
@@ -512,8 +566,10 @@ namespace Electra_MAC_Printing
                 col.Header.Appearance.ForeColor = Color.Black;
                 col.Header.Appearance.FontData.Bold = Infragistics.Win.DefaultableBoolean.True;
 
-                col.Header.Caption = (string)dicLanguageCaptions[string.Format("{0}_{1}", col.Key,strLanguage)];              
-            }            
+                col.Header.Caption = (string)dicLanguageCaptions[string.Format("{0}_{1}", col.Key,strLanguage)];
+                
+            }
+            uGrid_Users.DisplayLayout.Bands[0].Columns[2].Hidden = true;
             e.Layout.Bands[0].Columns[0].CellActivation = Infragistics.Win.UltraWinGrid.Activation.NoEdit;
 
             if ("0" == clsCommon.ReadSingleConfigValue("Default", "LanguageDirection", "LanguageSupport"))
@@ -574,9 +630,9 @@ namespace Electra_MAC_Printing
                 int intRoleID = string.IsNullOrEmpty(uGrid_Users.ActiveRow.Cells[1].Value.ToString()) ? 0 : Convert.ToInt32(uGrid_Users.ActiveRow.Cells[1].Value.ToString());
                 string strRFID = string.IsNullOrEmpty(uGrid_Users.ActiveRow.Cells[2].Value.ToString()) ? null : uGrid_Users.ActiveRow.Cells[2].Value.ToString();
 
-                if (intUserID > 0 && intRoleID > 0 && !string.IsNullOrEmpty(strRFID))
+                if (intUserID > 0 && intRoleID > 0)
                 {
-                    uGrid_Users_Insert_Update_Delete(2, intUserID, intRoleID, strRFID);
+                    uGrid_Users_Insert_Update_Delete(2, intUserID, intRoleID, intUserID.ToString());
                 }
 
                 else
@@ -639,7 +695,7 @@ namespace Electra_MAC_Printing
          ****************************************************************************************************/
         private void uGrid_Users_AfterRowsDeleted(object sender, EventArgs e)
         {
-            uGrid_Users_Insert_Update_Delete(3, intuGrid_Users_DeleteRowId, 0, null);
+            uGrid_Users_Insert_Update_Delete(3, intuGrid_Users_DeleteRowId, 0, intuGrid_Users_DeleteRowId.ToString());
             intuGrid_Users_DeleteRowId = 0;
         }
         #endregion

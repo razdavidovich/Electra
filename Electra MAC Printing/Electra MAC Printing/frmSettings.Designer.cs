@@ -38,13 +38,14 @@
             Infragistics.Win.Appearance appearance7 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinTabControl.UltraTab ultraTab2 = new Infragistics.Win.UltraWinTabControl.UltraTab();
             Infragistics.Win.Appearance appearance8 = new Infragistics.Win.Appearance();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSettings));
             this.utpcAppSettingsWizard_GeneralSettings = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
             this.panelGeneralSettings = new System.Windows.Forms.Panel();
             this.grpCommunicationSettings = new System.Windows.Forms.GroupBox();
+            this.UltraPrinter = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this.uCBO_GS_StripeStopBits = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
-            this.TXT_PrinterSettings = new System.Windows.Forms.TextBox();
             this.uCBO_GS_StripeParity = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
-            this.LBL_PrinterSettings = new System.Windows.Forms.Label();
+            this.LBL_PrinterName = new System.Windows.Forms.Label();
             this.uCBO_GS_StripeBaudRate = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this.TXT_DataAddress = new System.Windows.Forms.TextBox();
             this.uCBO_GS_StripeDataBits = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
@@ -68,6 +69,7 @@
             this.utpcAppSettingsWizard_GeneralSettings.SuspendLayout();
             this.panelGeneralSettings.SuspendLayout();
             this.grpCommunicationSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.UltraPrinter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeStopBits)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeParity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeBaudRate)).BeginInit();
@@ -103,10 +105,10 @@
             // 
             this.grpCommunicationSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpCommunicationSettings.Controls.Add(this.UltraPrinter);
             this.grpCommunicationSettings.Controls.Add(this.uCBO_GS_StripeStopBits);
-            this.grpCommunicationSettings.Controls.Add(this.TXT_PrinterSettings);
             this.grpCommunicationSettings.Controls.Add(this.uCBO_GS_StripeParity);
-            this.grpCommunicationSettings.Controls.Add(this.LBL_PrinterSettings);
+            this.grpCommunicationSettings.Controls.Add(this.LBL_PrinterName);
             this.grpCommunicationSettings.Controls.Add(this.uCBO_GS_StripeBaudRate);
             this.grpCommunicationSettings.Controls.Add(this.TXT_DataAddress);
             this.grpCommunicationSettings.Controls.Add(this.uCBO_GS_StripeDataBits);
@@ -126,6 +128,17 @@
             this.grpCommunicationSettings.TabStop = false;
             this.grpCommunicationSettings.Text = "Communication Settings";
             // 
+            // UltraPrinter
+            // 
+            this.UltraPrinter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.UltraPrinter.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Suggest;
+            this.UltraPrinter.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UltraPrinter.Location = new System.Drawing.Point(270, 247);
+            this.UltraPrinter.Name = "UltraPrinter";
+            this.UltraPrinter.Size = new System.Drawing.Size(639, 31);
+            this.UltraPrinter.TabIndex = 34;
+            // 
             // uCBO_GS_StripeStopBits
             // 
             this.uCBO_GS_StripeStopBits.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Suggest;
@@ -134,16 +147,6 @@
             this.uCBO_GS_StripeStopBits.Name = "uCBO_GS_StripeStopBits";
             this.uCBO_GS_StripeStopBits.Size = new System.Drawing.Size(127, 31);
             this.uCBO_GS_StripeStopBits.TabIndex = 33;
-            // 
-            // TXT_PrinterSettings
-            // 
-            this.TXT_PrinterSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TXT_PrinterSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TXT_PrinterSettings.Location = new System.Drawing.Point(270, 248);
-            this.TXT_PrinterSettings.Name = "TXT_PrinterSettings";
-            this.TXT_PrinterSettings.Size = new System.Drawing.Size(639, 29);
-            this.TXT_PrinterSettings.TabIndex = 28;
             // 
             // uCBO_GS_StripeParity
             // 
@@ -154,15 +157,15 @@
             this.uCBO_GS_StripeParity.Size = new System.Drawing.Size(127, 31);
             this.uCBO_GS_StripeParity.TabIndex = 32;
             // 
-            // LBL_PrinterSettings
+            // LBL_PrinterName
             // 
-            this.LBL_PrinterSettings.AutoSize = true;
-            this.LBL_PrinterSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LBL_PrinterSettings.Location = new System.Drawing.Point(10, 251);
-            this.LBL_PrinterSettings.Name = "LBL_PrinterSettings";
-            this.LBL_PrinterSettings.Size = new System.Drawing.Size(135, 24);
-            this.LBL_PrinterSettings.TabIndex = 27;
-            this.LBL_PrinterSettings.Text = "Printer Settings";
+            this.LBL_PrinterName.AutoSize = true;
+            this.LBL_PrinterName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LBL_PrinterName.Location = new System.Drawing.Point(10, 251);
+            this.LBL_PrinterName.Name = "LBL_PrinterName";
+            this.LBL_PrinterName.Size = new System.Drawing.Size(135, 24);
+            this.LBL_PrinterName.TabIndex = 27;
+            this.LBL_PrinterName.Text = "Printer Settings";
             // 
             // uCBO_GS_StripeBaudRate
             // 
@@ -413,8 +416,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 582);
             this.Controls.Add(this.panelSettings);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmSettings";
-            this.Text = "frmSettings";
+            this.Text = "Electra MAC Print Settings";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.frmSettings_Load);
             this.utpcAppSettingsWizard_GeneralSettings.ResumeLayout(false);
@@ -422,6 +426,7 @@
             this.panelGeneralSettings.PerformLayout();
             this.grpCommunicationSettings.ResumeLayout(false);
             this.grpCommunicationSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.UltraPrinter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeStopBits)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeParity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeBaudRate)).EndInit();
@@ -453,8 +458,7 @@
         private Infragistics.Win.UltraWinTabControl.UltraTabPageControl utpcAppSettingsWizard_Users;
         private System.Windows.Forms.Panel panelUsersSettings;
         private System.Windows.Forms.Panel panelSettings;
-        private System.Windows.Forms.TextBox TXT_PrinterSettings;
-        private System.Windows.Forms.Label LBL_PrinterSettings;
+        private System.Windows.Forms.Label LBL_PrinterName;
         private System.Windows.Forms.TextBox TXT_DataAddress;
         private System.Windows.Forms.Label LBL_DataAddress;
         private System.Windows.Forms.TextBox TXT_SerialNumberAddress;
@@ -466,5 +470,6 @@
         private Infragistics.Win.UltraWinEditors.UltraComboEditor uCBO_GS_StripeDataBits;
         private Infragistics.Win.UltraWinEditors.UltraComboEditor uCBO_GS_StripeCom;
         private System.Windows.Forms.Label LBL_UnitSettings;
+        private Infragistics.Win.UltraWinEditors.UltraComboEditor UltraPrinter;
     }
 }
