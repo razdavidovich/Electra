@@ -141,6 +141,9 @@ namespace Electra_MAC_Printing
             txtunitMacAddress.BackColor = Color.Red;
 
             BtnRePrint.Hide();
+
+            blnTimerRunning = false;
+
         }
 
         private void setUnitInformationAndPrint()
@@ -185,19 +188,19 @@ namespace Electra_MAC_Printing
                     string strDataAddress = clsCommon.ReadSingleConfigValue("DataAddress", "GetSetGeneralSettings", "Settings");
                     string strSerialNumberAddress = clsCommon.ReadSingleConfigValue("SerialNumberAddress", "GetSetGeneralSettings", "Settings");
 
-                    if (!BtnRePrint.Visible)
+                    // Read Serial number (expecting 6153320000 from test unit)
+                    var serialValue = ReadModbusRegisters(2, Convert.ToUInt16(strSerialNumberAddress, 16), 5);
+                    txtUnitSerialNumber.Text = ConvertToSerialNumber(serialValue);
+
+                    // Read MAC ADDRESS (expecting A8 1B 6A 9C 7A 9C from test unit)
+                    var macValue = ReadModbusRegisters(2, Convert.ToUInt16(strDataAddress, 16), 3);
+                    txtunitMacAddress.Text = ConvertToMACAddress(macValue);
+
+                    if (txtunitMacAddress.TextLength > 0)
                     {
-                        // Read Serial number (expecting 6153320000 from test unit)
-                        var serialValue = ReadModbusRegisters(2, Convert.ToUInt16(strSerialNumberAddress, 16), 5);
-                        txtUnitSerialNumber.Text = ConvertToSerialNumber(serialValue);
-
-                        // Read MAC ADDRESS (expecting A8 1B 6A 9C 7A 9C from test unit)
-                        var macValue = ReadModbusRegisters(2, Convert.ToUInt16(strDataAddress, 16), 3);
-                        txtunitMacAddress.Text = ConvertToMACAddress(macValue);
-
-                        if (txtunitMacAddress.TextLength > 0)
+                        if (!BtnRePrint.Visible)
                         {
-                            if(!string.IsNullOrEmpty(strPrinterName))
+\                            if(!string.IsNullOrEmpty(strPrinterName))
                             {
                                 setUnitInformationAndPrint();                               
                             }
@@ -207,8 +210,7 @@ namespace Electra_MAC_Printing
                                 clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
                                 clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("PrinterNameNullOrEmptyErrorTitleCaption_{0}", strLanguage)]);
                                 clsCommon.commonGeneralDisplayMessageBox(0);
-                            }
-                          
+                            }                          
                         }
                     }
                     blnTimerRunning = false;
@@ -813,9 +815,13 @@ namespace Electra_MAC_Printing
             }
 
         }
+
         #endregion
 
-
+        private void BtnRePrint_Click(object sender, EventArgs e)
+        {
+            printLabel(txtUnitSerialNumber.Text, txtunitMacAddress.Text);
+        }
     }
 
 }
