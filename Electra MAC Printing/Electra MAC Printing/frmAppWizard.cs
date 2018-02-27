@@ -200,7 +200,7 @@ namespace Electra_MAC_Printing
                     {
                         if (!BtnRePrint.Visible)
                         {
-\                            if(!string.IsNullOrEmpty(strPrinterName))
+                            if(!string.IsNullOrEmpty(strPrinterName))
                             {
                                 setUnitInformationAndPrint();                               
                             }

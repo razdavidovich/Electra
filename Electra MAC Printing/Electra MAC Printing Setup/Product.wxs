@@ -26,11 +26,155 @@
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="Electra MAC Printing">
+        <Directory Id="Magma" Name="Magma Group">
+          <Directory Id="INSTALLFOLDER" Name="Electra MAC Printing">
+
+            <Component Id="ServiceFile1" Guid="{264ADD4B-D135-4E9F-B12F-6F28557D20C1}">
+              <File Id="Assembly.Software.Profile.dll" Name="Assembly.Software.Profile.dll" Source="$(var.Electra MAC Printing.TargetDir)Assembly.Software.Profile.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Assembly.Software.Profile.dll" On="uninstall" Name="Assembly.Software.Profile.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile2" Guid="{3992B126-D953-4298-9E1A-5B1B19915CBB}">
+              <File Id="Assembly.Software.Utilities.dll" Name="Assembly.Software.Utilities.dll" Source="$(var.Electra MAC Printing.TargetDir)Assembly.Software.Utilities.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Assembly.Software.Utilities.dll" On="uninstall" Name="Assembly.Software.Utilities.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile3" Guid="{ECA20779-A34D-454F-BA3B-6D53CFAA793D}">
+              <File Id="Infragistics4.Documents.Core.v14.2.dll" Name="Infragistics4.Documents.Core.v14.2.dll" Source="$(var.Electra MAC Printing.TargetDir)Infragistics4.Documents.Core.v14.2.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Infragistics4.Documents.Core.v14.2.dll" On="uninstall" Name="Infragistics4.Documents.Core.v14.2.dll"/>
+            </Component>
+                        
+            <Component Id="ServiceFile4" Guid="{30609F11-AAB6-43BA-BFE2-7D3120A1B320}">
+              <File Id="Infragistics4.Documents.Excel.v14.2.dll" Name="Infragistics4.Documents.Excel.v14.2.dll" Source="$(var.Electra MAC Printing.TargetDir)Infragistics4.Documents.Excel.v14.2.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Infragistics4.Documents.Excel.v14.2.dll" On="uninstall" Name="Infragistics4.Documents.Excel.v14.2.dll"/>
+            </Component>
+                        
+            <Component Id="ServiceFile5" Guid="{E2630CA9-71E9-430A-8B56-228213BF01C5}">
+              <File Id="Infragistics4.Shared.v14.2.dll" Name="Infragistics4.Shared.v14.2.dll" Source="$(var.Electra MAC Printing.TargetDir)Infragistics4.Shared.v14.2.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Infragistics4.Shared.v14.2.dll" On="uninstall" Name="Infragistics4.Shared.v14.2.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile6" Guid="{A7E51092-FC66-46E9-B7EB-3A9A21D8DEC8}">
+              <File Id="Infragistics4.Win.Misc.v14.2.dll" Name="Infragistics4.Win.Misc.v14.2.dll" Source="$(var.Electra MAC Printing.TargetDir)Infragistics4.Win.Misc.v14.2.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Infragistics4.Win.Misc.v14.2.dll" On="uninstall" Name="Infragistics4.Win.Misc.v14.2.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile7" Guid="{08572EAE-B53F-4FB0-B926-C7B057FEA113}">
+              <File Id="Infragistics4.Win.UltraWinEditors.v14.2.dll" Name="Infragistics4.Win.UltraWinEditors.v14.2.dll" Source="$(var.Electra MAC Printing.TargetDir)Infragistics4.Win.UltraWinEditors.v14.2.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Infragistics4.Win.UltraWinEditors.v14.2.dll" On="uninstall" Name="Infragistics4.Win.UltraWinEditors.v14.2.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile8" Guid="{C712D232-812C-40DA-80F8-1753CAB85DB5}">
+              <File Id="Infragistics4.Win.UltraWinGrid.ExcelExport.v14.2.dll" Name="Infragistics4.Win.UltraWinGrid.ExcelExport.v14.2.dll" Source="$(var.Electra MAC Printing.TargetDir)Infragistics4.Win.UltraWinGrid.ExcelExport.v14.2.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Infragistics4.Win.UltraWinGrid.ExcelExport.v14.2.dll" On="uninstall" Name="Infragistics4.Win.UltraWinGrid.ExcelExport.v14.2.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile9" Guid="{12860889-3170-4019-9B4E-596EEAEC4B2F}">
+              <File Id="Infragistics4.Win.UltraWinGrid.v14.2.dll" Name="Infragistics4.Win.UltraWinGrid.v14.2.dll" Source="$(var.Electra MAC Printing.TargetDir)Infragistics4.Win.UltraWinGrid.v14.2.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Infragistics4.Win.UltraWinGrid.v14.2.dll" On="uninstall" Name="Infragistics4.Win.UltraWinGrid.v14.2.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile10" Guid="{12C584CE-5D72-4430-8EDE-5870E2D731E4}">
+              <File Id="Infragistics4.Win.UltraWinStatusBar.v14.2.dll" Name="Infragistics4.Win.UltraWinStatusBar.v14.2.dll" Source="$(var.Electra MAC Printing.TargetDir)Infragistics4.Win.UltraWinStatusBar.v14.2.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Infragistics4.Win.UltraWinStatusBar.v14.2.dll" On="uninstall" Name="Infragistics4.Win.UltraWinStatusBar.v14.2.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile11" Guid="{BB7C7F98-EDB2-404B-A056-8F3BCB8D0B56}">
+              <File Id="Infragistics4.Win.UltraWinTabControl.v14.2.dll" Name="Infragistics4.Win.UltraWinTabControl.v14.2.dll" Source="$(var.Electra MAC Printing.TargetDir)Infragistics4.Win.UltraWinTabControl.v14.2.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Infragistics4.Win.UltraWinTabControl.v14.2.dll" On="uninstall" Name="Infragistics4.Win.UltraWinTabControl.v14.2.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile12" Guid="{E088C13C-7CBD-40A3-83BC-378691018CC3}">
+              <File Id="Infragistics4.Win.UltraWinToolbars.v14.2.dll" Name="Infragistics4.Win.UltraWinToolbars.v14.2.dll" Source="$(var.Electra MAC Printing.TargetDir)Infragistics4.Win.UltraWinToolbars.v14.2.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Infragistics4.Win.UltraWinToolbars.v14.2.dll" On="uninstall" Name="Infragistics4.Win.UltraWinToolbars.v14.2.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile13" Guid="{CC8937DA-F454-49AE-9734-AF067CCCCC50}">
+              <File Id="Infragistics4.Win.v14.2.dll" Name="Infragistics4.Win.v14.2.dll" Source="$(var.Electra MAC Printing.TargetDir)Infragistics4.Win.v14.2.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Infragistics4.Win.v14.2.dll" On="uninstall" Name="Infragistics4.Win.v14.2.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile14" Guid="{140847B5-C3A3-42AA-AEBA-0BB6B5F66952}">
+              <File Id="Microsoft.Practices.EnterpriseLibrary.Common.dll" Name="Microsoft.Practices.EnterpriseLibrary.Common.dll" Source="$(var.Electra MAC Printing.TargetDir)Microsoft.Practices.EnterpriseLibrary.Common.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Microsoft.Practices.EnterpriseLibrary.Common.dll" On="uninstall" Name="Microsoft.Practices.EnterpriseLibrary.Common.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile15" Guid="{0491AC58-0FC4-4021-BE03-55E501E92973}">
+              <File Id="Microsoft.Practices.EnterpriseLibrary.Data.dll" Name="Microsoft.Practices.EnterpriseLibrary.Data.dll" Source="$(var.Electra MAC Printing.TargetDir)Microsoft.Practices.EnterpriseLibrary.Data.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Microsoft.Practices.EnterpriseLibrary.Data.dll" On="uninstall" Name="Microsoft.Practices.EnterpriseLibrary.Data.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile16" Guid="{5D08ABF7-E30A-4034-BC92-585DDFA9864B}">
+              <File Id="Microsoft.Practices.ObjectBuilder.dll" Name="Microsoft.Practices.ObjectBuilder.dll" Source="$(var.Electra MAC Printing.TargetDir)Microsoft.Practices.ObjectBuilder.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Microsoft.Practices.ObjectBuilder.dll" On="uninstall" Name="Microsoft.Practices.ObjectBuilder.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile17" Guid="{DC4C0C27-C5ED-4264-837E-4187CD842E5F}">
+              <File Id="NModbus4.dll" Name="NModbus4.dll" Source="$(var.Electra MAC Printing.TargetDir)NModbus4.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.NModbus4.dll" On="uninstall" Name="NModbus4.dll"/>
+            </Component>
+
+            <Component Id="SetupConfigFile1" Guid="{B0DD85B9-1369-444D-991B-424ED638BCAA}">
+              <File Id="Electra_MAC_Printing.exe.config" Name="Electra MAC Printing.exe.config" Source="$(var.Electra MAC Printing.TargetDir)Electra MAC Printing.exe.config" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.Electra_MAC_Printing.exe.config" On="uninstall" Name="Electra MAC Printing.exe.config"/>
+            </Component>
+
+            <Component Id="SetupFile1" Guid="{E80F04D0-D6D1-4EE9-B4B1-E9AEDD5C4EA4}">
+              <File Id="Electra_MAC_Printing.exe" Name="Electra MAC Printing.exe" Source="$(var.Electra MAC Printing.TargetPath)" KeyPath="yes" Vital="yes" DiskId="1" Checksum="yes"/>
+              <RemoveFile Id="Remove.Electra_MAC_Printing.exe" On="uninstall" Name="Electra MAC Printing.exe"/>
+            </Component>
+            
+          </Directory>
         </Directory>
       </Directory>
+
+
+      <!--ShortCut in Desktop-->
+      <Directory Id="DesktopFolder" Name="Desktop">
+        <Component Id="ApplicationShortcutDesktop" Guid="{F40005C1-2461-4924-B6EE-F19CD457DAC5}">
+          <Shortcut Id="ApplicationDesktopShortcut"
+             Name="Electra MAC Printing"
+            Target="[INSTALLFOLDER]Electra MAC Printing.exe"
+             WorkingDirectory="INSTALLFOLDER" Icon="ReportsIcon.exe" />
+          <RemoveFolder Id="DesktopFolder" On="uninstall"/>
+          <RegistryValue
+            Root="HKCU"
+            Key="Software/MyAppName"
+            Name="installed"
+            Type="integer"
+            Value="1"
+            KeyPath="yes"/>
+        </Component>
+      </Directory>
+      <!--ShortCut in start Menu-->
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="Electra MAC Printing"/>
+      </Directory>
+      
     </Directory>
   </Fragment>
+
+
+  <Fragment>
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ApplicationShortcut1" Guid="{E4E8F4F5-CF45-441A-9C02-BABC75A68211}">
+        <Shortcut Id="ApplicationStartMenuShortcut"
+							 Name="Electra MAC Printing System"
+							 Description="Electra MAC Printing"
+							 Target="[INSTALLFOLDER]Electra MAC Printing.exe"
+							 WorkingDirectory="INSTALLFOLDER"/>
+        <Shortcut Id="UninstallProduct"
+									  Name="Uninstall Electra MAC Printing"
+									  Target="[SystemFolder]msiexec.exe"
+									  Arguments="/x [ProductCode]"
+									  Description="Uninstalls Electra MAC Printing System" Icon="ReportsIcon.exe" />
+
+        <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\Magma Group\Electra MAC Printing" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+
 
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
@@ -38,6 +182,30 @@
       <!-- <Component Id="ProductComponent"> -->
       <!-- TODO: Insert files, registry keys, and other resources here. -->
       <!-- </Component> -->
+
+      <ComponentRef Id="SetupConfigFile1"/>
+      <ComponentRef Id="SetupFile1"/>
+
+      <ComponentRef Id="ServiceFile1"/>
+      <ComponentRef Id="ServiceFile2"/>
+      <ComponentRef Id="ServiceFile3"/>
+      <ComponentRef Id="ServiceFile4"/>
+      <ComponentRef Id="ServiceFile5"/>
+      <ComponentRef Id="ServiceFile6"/>
+      <ComponentRef Id="ServiceFile7"/>
+      <ComponentRef Id="ServiceFile8"/>
+      <ComponentRef Id="ServiceFile9"/>
+      <ComponentRef Id="ServiceFile10"/>
+      <ComponentRef Id="ServiceFile11"/>
+      <ComponentRef Id="ServiceFile12"/>
+      <ComponentRef Id="ServiceFile13"/>
+      <ComponentRef Id="ServiceFile14"/>
+      <ComponentRef Id="ServiceFile15"/>
+      <ComponentRef Id="ServiceFile16"/>
+      <ComponentRef Id="ServiceFile17"/>
+
+      <ComponentRef Id="ApplicationShortcut1" />
+      <ComponentRef Id="ApplicationShortcutDesktop" />
     </ComponentGroup>
   </Fragment>
 </Wix>
