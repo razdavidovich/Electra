@@ -123,8 +123,8 @@
             // ultraTabPageControl1
             // 
             this.ultraTabPageControl1.Controls.Add(this.pnlLoginMain);
-            this.ultraTabPageControl1.Location = new System.Drawing.Point(-10000, -10000);
-            this.ultraTabPageControl1.Margin = new System.Windows.Forms.Padding(8, 10, 8, 10);
+            this.ultraTabPageControl1.Location = new System.Drawing.Point(0, 0);
+            this.ultraTabPageControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ultraTabPageControl1.Name = "ultraTabPageControl1";
             this.ultraTabPageControl1.Size = new System.Drawing.Size(2030, 1044);
             // 
@@ -712,10 +712,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2030, 1129);
             this.Controls.Add(this.frmPanel);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmAppWizard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Electra";
+            this.Text = "Electra MAC Address Printing System";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.frmAppWizard_Load);
             this.Resize += new System.EventHandler(this.frmAppWizard_Resize);

@@ -184,6 +184,7 @@ namespace Electra_MAC_Printing
                 {
 
                     blnTimerRunning = true;
+                    string strPrinterName = clsCommon.ReadSingleConfigValue("PrinterName", "GetSetGeneralSettings", "Settings");
                     string strDataAddress = clsCommon.ReadSingleConfigValue("DataAddress", "GetSetGeneralSettings", "Settings");
                     string strSerialNumberAddress = clsCommon.ReadSingleConfigValue("SerialNumberAddress", "GetSetGeneralSettings", "Settings");
 
@@ -199,7 +200,17 @@ namespace Electra_MAC_Printing
                     {
                         if (!BtnRePrint.Visible)
                         {
-                            setUnitInformationAndPrint();
+\                            if(!string.IsNullOrEmpty(strPrinterName))
+                            {
+                                setUnitInformationAndPrint();                               
+                            }
+                            else
+                            {
+                                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("PrinterNameNullOrEmptyErrorTextCaption_{0}", strLanguage)]);
+                                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("PrinterNameNullOrEmptyErrorTitleCaption_{0}", strLanguage)]);
+                                clsCommon.commonGeneralDisplayMessageBox(0);
+                            }                          
                         }
                     }
                     blnTimerRunning = false;
@@ -227,6 +238,8 @@ namespace Electra_MAC_Printing
             clsPrintUtility.SendStringToPrinter(printerName, zpl);
 
             // Svae the print information to the logbook
+
+            SaveLogBookDetails(serialNumber, unitMACAddress);
 
         }
 
@@ -787,24 +800,14 @@ namespace Electra_MAC_Printing
          * NAME         : SaveLogBookDetails                                                                *
          * DESCRIPTION  : Set the SaveLogBookDetails details.                                               *
          * WRITTEN BY   : RajaSekar J                                                                       *
-         * DATE         : 21Feb2018                                                                         *
+         * DATE         : 26Feb2018                                                                         *
          ****************************************************************************************************/
-        private void SaveLogBookDetails()
+        private void SaveLogBookDetails(string serialNumber, string unitMACAddress)
         {
             try
-            {
-                string[] strParameterValue = new string[4];
-                //int GridRows = ultraBarCodeGrid.Rows.Count;
-
-                //if (0 < GridRows)
-                //{
-                //    for (int i = 0; i < GridRows; i++)
-                //    {
-                //        strParameterValue[i] = string.Format("{0} => {1}", ultraBarCodeGrid.Rows[i].Cells[3].Value.ToString(), ultraBarCodeGrid.Rows[i].Cells[4].Value.ToString());
-                //    }
-                //}
-                string strMachineName = clsCommon.ReadSingleConfigValue("MachineNumber", "GetSetGeneralSettings", "Settings");
-                clsappWizardBAL.SetEletraLogBookDetails(2, DateTime.Now, strMachineName, clsVariables.intLoginUserID, clsVariablesWorkOrderDetails.intPartNumberID, clsVariablesWorkOrderDetails.strVLMName, strParameterValue[0], strParameterValue[1], strParameterValue[2], strParameterValue[3], 0);
+            {                       
+                string strStationName = clsCommon.ReadSingleConfigValue("StationName", "GetSetGeneralSettings", "Settings");
+                clsappWizardBAL.SetEletraLogBookDetails(2, DateTime.Now, strStationName, clsVariables.intLoginUserID, serialNumber, unitMACAddress);
             }
             catch (Exception ex)
             {

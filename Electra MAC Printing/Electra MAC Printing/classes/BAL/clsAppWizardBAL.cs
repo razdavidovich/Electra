@@ -80,11 +80,11 @@ namespace Electra_MAC_Printing.classes.BAL
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 17Feb18                                                                           *
          ****************************************************************************************************/
-        public bool SetEletraLogBookDetails(int intOperation, DateTime MarkingDate, string vchMachine, int intUserId, int intPartNumber, string vchVLMName, string vchParameter1, string vchParameter2, string vchParameter3, string vchParameter4, int intMachineStatus)
+        public bool SetEletraLogBookDetails(int intOperation, DateTime MarkingDate, string vchMachine, int intUserId, string vchSerialNumber, string vchMACAddress)
         {
             try
             {
-                return clsAppWizardDAL.SetEletraLogBookDetails(intOperation, MarkingDate, vchMachine, intUserId, intPartNumber, vchVLMName, vchParameter1, vchParameter2, vchParameter3, vchParameter4, intMachineStatus);
+                return clsAppWizardDAL.SetEletraLogBookDetails(intOperation, MarkingDate, vchMachine, intUserId, vchSerialNumber, vchMACAddress);
 
             }
             catch (Exception ex)

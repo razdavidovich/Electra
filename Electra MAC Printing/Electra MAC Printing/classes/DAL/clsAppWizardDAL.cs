@@ -92,7 +92,7 @@ namespace Electra_MAC_Printing.classes.DAL
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 17Feb18                                                                           *
          ****************************************************************************************************/
-        public bool SetEletraLogBookDetails(int intOperation, DateTime MarkingDate, string vchMachine, int intUserId, int intPartNumber, string vchVLMName, string vchParameter1, string vchParameter2, string vchParameter3, string vchParameter4, int intMachineStatus)
+        public bool SetEletraLogBookDetails(int intOperation, DateTime MarkingDate, string vchMachine, int intUserId, string vchSerialNumber, string vchMACAddress)
         {
 
             try
@@ -104,8 +104,8 @@ namespace Electra_MAC_Printing.classes.DAL
                     db.AddInParameter(dbCommand, "datPrintingDate", DbType.DateTime, MarkingDate);
                     db.AddInParameter(dbCommand, "vchMachine", DbType.String, vchMachine);
                     db.AddInParameter(dbCommand, "intUserID", DbType.Int32, intUserId);                  
-                    db.AddInParameter(dbCommand, "vchSerialNumber", DbType.String, vchVLMName);
-                    db.AddInParameter(dbCommand, "vchMACAddress", DbType.String, vchParameter1);                   
+                    db.AddInParameter(dbCommand, "vchSerialNumber", DbType.String, vchSerialNumber);
+                    db.AddInParameter(dbCommand, "vchMACAddress", DbType.String, vchMACAddress);                   
                     db.ExecuteNonQuery(dbCommand);
                 }
 
