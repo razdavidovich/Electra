@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly.Software.Utilities, Version=1.0.1.0, Culture=neutral, PublicKeyToken=b43ab951e5782031, processorArchitecture=MSIL">
       <HintPath>..\packages\Assembly.Software.Utilities.1.0.1\lib\net20\Assembly.Software.Utilities.dll</HintPath>
@@ -116,6 +119,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
