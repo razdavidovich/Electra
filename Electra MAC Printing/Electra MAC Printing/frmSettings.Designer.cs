@@ -38,9 +38,11 @@
             Infragistics.Win.Appearance appearance7 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinTabControl.UltraTab ultraTab2 = new Infragistics.Win.UltraWinTabControl.UltraTab();
             Infragistics.Win.Appearance appearance8 = new Infragistics.Win.Appearance();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSettings));
             this.utpcAppSettingsWizard_GeneralSettings = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
             this.panelGeneralSettings = new System.Windows.Forms.Panel();
             this.grpCommunicationSettings = new System.Windows.Forms.GroupBox();
+            this.UltraPrinter = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this.uCBO_GS_StripeStopBits = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this.uCBO_GS_StripeParity = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this.LBL_PrinterName = new System.Windows.Forms.Label();
@@ -64,10 +66,10 @@
             this.utcAppSettingsWizard = new Infragistics.Win.UltraWinTabControl.UltraTabControl();
             this.utscpAppSettingsWizard_SharedControl = new Infragistics.Win.UltraWinTabControl.UltraTabSharedControlsPage();
             this.panelSettings = new System.Windows.Forms.Panel();
-            this.UltraPrinter = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this.utpcAppSettingsWizard_GeneralSettings.SuspendLayout();
             this.panelGeneralSettings.SuspendLayout();
             this.grpCommunicationSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.UltraPrinter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeStopBits)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeParity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeBaudRate)).BeginInit();
@@ -79,7 +81,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.utcAppSettingsWizard)).BeginInit();
             this.utcAppSettingsWizard.SuspendLayout();
             this.panelSettings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.UltraPrinter)).BeginInit();
             this.SuspendLayout();
             // 
             // utpcAppSettingsWizard_GeneralSettings
@@ -126,6 +127,17 @@
             this.grpCommunicationSettings.TabIndex = 15;
             this.grpCommunicationSettings.TabStop = false;
             this.grpCommunicationSettings.Text = "Communication Settings";
+            // 
+            // UltraPrinter
+            // 
+            this.UltraPrinter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.UltraPrinter.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Suggest;
+            this.UltraPrinter.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UltraPrinter.Location = new System.Drawing.Point(270, 247);
+            this.UltraPrinter.Name = "UltraPrinter";
+            this.UltraPrinter.Size = new System.Drawing.Size(639, 31);
+            this.UltraPrinter.TabIndex = 34;
             // 
             // uCBO_GS_StripeStopBits
             // 
@@ -398,25 +410,15 @@
             this.panelSettings.Size = new System.Drawing.Size(984, 582);
             this.panelSettings.TabIndex = 3;
             // 
-            // UltraPrinter
-            // 
-            this.UltraPrinter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.UltraPrinter.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Suggest;
-            this.UltraPrinter.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.UltraPrinter.Location = new System.Drawing.Point(270, 247);
-            this.UltraPrinter.Name = "UltraPrinter";
-            this.UltraPrinter.Size = new System.Drawing.Size(639, 31);
-            this.UltraPrinter.TabIndex = 34;
-            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 582);
             this.Controls.Add(this.panelSettings);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmSettings";
-            this.Text = "frmSettings";
+            this.Text = "Electra MAC Print Settings";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.frmSettings_Load);
             this.utpcAppSettingsWizard_GeneralSettings.ResumeLayout(false);
@@ -424,6 +426,7 @@
             this.panelGeneralSettings.PerformLayout();
             this.grpCommunicationSettings.ResumeLayout(false);
             this.grpCommunicationSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.UltraPrinter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeStopBits)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeParity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.uCBO_GS_StripeBaudRate)).EndInit();
@@ -435,7 +438,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.utcAppSettingsWizard)).EndInit();
             this.utcAppSettingsWizard.ResumeLayout(false);
             this.panelSettings.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.UltraPrinter)).EndInit();
             this.ResumeLayout(false);
 
         }

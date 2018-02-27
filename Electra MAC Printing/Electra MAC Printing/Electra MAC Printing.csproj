@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="images\Electra.png" />
+    <Content Include="images\ElectroMAC.ico" />
     <Content Include="images\InstructionImage.png" />
     <Content Include="images\logbook.png" />
     <Content Include="images\plussquare.png" />
