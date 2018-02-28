@@ -10,14 +10,13 @@ namespace Electra_MAC_Printing.classes.BAL
 {
     class clsAppWizardBAL
     {
-
         clsAppWizardDAL clsAppWizardDAL = new clsAppWizardDAL();
 
         #region checkUserLogin
         /****************************************************************************************************
          * NAME         : checkUserLogin                                                                    *
          * DESCRIPTION  : Validate the User Login details.                                                  *
-         * WRITTEN BY   : RajaSekar                                                                       *
+         * WRITTEN BY   : RajaSekar                                                                         *
          * DATE         : 14Feb18                                                                           *
          ****************************************************************************************************/
         public Boolean checkUserLogin(string strLoginUserID)
@@ -53,8 +52,8 @@ namespace Electra_MAC_Printing.classes.BAL
 
         #region getEletraLogBookDetails
         /****************************************************************************************************
-         * NAME         : getEletraLogBookDetails                                                          *
-         * DESCRIPTION  : Get the Marking Log Book Details.                                                 *
+         * NAME         : getEletraLogBookDetails                                                           *
+         * DESCRIPTION  : Get the Electra MAC Log Book Details.                                             *
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 17Feb18                                                                           *
          ****************************************************************************************************/
@@ -75,8 +74,8 @@ namespace Electra_MAC_Printing.classes.BAL
 
         #region SetEletraLogBookDetails
         /****************************************************************************************************
-         * NAME         : SetEletraLogBookDetails                                                          *
-         * DESCRIPTION  : Get the Marking Log Book Details.                                                 *
+         * NAME         : SetEletraLogBookDetails                                                           *
+         * DESCRIPTION  : Get the Electra MAC Log Book Details.                                             *
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 17Feb18                                                                           *
          ****************************************************************************************************/
@@ -96,8 +95,8 @@ namespace Electra_MAC_Printing.classes.BAL
 
         #region getLanguageCapion
         /****************************************************************************************************
-         * NAME         : getLanguageCapion                                                              *
-         * DESCRIPTION  : Get Language Caption Details(SELECT).                                                   *
+         * NAME         : getLanguageCapion                                                                 *
+         * DESCRIPTION  : Get Language Caption Details(SELECT).                                             *
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 15Feb2018                                                                         *
          ****************************************************************************************************/

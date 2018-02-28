@@ -188,13 +188,14 @@ namespace Electra_MAC_Printing
                     string strPrinterName = clsCommon.ReadSingleConfigValue("PrinterName", "GetSetGeneralSettings", "Settings");
                     string strDataAddress = clsCommon.ReadSingleConfigValue("DataAddress", "GetSetGeneralSettings", "Settings");
                     string strSerialNumberAddress = clsCommon.ReadSingleConfigValue("SerialNumberAddress", "GetSetGeneralSettings", "Settings");
+                    string strModbusSlaveAddress = clsCommon.ReadSingleConfigValue("ModbusSlaveAddress", "GetSetGeneralSettings", "Settings");
 
                     // Read Serial number (expecting 6153320000 from test unit)
-                    var serialValue = ReadModbusRegisters(2, Convert.ToUInt16(strSerialNumberAddress, 16), 5);
+                    var serialValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSerialNumberAddress, 16), 5);
                     txtUnitSerialNumber.Text = ConvertToSerialNumber(serialValue);
 
                     // Read MAC ADDRESS (expecting A8 1B 6A 9C 7A 9C from test unit)
-                    var macValue = ReadModbusRegisters(2, Convert.ToUInt16(strDataAddress, 16), 3);
+                    var macValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strDataAddress, 16), 3);
                     txtunitMacAddress.Text = ConvertToMACAddress(macValue);
 
                     if (txtunitMacAddress.TextLength > 0)
@@ -364,9 +365,7 @@ namespace Electra_MAC_Printing
             {
                 strAppWizard = clsVariables.strFrmAppWizardActiveTabKey;
             }
-
-            //clsAppWizardAlign.panelSharedHeaderDetailsLabelResize(panelSharedHeader, lblShared, panelsharedImage);
-
+            
             switch (strAppWizard)
             {
                 case "login":
@@ -374,14 +373,7 @@ namespace Electra_MAC_Printing
                     break;
                 case "newbatch":
                     clsAppWizardAlign.newBatchFormResize(panelMainNewBatch, panelLeftNewBatch, panelRightNewBatch);
-                    break;
-                case "startbatch":
-                    // clsAppWizardAlign.panelStartBatchLabelResize(panelStartBatch, lblBarCode, lblStartMarking, txtBarCode, lblStartBatchErroMessage, panelStartBatchHeader);
-                    break;
-                case "endbatch":
-
-                    //clsAppWizardAlign.panelMarkingLabelResize(panelMarking, LBL_MarkingText, btnMarkingCancel, LBL_BTN_MarkingText);
-                    break;
+                    break;               
             }
 
         }

@@ -15,6 +15,7 @@ namespace Electra_MAC_Printing.classes.DAL
         private DatabaseProviderFactory factory;
         private Database db;
         #endregion
+
         public clsCommonDAL()
         {
             factory = new DatabaseProviderFactory();

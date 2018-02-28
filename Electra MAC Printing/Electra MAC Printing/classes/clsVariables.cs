@@ -27,10 +27,6 @@ namespace Electra_MAC_Printing.classes
         /*Non-Static Variable  Declaration*/
         private string _strImageFileName;
 
-
-
-
-
         public void DefaultInitDataMatrixValuesClear()
         {
         }
@@ -66,17 +62,5 @@ namespace Electra_MAC_Printing.classes
             _blnToolBarSettingsVisiable = Convert.ToBoolean(clsCommon.ReadSingleConfigValue("ToolBarSettingsVisiable", "OtherSettings", "Settings"));
         }
     }
-
-    class clsVariablesWorkOrderDetails
-    {
-        public static int intPartNumberID { get; set; }
-        public static string strPartNumber { get; set; }
-        public static string strPartNumberDescription { get; set; }
-        public static string strVLMName { get; set; }
-        public static string strTopVLM { get; set; }
-        public static string strBottomVLM { get; set; }
-        public static string strLeftVLM { get; set; }
-        public static string strRightVLM { get; set; }
-        public static string strProgramID { get; set; }
-    }
+    
 }

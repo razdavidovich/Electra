@@ -16,11 +16,21 @@ namespace Electra_MAC_Printing.classes.DAL
         private DatabaseProviderFactory factory;
         private Database db;
         #endregion
+
+        #region clsAppWizardDAL
+        /****************************************************************************************************
+         * NAME         : clsAppWizardDAL                                                                    *
+         * DESCRIPTION  : Get the DataBase Provider Factory                                                 *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 26Feb18                                                                           *
+         ****************************************************************************************************/
         public clsAppWizardDAL()
         {
             factory = new DatabaseProviderFactory();
             db = factory.Create(clsVariables.strGetDefaultDatabase);
         }
+        #endregion
+
         #region checkUserLogin
         /****************************************************************************************************
          * NAME         : checkUserLogin                                                                    *
@@ -51,10 +61,11 @@ namespace Electra_MAC_Printing.classes.DAL
 
         }
         #endregion
+
         #region getEletraLogBookDetails
         /****************************************************************************************************
-         * NAME         : getEletraLogBookDetails                                                          *
-         * DESCRIPTION  : Get the Marking Log Book Details.                                                 *
+         * NAME         : getEletraLogBookDetails                                                           *
+         * DESCRIPTION  : Get the Electra MAC Log Book Details.                                             *
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 17Feb18                                                                           *
          ****************************************************************************************************/
@@ -87,8 +98,8 @@ namespace Electra_MAC_Printing.classes.DAL
 
         #region SetEletraLogBookDetails
         /****************************************************************************************************
-         * NAME         : SetEletraLogBookDetails                                                          *
-         * DESCRIPTION  : Get the Marking Log Book Details.                                                 *
+         * NAME         : SetEletraLogBookDetails                                                           *
+         * DESCRIPTION  : Get the Electra MAC Log Book Details.                                             *
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 17Feb18                                                                           *
          ****************************************************************************************************/
@@ -124,8 +135,8 @@ namespace Electra_MAC_Printing.classes.DAL
 
         #region getLanguageCapion
         /****************************************************************************************************
-         * NAME         : getLanguageCapion                                                              *
-         * DESCRIPTION  : Get Language Caption Details(SELECT).                                                   *
+         * NAME         : getLanguageCapion                                                                 *
+         * DESCRIPTION  : Get Language Caption Details(SELECT).                                             *
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 15Feb2018                                                                         *
          ****************************************************************************************************/
@@ -151,7 +162,6 @@ namespace Electra_MAC_Printing.classes.DAL
             return ds;
         }
         #endregion
-
 
     }
 }
