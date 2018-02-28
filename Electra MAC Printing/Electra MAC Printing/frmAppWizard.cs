@@ -365,9 +365,7 @@ namespace Electra_MAC_Printing
             {
                 strAppWizard = clsVariables.strFrmAppWizardActiveTabKey;
             }
-
-            //clsAppWizardAlign.panelSharedHeaderDetailsLabelResize(panelSharedHeader, lblShared, panelsharedImage);
-
+            
             switch (strAppWizard)
             {
                 case "login":
@@ -375,14 +373,7 @@ namespace Electra_MAC_Printing
                     break;
                 case "newbatch":
                     clsAppWizardAlign.newBatchFormResize(panelMainNewBatch, panelLeftNewBatch, panelRightNewBatch);
-                    break;
-                case "startbatch":
-                    // clsAppWizardAlign.panelStartBatchLabelResize(panelStartBatch, lblBarCode, lblStartMarking, txtBarCode, lblStartBatchErroMessage, panelStartBatchHeader);
-                    break;
-                case "endbatch":
-
-                    //clsAppWizardAlign.panelMarkingLabelResize(panelMarking, LBL_MarkingText, btnMarkingCancel, LBL_BTN_MarkingText);
-                    break;
+                    break;               
             }
 
         }

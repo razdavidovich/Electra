@@ -14,7 +14,6 @@ namespace Electra_MAC_Printing.classes
 {
    public class clsCommon
     {
-
      
         #region ReadSingleConfigValue
         /****************************************************************************************************
@@ -28,7 +27,6 @@ namespace Electra_MAC_Printing.classes
             return Config.get_ReadConfigValue(strItemName, strConfigSection, strConfigGroup);
         }
         #endregion
-
 
         #region FileFolderOpenFileDialog
         /****************************************************************************************************
@@ -74,7 +72,7 @@ namespace Electra_MAC_Printing.classes
         /****************************************************************************************************
          * NAME         : clsApplicationLogFileWriteLog                                                     *
          * DESCRIPTION  : Common Method for Write the Log file in the Folder.                               *
-         * WRITTEN BY   : RajaSekar                                                                       *
+         * WRITTEN BY   : RajaSekar                                                                         *
          * DATE         : 14Feb18                                                                           *
          ****************************************************************************************************/
         public static void clsApplicationLogFileWriteLog(Exception ex = null, string strMessages = null)
@@ -97,20 +95,7 @@ namespace Electra_MAC_Printing.classes
             clsApplicationLogFile.WriteLog(strLog);
         }
         #endregion
-
-        //#region commonGeneralDisplayMessageBox
-        ///****************************************************************************************************
-        // * NAME         : commonGeneralDisplayMessageBox                                                    *
-        // * DESCRIPTION  : Common Method for display the messages.                                           *
-        // * WRITTEN BY   : RajaSekar J                                                                       *
-        // * DATE         : 14Feb18                                                                           *
-        // ****************************************************************************************************/
-        //public static void commonGeneralDisplayMessageBox(int intMsgId)
-        //{
-        //    General.DisplayMessageBoxLTR(intMsgId);
-        //}
-        //#endregion
-
+       
         #region ReadConfigGetSectionGroup
         /****************************************************************************************************
          * NAME         : ReadConfigGetSectionGroup                                                         *
@@ -136,6 +121,7 @@ namespace Electra_MAC_Printing.classes
             Config.SaveConfigValue(strItemName, strConfigSection, strConfigGroup, strValue);
         }
         #endregion
+
         #region commonGeneralDisplayMessageBox
         /****************************************************************************************************
          * NAME         : commonGeneralDisplayMessageBox                                                    *
@@ -148,12 +134,13 @@ namespace Electra_MAC_Printing.classes
             General.DisplayMessageBoxLTR(intMsgId);
         }
         #endregion
+
         #region SetDisplayCommonErrorMessage
         /****************************************************************************************************
          * NAME         : SetDisplayCommonErrorMessage                                                      *
          * DESCRIPTION  : Get the details from the config and show the message                              *
          * WRITTEN BY   : RajaSekar J                                                                       *
-         * DATE         : 15Feb2018                                                                           *
+         * DATE         : 15Feb2018                                                                         *
          ****************************************************************************************************/
         public void SetDisplayCommonErrorMessage(string strTitle, string strType, string strMessage)
         {
@@ -165,13 +152,12 @@ namespace Electra_MAC_Printing.classes
         }
         #endregion
 
-
         #region getSerialPort
         /****************************************************************************************************
          * NAME         : getSerialPort                                                                     *
          * DESCRIPTION  : Get the Serial Port details and Return the Details in to Datatables.              *
-         * WRITTEN BY   : PrabakaranG                                                                       *
-         * DATE         : 20Mar15                                                                           *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 26Feb18                                                                           *
          ****************************************************************************************************/
         public DataTable getSerialPort()
         {
@@ -190,17 +176,15 @@ namespace Electra_MAC_Printing.classes
             return dtPorts;
         }
 
-      
+
         #endregion
-
-
 
         #region getBaudRate
         /****************************************************************************************************
          * NAME         : getBaudRate                                                                       *
-         * DESCRIPTION  : Get the Serial Port details and Return the Details in to Datatables.              *
-         * WRITTEN BY   : PrabakaranG                                                                       *
-         * DATE         : 20Mar15                                                                           *
+         * DESCRIPTION  : Get the Baud Rate details and Return the Details in to Datatables.                *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 26Feb18                                                                           *
          ****************************************************************************************************/
         public DataTable getBaudRate()
         {
@@ -236,9 +220,9 @@ namespace Electra_MAC_Printing.classes
         #region getParity
         /****************************************************************************************************
          * NAME         : getParity                                                                         *
-         * DESCRIPTION  : Get the Serial Port details and Return the Details in to Datatables.              *
-         * WRITTEN BY   : PrabakaranG                                                                       *
-         * DATE         : 20Mar15                                                                           *
+         * DESCRIPTION  : Get the Parity details and Return the Details in to Datatables.                   *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 26Feb18                                                                           *
          ****************************************************************************************************/
         public DataTable getParity()
         {
@@ -258,9 +242,9 @@ namespace Electra_MAC_Printing.classes
         #region getDataBits
         /****************************************************************************************************
          * NAME         : getDataBits                                                                       *
-         * DESCRIPTION  : Get the Serial Port details and Return the Details in to Datatables.              *
-         * WRITTEN BY   : PrabakaranG                                                                       *
-         * DATE         : 20Mar15                                                                           *
+         * DESCRIPTION  : Get the Data Bits details and Return the Details in to Datatables.                * 
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 26Feb18                                                                           *
          ****************************************************************************************************/
         public DataTable getDataBits()
         {
@@ -294,9 +278,9 @@ namespace Electra_MAC_Printing.classes
         #region getStopBits
         /****************************************************************************************************
          * NAME         : getStopBits                                                                       *
-         * DESCRIPTION  : Get the Serial Port details and Return the Details in to Datatables.              *
-         * WRITTEN BY   : PrabakaranG                                                                       *
-         * DATE         : 20Mar15                                                                           *
+         * DESCRIPTION  : Get the Stop Bits details and Return the Details in to Datatables.                *
+         * WRITTEN BY   : RajaSekar J                                                                       *
+         * DATE         : 26Feb18                                                                           *
          ****************************************************************************************************/
         public DataTable getStopBits()
         {
@@ -312,7 +296,6 @@ namespace Electra_MAC_Printing.classes
 
         }
         #endregion
-
         
     }
 }

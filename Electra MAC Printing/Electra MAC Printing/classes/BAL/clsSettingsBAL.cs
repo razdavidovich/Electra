@@ -10,7 +10,6 @@ namespace Electra_MAC_Printing.classes.BAL
 {
     class clsSettingsBAL
     {
-
         clsSettingsDAL clsSettingsDAL = new clsSettingsDAL();
 
         #region getUsersDetails
@@ -40,7 +39,7 @@ namespace Electra_MAC_Printing.classes.BAL
          * NAME         : setUsersDetails                                                                   *
          * DESCRIPTION  : set User Details(INSERT,UPDATE,DELETE).                                           *
          * WRITTEN BY   : RajaSekar J                                                                       *
-         * DATE         : 15Feb2018                                                                           *
+         * DATE         : 15Feb2018                                                                         *
          ****************************************************************************************************/
         public Boolean setUsersDetails(int intOperation, int intUserID = 0, int intRoleID = 0, string strRFID = null)
         {
