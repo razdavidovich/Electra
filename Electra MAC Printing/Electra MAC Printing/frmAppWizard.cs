@@ -144,6 +144,7 @@ namespace Electra_MAC_Printing
 
             blnTimerRunning = false;
 
+            Application.DoEvents();
         }
 
         private void setUnitInformationAndPrint()
@@ -158,6 +159,8 @@ namespace Electra_MAC_Printing
             // Allow re-print
             BtnRePrint.Show();
 
+            Application.DoEvents();
+
         }
 
         private void tmrModbus_Tick(object sender, EventArgs e)
@@ -165,8 +168,6 @@ namespace Electra_MAC_Printing
 
             if (!blnTimerRunning)
             {
-                Application.DoEvents();
-
                 MethodInvoker tmrDelegate = delegate
                 {
                     tmrModbusTickWorker();
@@ -312,7 +313,6 @@ namespace Electra_MAC_Printing
         {
             lblFormHead.Text = (string)dicLanguageCaptions[string.Format("loginHeaderCaption_{0}", strLanguage)];
             lblHeadlogin.Text = (string)dicLanguageCaptions[string.Format("loginHeaderemployeeCardCaption_{0}", strLanguage)];
-            lblEmpNo.Text = (string)dicLanguageCaptions[string.Format("loginEmployeeNumberCaption_{0}", strLanguage)];
             btnLogin.Text = (string)dicLanguageCaptions[string.Format("loginButtonCaption_{0}", strLanguage)];
             lblUnitSerialNumber.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitSerialNumberCaption_{0}", strLanguage)];
             lblUnitMacAddress.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitMacAddressCaption_{0}", strLanguage)];
