@@ -165,7 +165,6 @@ namespace Electra_MAC_Printing
 
         private void tmrModbus_Tick(object sender, EventArgs e)
         {
-
             if (!blnTimerRunning)
             {
                 MethodInvoker tmrDelegate = delegate

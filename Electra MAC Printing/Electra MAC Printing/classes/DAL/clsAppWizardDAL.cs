@@ -147,7 +147,7 @@ namespace Electra_MAC_Printing.classes.DAL
             {
                 using (DbCommand dbCommand = db.GetStoredProcCommand("TranslationGlossary_SP"))
                 {
-                    db.AddInParameter(dbCommand, "Operation", DbType.String, intOperation);
+                    db.AddInParameter(dbCommand, "Operation", DbType.Int32, intOperation);
                     db.AddInParameter(dbCommand, "vchLanguageCode", DbType.String, vchLanguageCode);
                     db.AddInParameter(dbCommand, "vchValues", DbType.String, "");                    
                     ds = db.ExecuteDataSet(dbCommand);

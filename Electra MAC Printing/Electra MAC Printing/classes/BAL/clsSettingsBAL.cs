@@ -41,11 +41,11 @@ namespace Electra_MAC_Printing.classes.BAL
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 15Feb2018                                                                         *
          ****************************************************************************************************/
-        public Boolean setUsersDetails(int intOperation, int intUserID = 0, int intRoleID = 0, string strRFID = null)
+        public Boolean setUsersDetails(int intOperation, int intUserID = 0, int intRoleID = 0, string strRFID = null, int intKey = 0)
         {
             try
             {
-                return clsSettingsDAL.setUsersDetails(intOperation, intUserID, intRoleID, strRFID);
+                return clsSettingsDAL.setUsersDetails(intOperation, intUserID, intRoleID, strRFID,intKey);
             }
             catch (Exception ex)
             {
