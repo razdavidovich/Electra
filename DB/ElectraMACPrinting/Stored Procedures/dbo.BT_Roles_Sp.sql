@@ -2,18 +2,17 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
-
 /***************************************************************************************************
-* SP-NAME      : BT_Roles_Sp																   *
+* SP-NAME      : BT_Roles_Sp																       *
 * Author-NAME  : RajaSekar J															           *
-* DESCRIPTION  : Get Work Roles Detail from BT_Roles_Sp Table						                           *
+* DESCRIPTION  : Get Work Roles Detail from BT_Roles_Sp Table						               *
 * DATE         : 24Feb18                                                                           *
 ***************************************************************************************************/
 CREATE PROCEDURE [dbo].[BT_Roles_Sp]
     @Operation INT,
     @intRoleID INT = NULL,
-    @vchRoleDescription VARCHAR(50) = NULL
-
+    @vchRoleDescription VARCHAR(50) = NULL,
+    @Key1 INT = NULL
 AS
 BEGIN
     IF (@Operation = 1)
@@ -23,12 +22,12 @@ BEGIN
     END;
     IF (@Operation = 2)
     BEGIN
-        IF EXISTS (SELECT * FROM dbo.Roles_Ta WHERE ([intRoleID] = @intRoleID))
+        IF EXISTS (SELECT * FROM dbo.Roles_Ta WHERE ([intRoleID] = @Key1))
         BEGIN
             UPDATE dbo.Roles_Ta
             SET [intRoleID] = @intRoleID,
                 [vchRoleDescription] = @vchRoleDescription
-            WHERE ([intRoleID] = @intRoleID);
+            WHERE ([intRoleID] = @Key1);
         END;
         ELSE
         BEGIN
@@ -45,7 +44,8 @@ BEGIN
     IF (@Operation = 3)
     BEGIN
         DELETE FROM dbo.Roles_Ta
-        WHERE ([intRoleID] = @intRoleID);
+        WHERE ([intRoleID] = @Key1);
     END;
 END;
+
 GO
