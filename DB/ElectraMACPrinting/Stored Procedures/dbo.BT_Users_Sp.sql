@@ -49,6 +49,15 @@ BEGIN
         DELETE FROM dbo.Users_Ta
         WHERE ([intUserID] = @Key1);
     END;
+
+    IF (@Operation = 4)
+    BEGIN
+        SELECT intUserID,
+               intRoleID,
+               vchRFID,
+               intUserID AS Key1
+        FROM dbo.Users_Ta;
+    END;
 END;
 
 GO
