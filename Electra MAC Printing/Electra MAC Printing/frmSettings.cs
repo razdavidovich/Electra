@@ -511,7 +511,7 @@ namespace Electra_MAC_Printing
             {
                 uGrid_Users.DisplayLayout.AutoFitStyle = IWUG.AutoFitStyle.ResizeAllColumns;
 
-                uGrid_Users.DataSource = clsSettingsBAL.getUsersDetails(1);
+                uGrid_Users.DataSource = clsSettingsBAL.getUsersDetails(4);
                 uGrid_Users.DisplayLayout.Bands[0].Columns[1].Style = IWUG.ColumnStyle.DropDownList;
                 uGrid_Users.DisplayLayout.Bands[0].Columns[1].ButtonDisplayStyle = IWUG.ButtonDisplayStyle.Always;
                 uGrid_Users.DisplayLayout.Bands[0].Columns[1].ValueList = uGrid_Users_Roles();
@@ -569,9 +569,10 @@ namespace Electra_MAC_Printing
                 col.Header.Caption = (string)dicLanguageCaptions[string.Format("{0}_{1}", col.Key,strLanguage)];
                 
             }
-            uGrid_Users.DisplayLayout.Bands[0].Columns[2].Hidden = true;
-            e.Layout.Bands[0].Columns[0].CellActivation = Infragistics.Win.UltraWinGrid.Activation.NoEdit;
 
+            uGrid_Users.DisplayLayout.Bands[0].Columns[2].Hidden = true;
+            uGrid_Users.DisplayLayout.Bands[0].Columns[3].Hidden = true;
+           
             if ("0" == clsCommon.ReadSingleConfigValue("Default", "LanguageDirection", "LanguageSupport"))
             {
                 uGrid_Users.DisplayLayout.Bands[0].Override.HeaderAppearance.TextHAlign = Infragistics.Win.HAlign.Left;
@@ -608,9 +609,9 @@ namespace Electra_MAC_Printing
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 15Feb2018                                                                           *
          ****************************************************************************************************/
-        private void uGrid_Users_Insert_Update_Delete(int intOperation, int intUserID, int intRoleID, string strRFID)
+        private void uGrid_Users_Insert_Update_Delete(int intOperation, int intUserID, int intRoleID, string strRFID,int intKey)
         {
-            clsSettingsBAL.setUsersDetails(intOperation, intUserID, intRoleID, strRFID);
+            clsSettingsBAL.setUsersDetails(intOperation, intUserID, intRoleID, strRFID, intKey);
         }
         #endregion
 
@@ -629,10 +630,11 @@ namespace Electra_MAC_Printing
                 int intUserID = string.IsNullOrEmpty(uGrid_Users.ActiveRow.Cells[0].Value.ToString()) ? 0 : Convert.ToInt32(uGrid_Users.ActiveRow.Cells[0].Value.ToString());
                 int intRoleID = string.IsNullOrEmpty(uGrid_Users.ActiveRow.Cells[1].Value.ToString()) ? 0 : Convert.ToInt32(uGrid_Users.ActiveRow.Cells[1].Value.ToString());
                 string strRFID = string.IsNullOrEmpty(uGrid_Users.ActiveRow.Cells[2].Value.ToString()) ? null : uGrid_Users.ActiveRow.Cells[2].Value.ToString();
+                int intKey = string.IsNullOrEmpty(uGrid_Users.ActiveRow.Cells[3].Value.ToString()) ? 0 : Convert.ToInt32(uGrid_Users.ActiveRow.Cells[3].Value.ToString());
 
                 if (intUserID > 0 && intRoleID > 0)
                 {
-                    uGrid_Users_Insert_Update_Delete(2, intUserID, intRoleID, intUserID.ToString());
+                    uGrid_Users_Insert_Update_Delete(2, intUserID, intRoleID, intUserID.ToString(), intKey);
                 }
 
                 else
@@ -682,7 +684,7 @@ namespace Electra_MAC_Printing
          ****************************************************************************************************/
         private void uGrid_Users_BeforeRowsDeleted(object sender, IWUG.BeforeRowsDeletedEventArgs e)
         {
-            intuGrid_Users_DeleteRowId = string.IsNullOrEmpty(e.Rows[0].Cells[0].Value.ToString()) ? 0 : Convert.ToInt32(e.Rows[0].Cells[0].Value.ToString());
+            intuGrid_Users_DeleteRowId = string.IsNullOrEmpty(e.Rows[0].Cells[3].Value.ToString()) ? 0 : Convert.ToInt32(e.Rows[0].Cells[3].Value.ToString());
         }
         #endregion
 
@@ -695,7 +697,7 @@ namespace Electra_MAC_Printing
          ****************************************************************************************************/
         private void uGrid_Users_AfterRowsDeleted(object sender, EventArgs e)
         {
-            uGrid_Users_Insert_Update_Delete(3, intuGrid_Users_DeleteRowId, 0, intuGrid_Users_DeleteRowId.ToString());
+            uGrid_Users_Insert_Update_Delete(3, 0, 0, null, intuGrid_Users_DeleteRowId);
             intuGrid_Users_DeleteRowId = 0;
         }
         #endregion

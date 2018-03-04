@@ -35,10 +35,11 @@ namespace Electra_MAC_Printing.classes.DAL
             {
                 using (DbCommand dbCommand = db.GetStoredProcCommand("BT_Users_Sp"))
                 {
-                    db.AddInParameter(dbCommand, "Operation", DbType.String, intOperation);
-                    db.AddInParameter(dbCommand, "intUserID", DbType.String, null);
-                    db.AddInParameter(dbCommand, "intRoleID", DbType.String, null);
+                    db.AddInParameter(dbCommand, "Operation", DbType.Int32, intOperation);
+                    db.AddInParameter(dbCommand, "intUserID", DbType.Int32, null);
+                    db.AddInParameter(dbCommand, "intRoleID", DbType.Int32, null);
                     db.AddInParameter(dbCommand, "vchRFID", DbType.String, null);
+                    db.AddInParameter(dbCommand, "Key1", DbType.Int32, null);
 
                     ds = db.ExecuteDataSet(dbCommand);
                 }
@@ -64,10 +65,11 @@ namespace Electra_MAC_Printing.classes.DAL
             {
                 using (DbCommand dbCommand = db.GetStoredProcCommand("BT_Users_Sp"))
                 {
-                    db.AddInParameter(dbCommand, "Operation", DbType.String, intOperation);
-                    db.AddInParameter(dbCommand, "intUserID", DbType.String, intUserID);
-                    db.AddInParameter(dbCommand, "intRoleID", DbType.String, intRoleID);
+                    db.AddInParameter(dbCommand, "Operation", DbType.Int32, intOperation);
+                    db.AddInParameter(dbCommand, "intUserID", DbType.Int32, intUserID);
+                    db.AddInParameter(dbCommand, "intRoleID", DbType.Int32, intRoleID);
                     db.AddInParameter(dbCommand, "vchRFID", DbType.String, strRFID);
+                    db.AddInParameter(dbCommand, "Key1", DbType.Int32, intKey);
                     db.ExecuteNonQuery(dbCommand);
                 }
                 return true;
