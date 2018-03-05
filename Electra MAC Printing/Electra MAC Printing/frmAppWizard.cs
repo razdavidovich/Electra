@@ -191,11 +191,16 @@ namespace Electra_MAC_Printing
 
                     // Read Serial number (expecting 6153320000 from test unit)
                     var serialValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSerialNumberAddress, 16), 5);
-                    txtUnitSerialNumber.Text = ConvertToSerialNumber(serialValue);
+                    var strSerialNumber = ConvertToSerialNumber(serialValue);
 
                     // Read MAC ADDRESS (expecting A8 1B 6A 9C 7A 9C from test unit)
                     var macValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strDataAddress, 16), 3);
-                    txtunitMacAddress.Text = ConvertToMACAddress(macValue);
+                    var strMACAddress = ConvertToMACAddress(macValue);
+
+                    if (strMACAddress == "EFFFFFFFFFFFF") { throw new Exception("Invalid MAC address"); }
+
+                    txtunitMacAddress.Text = strMACAddress;
+                    txtUnitSerialNumber.Text = strSerialNumber;
 
                     if (txtunitMacAddress.TextLength > 0)
                     {
@@ -220,7 +225,6 @@ namespace Electra_MAC_Printing
                 catch (Exception ex)
                 {
                     clearData();
-                    clsCommon.clsApplicationLogFileWriteLog(ex);
                 }
             });
 
