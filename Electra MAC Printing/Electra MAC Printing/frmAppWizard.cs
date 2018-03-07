@@ -237,7 +237,7 @@ namespace Electra_MAC_Printing
             string printerName = clsCommon.ReadSingleConfigValue("PrinterName", "GetSetGeneralSettings", "Settings");
 
             // Setup the ZPL to print
-            string zpl = string.Format(clsCommon.ReadSingleConfigValue("ZPL", "GetSetGeneralSettings", "Settings"), serialNumber,unitMACAddress,unitMACAddress.Substring(0,7),unitMACAddress.Substring(6));
+            string zpl = string.Format(clsCommon.ReadSingleConfigValue("ZPL", "GetSetGeneralSettings", "Settings"), serialNumber,unitMACAddress,unitMACAddress.Substring(0,7),unitMACAddress.Substring(7));
 
             // Print the label
             clsPrintUtility.SendStringToPrinter(printerName, zpl);
