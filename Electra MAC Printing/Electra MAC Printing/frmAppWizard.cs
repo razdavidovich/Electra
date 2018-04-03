@@ -80,7 +80,7 @@ namespace Electra_MAC_Printing
                 string hexValue = value.ToString("X").ToUpper().PadLeft(4, '0');
                 if (hexValue == "FFFF")
                 {
-                    return "0000000000";
+                    return "00000000000";
                 }
 
                 sb.Append(HexString2Ascii(hexValue.Substring(2)));
