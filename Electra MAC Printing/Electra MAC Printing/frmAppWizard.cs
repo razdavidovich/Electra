@@ -16,7 +16,7 @@ using System.IO.Ports;
 using Modbus.Data;
 using Modbus.Device;
 using Modbus.Utility;
-
+using Infragistics.Win.UltraWinGrid;
 
 namespace Electra_MAC_Printing
 {
@@ -28,6 +28,7 @@ namespace Electra_MAC_Printing
         clsAppWizardAlign clsAppWizardAlign = new clsAppWizardAlign();
         clsAppWizardBAL clsappWizardBAL = new clsAppWizardBAL();
         //clsSettingsBAL clsSettingsBAL = new clsSettingsBAL();
+        clsWiFiTests objWifiTests = new clsWiFiTests();
 
         private Dictionary<string, object> dicLanguageCaptions;
 
@@ -35,6 +36,7 @@ namespace Electra_MAC_Printing
         private string[] strSettingsArray;
 
         private bool blnTimerRunning = false;
+        
 
         public frmAppWizard()
         {
@@ -134,11 +136,11 @@ namespace Electra_MAC_Printing
 
         private void clearData()
         {
-            txtUnitSerialNumber.Text = string.Empty;
-            txtUnitSerialNumber.BackColor = Color.Red;
+            //txtUnitSerialNumber.Text = string.Empty; need to remove
+            //txtUnitSerialNumber.BackColor = Color.Red;
 
-            txtunitMacAddress.Text = string.Empty;
-            txtunitMacAddress.BackColor = Color.Red;
+            //txtunitMacAddress.Text = string.Empty;
+            //txtunitMacAddress.BackColor = Color.Red;
 
             BtnRePrint.Hide();
 
@@ -150,11 +152,11 @@ namespace Electra_MAC_Printing
         private void setUnitInformationAndPrint()
         {
             // Set background
-            txtUnitSerialNumber.BackColor = Color.Green;
-            txtunitMacAddress.BackColor = Color.Green;
+           // txtUnitSerialNumber.BackColor = Color.Green; need to remove
+            //txtunitMacAddress.BackColor = Color.Green;
 
             // Print label
-            printLabel(txtUnitSerialNumber.Text, txtunitMacAddress.Text);
+            //printLabel(txtUnitSerialNumber.Text, txtunitMacAddress.Text);
 
             // Allow re-print
             BtnRePrint.Show();
@@ -199,16 +201,16 @@ namespace Electra_MAC_Printing
 
                     if (strMACAddress == "EFFFFFFFFFFFF") { throw new Exception("Invalid MAC address"); }
 
-                    txtunitMacAddress.Text = strMACAddress;
-                    txtUnitSerialNumber.Text = strSerialNumber;
+                    //txtunitMacAddress.Text = strMACAddress;
+                    //txtUnitSerialNumber.Text = strSerialNumber;
 
-                    if (txtunitMacAddress.TextLength > 0)
-                    {
+                    //if (txtunitMacAddress.TextLength > 0)
+                    //{
                         if (!BtnRePrint.Visible)
                         {
-                            if(!string.IsNullOrEmpty(strPrinterName))
+                            if (!string.IsNullOrEmpty(strPrinterName))
                             {
-                                setUnitInformationAndPrint();                               
+                                setUnitInformationAndPrint();
                             }
                             else
                             {
@@ -216,9 +218,9 @@ namespace Electra_MAC_Printing
                                 clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
                                 clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("PrinterNameNullOrEmptyErrorTitleCaption_{0}", strLanguage)]);
                                 clsCommon.commonGeneralDisplayMessageBox(0);
-                            }                          
+                            }
                         }
-                    }
+                    //}
                     blnTimerRunning = false;
 
                 }
@@ -228,6 +230,27 @@ namespace Electra_MAC_Printing
                 }
             });
 
+        }
+
+        private void BindInitialData()
+        {
+            DataTable dtInitial = new DataTable();
+            string strStepName = string.Empty;
+            string strStatus = string.Empty;
+            int i = 0;
+
+            dtInitial.Columns.Add("intIndex");
+            dtInitial.Columns.Add("vchStep");
+            dtInitial.Columns.Add("vchStatus");
+
+            for (i = 1; i <= 12; i++)
+            {
+                strStepName = (string)dicLanguageCaptions[string.Format("StepName_" + i + "_{0}", strLanguage)];
+                dtInitial.Rows.Add(i, strStepName, i == 1 ? "NO" : "N/A");
+            }
+
+            ugStatuGrid.DataSource = dtInitial;
+            ugStatuGrid.DataBind();
         }
 
         #region "Print Label"
@@ -267,7 +290,7 @@ namespace Electra_MAC_Printing
             txtEmpNo.Text = "";
             LoadControlCaption();
             //Adding_uGridWorkDetails_From_Form_Load();
-
+            BindInitialData();
             // RunStartMarking();
         }
         #endregion
@@ -317,15 +340,17 @@ namespace Electra_MAC_Printing
             lblFormHead.Text = (string)dicLanguageCaptions[string.Format("loginHeaderCaption_{0}", strLanguage)];
             lblHeadlogin.Text = (string)dicLanguageCaptions[string.Format("loginHeaderemployeeCardCaption_{0}", strLanguage)];
             btnLogin.Text = (string)dicLanguageCaptions[string.Format("loginButtonCaption_{0}", strLanguage)];
-            lblUnitSerialNumber.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitSerialNumberCaption_{0}", strLanguage)];
-            lblUnitMacAddress.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitMacAddressCaption_{0}", strLanguage)];
-            lblUnitMacAddress.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitMacAddressCaption_{0}", strLanguage)];
+            //lblUnitSerialNumber.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitSerialNumberCaption_{0}", strLanguage)];
+            //lblUnitMacAddress.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitMacAddressCaption_{0}", strLanguage)];
+            //lblUnitMacAddress.Text = (string)dicLanguageCaptions[string.Format("NewBatchUnitMacAddressCaption_{0}", strLanguage)];
             LBL_LogBook_From.Text = (string)dicLanguageCaptions[string.Format("LBLLogBookFromCaption_{0}", strLanguage)];
             LBL_LogBook_To.Text = (string)dicLanguageCaptions[string.Format("LBLLogBookToCaption_{0}", strLanguage)];
             uBTN_LogBook_Excel.Text = (string)dicLanguageCaptions[string.Format("BtnLogBookExportCaption_{0}", strLanguage)];
             uBTN_LogBook_Filter.Text = (string)dicLanguageCaptions[string.Format("BtnLogBookFilterCaption_{0}", strLanguage)];
             BtnRePrint.Text = (string)dicLanguageCaptions[string.Format("BtnRePrintCaption_{0}", strLanguage)];
             lblErrorMesaage.Text = (string)dicLanguageCaptions[string.Format("LoginLabelErrorMessageCaption_{0}", strLanguage)];
+
+            
 
             uToolBarManagerControl.Tools[0].SharedProps.Caption = (string)dicLanguageCaptions[string.Format("ToolBarNewBatchCaption_{0}", strLanguage)];
             uToolBarManagerControl.Tools[1].SharedProps.Caption = (string)dicLanguageCaptions[string.Format("ToolBarEndBatchCaption_{0}", strLanguage)];
@@ -815,7 +840,37 @@ namespace Electra_MAC_Printing
 
         private void BtnRePrint_Click(object sender, EventArgs e)
         {
-            printLabel(txtUnitSerialNumber.Text, txtunitMacAddress.Text);
+            //printLabel(txtUnitSerialNumber.Text, txtunitMacAddress.Text);
+        }
+
+       
+        private void ugStatuGrid_InitializeLayout(object sender, InitializeLayoutEventArgs e)
+        {
+            foreach (IWUG.UltraGridColumn col in ugStatuGrid.DisplayLayout.Bands[0].Columns)
+            {
+                // Here we "turn off" theming for the column header.
+                col.Header.Appearance.ThemedElementAlpha = Infragistics.Win.Alpha.Transparent;
+                col.Header.Appearance.BackColor = Color.LightGray;
+                col.Header.Appearance.ForeColor = Color.Black;
+                col.Header.Appearance.FontData.Bold = Infragistics.Win.DefaultableBoolean.True;
+                col.Header.Appearance.FontData.SizeInPoints = 13;
+                col.Header.Caption = (string)dicLanguageCaptions[string.Format("{0}_{1}", col.Key, strLanguage)];
+
+            }
+            ugStatuGrid.DisplayLayout.Bands[0].Columns[0].Hidden = true;
+            
+            ugStatuGrid.DisplayLayout.Bands[0].Columns[2].Width = 100;
+
+            if ("0" == clsCommon.ReadSingleConfigValue("Default", "LanguageDirection", "LanguageSupport"))
+            {
+                ugStatuGrid.DisplayLayout.Bands[0].Override.HeaderAppearance.TextHAlign = Infragistics.Win.HAlign.Left;
+                ugStatuGrid.DisplayLayout.Bands[0].Override.CellAppearance.TextHAlign = Infragistics.Win.HAlign.Left;
+            }
+            else
+            {
+                ugStatuGrid.DisplayLayout.Bands[0].Override.HeaderAppearance.TextHAlign = Infragistics.Win.HAlign.Right;
+                ugStatuGrid.DisplayLayout.Bands[0].Override.CellAppearance.TextHAlign = Infragistics.Win.HAlign.Right;
+            }
         }
     }
 

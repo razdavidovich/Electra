@@ -88,6 +88,7 @@
     <Compile Include="classes\DAL\clsCommonDAL.cs" />
     <Compile Include="classes\DAL\clsSettingsDAL.cs" />
     <Compile Include="clsPrintUtility.cs" />
+    <Compile Include="clsWiFiTests.cs" />
     <Compile Include="frmAppWizard.cs">
       <SubType>Form</SubType>
     </Compile>
