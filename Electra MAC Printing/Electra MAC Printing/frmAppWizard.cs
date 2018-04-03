@@ -51,6 +51,27 @@ namespace Electra_MAC_Printing
 
         #region "Modbus"
 
+        private string ConvertToIPAddress(ushort[] modbusValues)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            //Loop the array values
+            foreach (ushort value in modbusValues)
+            {
+                string hexValue = value.ToString("X").ToUpper().PadLeft(4, '0');
+                sb.Append(Convert.ToInt32(hexValue.Substring(0, 2), 16).ToString());
+                sb.Append(".");
+                sb.Append(Convert.ToInt32(hexValue.Substring(2), 16).ToString());
+                sb.Append(".");
+            }
+
+            //Remove the last "." at the end
+            sb.Remove(sb.Length - 1, 1);
+
+            return sb.ToString();
+
+        }
+
         private string ConvertToMACAddress(ushort[] modbusValues)
         {
             StringBuilder sb = new StringBuilder();
@@ -132,6 +153,36 @@ namespace Electra_MAC_Printing
 
         }
 
+        private void WriteModbusRegisters(byte slaveId, ushort writeAddress, ushort value)
+        {
+            try
+            {
+                strSettingsArray = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings").Split(',');
+                string strSettingsTimeOut = clsCommon.ReadSingleConfigValue("TimeOut", "GetSetGeneralSettings", "Settings");
+                using (SerialPort port = new SerialPort(strSettingsArray[0]))
+                {
+                    // configure serial port
+                    port.BaudRate = Convert.ToInt32(strSettingsArray[1]);
+                    port.DataBits = Convert.ToInt32(strSettingsArray[3]);
+                    port.Parity = (Parity)Enum.Parse(typeof(Parity), strSettingsArray[2]);
+                    port.StopBits = (StopBits)Enum.Parse(typeof(StopBits), strSettingsArray[4]);
+                    port.ReadTimeout = Convert.ToInt32(strSettingsTimeOut);
+                    port.Open();
+
+                    // create modbus master
+                    IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(port);
+
+                    // Read the registers
+                    master.WriteSingleRegister(slaveId, writeAddress, value);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
         private void clearData()
         {
             txtUnitSerialNumber.Text = string.Empty;
@@ -185,7 +236,8 @@ namespace Electra_MAC_Printing
 
                     blnTimerRunning = true;
                     string strPrinterName = clsCommon.ReadSingleConfigValue("PrinterName", "GetSetGeneralSettings", "Settings");
-                    string strDataAddress = clsCommon.ReadSingleConfigValue("DataAddress", "GetSetGeneralSettings", "Settings");
+                    string strMACMBAddress = clsCommon.ReadSingleConfigValue("MACAddress", "GetSetGeneralSettings", "Settings");
+                    string strSTAIPAddress = clsCommon.ReadSingleConfigValue("STA_IP_Address", "GetSetGeneralSettings", "Settings");
                     string strSerialNumberAddress = clsCommon.ReadSingleConfigValue("SerialNumberAddress", "GetSetGeneralSettings", "Settings");
                     string strModbusSlaveAddress = clsCommon.ReadSingleConfigValue("ModbusSlaveAddress", "GetSetGeneralSettings", "Settings");
 
@@ -193,8 +245,45 @@ namespace Electra_MAC_Printing
                     var serialValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSerialNumberAddress, 16), 5);
                     var strSerialNumber = ConvertToSerialNumber(serialValue);
 
+                    //===========================================
+                    // STA TESTS
+                    //===========================================
+
+                    // Read current STA IP address
+                    var ipAddressValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSTAIPAddress, 16), 2);
+                    var strIPAddress = ConvertToIPAddress(ipAddressValue);
+
+                    if (strIPAddress == "192.168.1.1")
+                    {
+                        // todo: Notify the UI
+
+                        // Set the unit to STA mode
+                        WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0x5555);
+
+                        // Delay until the unit recieves an IP address
+
+                        // Read the RSSI value
+                        var rssi = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x4141, 1);
+
+                        // Valdate the RSSI value
+
+                        // Read the STA new IP address
+                        ipAddressValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSTAIPAddress, 16), 2);
+                        strIPAddress = ConvertToIPAddress(ipAddressValue);
+
+                        // Validate the new IP address
+
+                        //Exit STA mode
+                        WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0xAAAA);
+
+                    }
+
+                    //===========================================
+                    // AP TESTS
+                    //===========================================
+
                     // Read MAC ADDRESS (expecting A8 1B 6A 9C 7A 9C from test unit)
-                    var macValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strDataAddress, 16), 3);
+                    var macValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strMACMBAddress, 16), 3);
                     var strMACAddress = ConvertToMACAddress(macValue);
 
                     if (strMACAddress == "EFFFFFFFFFFFF") { throw new Exception("Invalid MAC address"); }
