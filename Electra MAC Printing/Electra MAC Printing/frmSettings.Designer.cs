@@ -311,7 +311,7 @@
             this.uGrid_Users.DisplayLayout.Override.AllowUpdate = Infragistics.Win.DefaultableBoolean.True;
             this.uGrid_Users.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uGrid_Users.Location = new System.Drawing.Point(0, 0);
-            this.uGrid_Users.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.uGrid_Users.Margin = new System.Windows.Forms.Padding(5);
             this.uGrid_Users.Name = "uGrid_Users";
             this.uGrid_Users.Size = new System.Drawing.Size(659, 262);
             this.uGrid_Users.TabIndex = 1;
