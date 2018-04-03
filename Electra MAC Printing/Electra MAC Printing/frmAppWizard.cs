@@ -16,7 +16,10 @@ using System.IO.Ports;
 using Modbus.Data;
 using Modbus.Device;
 using Modbus.Utility;
-
+using System.Text.RegularExpressions;
+using SimpleWifi;
+using RestSharp;
+using System.Net;
 
 namespace Electra_MAC_Printing
 {
@@ -50,6 +53,13 @@ namespace Electra_MAC_Printing
         }
 
         #region "Modbus"
+
+        private int ConvertRSSI(ushort modbusValue)
+        {
+                string hexValue = modbusValue.ToString("X").ToUpper().PadLeft(4, '0');
+                return Convert.ToInt32(hexValue, 16);
+
+        }
 
         private string ConvertToIPAddress(ushort[] modbusValues)
         {
@@ -229,7 +239,7 @@ namespace Electra_MAC_Printing
         #endregion
         private void tmrModbusTickWorker()
         {
-            this.BeginInvoke((MethodInvoker)delegate
+            this.BeginInvoke((MethodInvoker)async delegate
             {
                 try
                 {
@@ -238,6 +248,7 @@ namespace Electra_MAC_Printing
                     string strPrinterName = clsCommon.ReadSingleConfigValue("PrinterName", "GetSetGeneralSettings", "Settings");
                     string strMACMBAddress = clsCommon.ReadSingleConfigValue("MACAddress", "GetSetGeneralSettings", "Settings");
                     string strSTAIPAddress = clsCommon.ReadSingleConfigValue("STA_IP_Address", "GetSetGeneralSettings", "Settings");
+                    string strIPAddressRegEx = clsCommon.ReadSingleConfigValue("IPAddressRegEx", "GetSetGeneralSettings", "Settings");
                     string strSerialNumberAddress = clsCommon.ReadSingleConfigValue("SerialNumberAddress", "GetSetGeneralSettings", "Settings");
                     string strModbusSlaveAddress = clsCommon.ReadSingleConfigValue("ModbusSlaveAddress", "GetSetGeneralSettings", "Settings");
 
@@ -260,21 +271,25 @@ namespace Electra_MAC_Printing
                         // Set the unit to STA mode
                         WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0x5555);
 
-                        // Delay until the unit recieves an IP address
+                        // Delay 5 seconds until the unit recieves an IP address
+                        await Task.Delay(5000);
 
                         // Read the RSSI value
                         var rssi = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x4141, 1);
 
                         // Valdate the RSSI value
+                        if (ConvertRSSI(rssi[0]) > 80) { throw new Exception("Invalid RSSI value"); }
 
                         // Read the STA new IP address
                         ipAddressValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSTAIPAddress, 16), 2);
                         strIPAddress = ConvertToIPAddress(ipAddressValue);
 
-                        // Validate the new IP address
+                        // Validate the new IP address                        
+                        if (!(Regex.Match(strIPAddress, strIPAddressRegEx).Success)) { throw new Exception("Invalid STA IP Address"); }
 
                         //Exit STA mode
                         WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0xAAAA);
+                        await Task.Delay(1000);
 
                     }
 
@@ -282,9 +297,71 @@ namespace Electra_MAC_Printing
                     // AP TESTS
                     //===========================================
 
+                    // todo: Notify the UI
+
+                    // Set the unit to STA mode
+                    WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413A, (ushort)0x5555);
+
                     // Read MAC ADDRESS (expecting A8 1B 6A 9C 7A 9C from test unit)
                     var macValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strMACMBAddress, 16), 3);
                     var strMACAddress = ConvertToMACAddress(macValue);
+
+                    // Notify the UI of the MAC address 
+
+                    // Setup the computer WiFi object
+                    var wifi = new Wifi();
+                    if (wifi.NoWifiAvailable) { throw new Exception("NO WIFI CARD WAS FOUND"); }
+
+                    var strSSID = clsCommon.ReadSingleConfigValue("APName", "GetSetGeneralSettings", "Settings") + strMACAddress.Substring(6);
+                    var strAPPassword = clsCommon.ReadSingleConfigValue("APPassword", "GetSetGeneralSettings", "Settings");
+
+                    // Loop and wait for AP to be detected
+                    int i;
+                    for (i = 0; i < 4; i++)
+                    {
+                        IEnumerable<AccessPoint> accessPoints = wifi.GetAccessPoints().OrderByDescending(ap => ap.SignalStrength);
+
+                        foreach (AccessPoint ap in accessPoints)
+                            if (ap.Name == strSSID)
+                            {
+                                AuthRequest authRequest = new AuthRequest(ap)
+                                {
+                                    Password = strAPPassword
+                                };
+                                if (!ap.Connect(authRequest)) {
+                                    await Task.Delay(3000);
+                                } else
+                                {
+                                    break;
+                                }
+                            }
+                    }
+
+                    if (i > 3)
+                    {
+                        throw new Exception("Unable to detect the unit AP");
+                    }
+                    else
+                    {
+                        var client = new RestClient("http://192.168.1.1");
+                        var request = new RestRequest(Method.POST);
+                        request.AddParameter("__SL_P_UTO", "ProdTokenAP");
+                        IRestResponse response = client.Execute(request);
+                        if (response.StatusCode != HttpStatusCode.NoContent) {
+                            throw new Exception(string.Format("Invalid http response code - {0} (expected 204)",response.StatusCode.ToString()));
+                        }
+                        await Task.Delay(3000);
+
+                        var prod = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413C, 1);
+                        if (prod[0] != (ushort)0x0055) { throw new Exception("Invalid PROD result (expected 0x0055"); }
+                    }
+
+                    // Disconnect from the AP
+                    wifi.Disconnect();
+
+                    // Exit AP mode
+                    WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413A, (ushort)0xAAAA);
+                    await Task.Delay(1000);
 
                     if (strMACAddress == "EFFFFFFFFFFFF") { throw new Exception("Invalid MAC address"); }
 
