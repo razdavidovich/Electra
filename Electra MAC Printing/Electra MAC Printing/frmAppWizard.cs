@@ -239,6 +239,8 @@ namespace Electra_MAC_Printing
         #endregion
         private void tmrModbusTickWorker()
         {
+            int i;
+
             this.BeginInvoke((MethodInvoker)async delegate
             {
                 try
@@ -256,6 +258,17 @@ namespace Electra_MAC_Printing
                     var serialValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSerialNumberAddress, 16), 5);
                     var strSerialNumber = ConvertToSerialNumber(serialValue);
 
+                    // Exit AP & STA mode (for unit recovery in case of any runtime issues)
+                    WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413A, (ushort)0xAAAA);
+                    WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0xAAAA);
+                    await Task.Delay(3000);
+
+                    if (BtnRePrint.Visible)
+                    {
+                        blnTimerRunning = false;
+                        return;
+                    }
+
                     //===========================================
                     // STA TESTS
                     //===========================================
@@ -271,14 +284,20 @@ namespace Electra_MAC_Printing
                         // Set the unit to STA mode
                         WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0x5555);
 
-                        // Delay 5 seconds until the unit recieves an IP address
-                        await Task.Delay(5000);
+                        // Delay execution for up to 12 seconds until the unit recieves an IP address
+                        for (i = 0; i < 5; i++)
+                        {
 
-                        // Read the RSSI value
-                        var rssi = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x4141, 1);
+                            await Task.Delay(5000);
 
-                        // Valdate the RSSI value
-                        if (ConvertRSSI(rssi[0]) > 80) { throw new Exception("Invalid RSSI value"); }
+                            // Read the RSSI value
+                            var rssi = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x4141, 1);
+
+                            // Valdate the RSSI value
+                            if (ConvertRSSI(rssi[0]) < 80) { break; }
+                        }
+
+                        if (i > 4) { throw new Exception("Invalid RSSI value"); }
 
                         // Read the STA new IP address
                         ipAddressValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSTAIPAddress, 16), 2);
@@ -289,8 +308,14 @@ namespace Electra_MAC_Printing
 
                         //Exit STA mode
                         WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0xAAAA);
-                        await Task.Delay(1000);
+                        await Task.Delay(5000);                   
 
+                    } else
+                    {
+                        // Reset the unit address
+                        WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0xAAAA);
+
+                        throw new Exception("Invalid Initial IP Address (expected 192.168.1.1)");
                     }
 
                     //===========================================
@@ -312,13 +337,16 @@ namespace Electra_MAC_Printing
                     var wifi = new Wifi();
                     if (wifi.NoWifiAvailable) { throw new Exception("NO WIFI CARD WAS FOUND"); }
 
-                    var strSSID = clsCommon.ReadSingleConfigValue("APName", "GetSetGeneralSettings", "Settings") + strMACAddress.Substring(6);
+                    var strSSID = clsCommon.ReadSingleConfigValue("APName", "GetSetGeneralSettings", "Settings") + strMACAddress.Substring(7);
                     var strAPPassword = clsCommon.ReadSingleConfigValue("APPassword", "GetSetGeneralSettings", "Settings");
 
+                    var connectedToAP = false;
+                    Console.WriteLine("Looking for SSID {0}", strSSID);
+
                     // Loop and wait for AP to be detected
-                    int i;
-                    for (i = 0; i < 4; i++)
+                    for (i = 0; (i < 11) && !(connectedToAP); i++)
                     {
+                        await Task.Delay(5000);
                         IEnumerable<AccessPoint> accessPoints = wifi.GetAccessPoints().OrderByDescending(ap => ap.SignalStrength);
 
                         foreach (AccessPoint ap in accessPoints)
@@ -332,12 +360,13 @@ namespace Electra_MAC_Printing
                                     await Task.Delay(3000);
                                 } else
                                 {
+                                    connectedToAP = true;
                                     break;
                                 }
                             }
                     }
 
-                    if (i > 3)
+                    if (i > 10)
                     {
                         throw new Exception("Unable to detect the unit AP");
                     }
@@ -390,6 +419,7 @@ namespace Electra_MAC_Printing
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine("{0:HH:mm:ss tt} {1}", DateTime.Now, ex.ToString());
                     clearData();
                 }
             });
