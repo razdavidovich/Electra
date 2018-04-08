@@ -30,9 +30,10 @@ namespace Electra_MAC_Printing
         clsVariables clsVariables = new clsVariables();
         clsAppWizardAlign clsAppWizardAlign = new clsAppWizardAlign();
         clsAppWizardBAL clsappWizardBAL = new clsAppWizardBAL();
-        //clsSettingsBAL clsSettingsBAL = new clsSettingsBAL();
+        // Setup the computer WiFi object
+        Wifi wifi = new Wifi();
 
-        private Dictionary<string, object> dicLanguageCaptions;
+    private Dictionary<string, object> dicLanguageCaptions;
 
         string strLanguage = clsCommon.ReadSingleConfigValue("Default", "LanguageCodes", "LanguageSupport");
         private string[] strSettingsArray;
@@ -263,6 +264,12 @@ namespace Electra_MAC_Printing
                     WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0xAAAA);
                     await Task.Delay(3000);
 
+                    // If No WiFi card is found, do not start the test
+                    if (wifi.NoWifiAvailable)
+                    {
+                        throw new Exception("NO WIFI CARD WAS FOUND");
+                    }
+
                     if (BtnRePrint.Visible)
                     {
                         blnTimerRunning = false;
@@ -333,9 +340,6 @@ namespace Electra_MAC_Printing
 
                     // Notify the UI of the MAC address 
 
-                    // Setup the computer WiFi object
-                    var wifi = new Wifi();
-                    if (wifi.NoWifiAvailable) { throw new Exception("NO WIFI CARD WAS FOUND"); }
 
                     var strSSID = clsCommon.ReadSingleConfigValue("APName", "GetSetGeneralSettings", "Settings") + strMACAddress.Substring(7);
                     var strAPPassword = clsCommon.ReadSingleConfigValue("APPassword", "GetSetGeneralSettings", "Settings");
@@ -344,7 +348,7 @@ namespace Electra_MAC_Printing
                     Console.WriteLine("Looking for SSID {0}", strSSID);
 
                     // Loop and wait for AP to be detected
-                    for (i = 0; (i < 11) && !(connectedToAP); i++)
+                    for (i = 0; (i <= 20) && !(connectedToAP); i++)
                     {
                         await Task.Delay(5000);
                         IEnumerable<AccessPoint> accessPoints = wifi.GetAccessPoints().OrderByDescending(ap => ap.SignalStrength);
@@ -366,7 +370,7 @@ namespace Electra_MAC_Printing
                             }
                     }
 
-                    if (i > 10)
+                    if ((i > 20) && !(connectedToAP)) 
                     {
                         throw new Exception("Unable to detect the unit AP");
                     }
