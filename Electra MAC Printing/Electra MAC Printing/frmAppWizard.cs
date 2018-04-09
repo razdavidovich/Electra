@@ -32,8 +32,10 @@ namespace Electra_MAC_Printing
         clsAppWizardBAL clsappWizardBAL = new clsAppWizardBAL();
         // Setup the computer WiFi object
         Wifi wifi = new Wifi();
+        RestClient client = new RestClient("http://192.168.1.1");
+        RestRequest request = new RestRequest(Method.POST);
 
-    private Dictionary<string, object> dicLanguageCaptions;
+        private Dictionary<string, object> dicLanguageCaptions;
 
         string strLanguage = clsCommon.ReadSingleConfigValue("Default", "LanguageCodes", "LanguageSupport");
         private string[] strSettingsArray;
@@ -48,9 +50,12 @@ namespace Electra_MAC_Printing
             clsApplicationLogFile.LogFilePath = clsCommon.ReadSingleConfigValue("LogFilePath", "LogSettings", "Settings");
             clsApplicationLogFile.LogFileName = clsCommon.ReadSingleConfigValue("LogFileName", "LogSettings", "Settings");
             clsApplicationLogFile.LogFileExtension = clsCommon.ReadSingleConfigValue("LogFileExtension", "LogSettings", "Settings");
-            clsCommon.clsApplicationLogFileWriteLog(null, "Form Login Load : Success");
             clsVariables.variableClearSetDefaultValues();
             LoadLanugageCaptions();
+            request.AddParameter("__SL_P_UTO", "ProdTokenAP");
+
+            clsCommon.clsApplicationLogFileWriteLog(null, "Form Login Load : Success");
+
         }
 
         #region "Modbus"
@@ -365,6 +370,7 @@ namespace Electra_MAC_Printing
                                 } else
                                 {
                                     connectedToAP = true;
+                                    await Task.Delay(3000);
                                     break;
                                 }
                             }
@@ -376,13 +382,23 @@ namespace Electra_MAC_Printing
                     }
                     else
                     {
-                        var client = new RestClient("http://192.168.1.1");
-                        var request = new RestRequest(Method.POST);
-                        request.AddParameter("__SL_P_UTO", "ProdTokenAP");
-                        IRestResponse response = client.Execute(request);
-                        if (response.StatusCode != HttpStatusCode.NoContent) {
-                            throw new Exception(string.Format("Invalid http response code - {0} (expected 204)",response.StatusCode.ToString()));
+                        var restCallOK = false;
+                        IRestResponse response = null;
+                        for (i = 0; (i <= 5) && !(restCallOK); i++)
+                        {
+                            response = client.Execute(request);
+
+                            if (response.StatusCode == HttpStatusCode.NoContent) {
+                                restCallOK = true;
+                                break;
+                            }
                         }
+
+                        if (!(restCallOK))
+                        {
+                            throw new Exception(string.Format("Invalid http response code - {0} (expected 204)", response.StatusCode.ToString()));
+                        }
+
                         await Task.Delay(3000);
 
                         var prod = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413C, 1);
