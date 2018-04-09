@@ -207,6 +207,10 @@ namespace Electra_MAC_Printing
             txtunitMacAddress.Text = string.Empty;
             txtunitMacAddress.BackColor = Color.Red;
 
+            lblIconAP.ImageKey = "AP-Gray";
+            lblIconSTA.ImageKey = "STA-Gray";
+
+            lblStatus.Text = string.Empty;
             BtnRePrint.Hide();
 
             blnTimerRunning = false;
@@ -264,6 +268,8 @@ namespace Electra_MAC_Printing
                     var serialValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSerialNumberAddress, 16), 5);
                     var strSerialNumber = ConvertToSerialNumber(serialValue);
 
+                    lblStatus.Text = "Device conneceted";
+
                     // Exit AP & STA mode (for unit recovery in case of any runtime issues)
                     WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413A, (ushort)0xAAAA);
                     WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0xAAAA);
@@ -281,6 +287,10 @@ namespace Electra_MAC_Printing
                         return;
                     }
 
+                    lblStatus.Text = "Starting STA test";
+                    lblIconSTA.ImageKey = "STA-Yellow";
+                    await Task.Delay(2000);
+
                     //===========================================
                     // STA TESTS
                     //===========================================
@@ -291,7 +301,8 @@ namespace Electra_MAC_Printing
 
                     if (strIPAddress == "192.168.1.1")
                     {
-                        // todo: Notify the UI
+                        // Notify the UI
+                        lblStatus.Text = "Connecting to access point";
 
                         // Set the unit to STA mode
                         WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0x5555);
@@ -318,14 +329,22 @@ namespace Electra_MAC_Printing
                         // Validate the new IP address                        
                         if (!(Regex.Match(strIPAddress, strIPAddressRegEx).Success)) { throw new Exception("Invalid STA IP Address"); }
 
+                        lblStatus.Text = string.Format("Recieved IP address {0}", strIPAddress);
+
                         //Exit STA mode
                         WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0xAAAA);
-                        await Task.Delay(5000);                   
+                        await Task.Delay(5000);
 
-                    } else
+                        lblIconSTA.ImageKey = "STA-Green";
+                        lblStatus.Text = "STA Test PASSED";
+
+                    }
+                    else
                     {
                         // Reset the unit address
                         WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0xAAAA);
+
+                        lblStatus.Text = "Wating for STA netwok components";
 
                         throw new Exception("Invalid Initial IP Address (expected 192.168.1.1)");
                     }
@@ -334,7 +353,9 @@ namespace Electra_MAC_Printing
                     // AP TESTS
                     //===========================================
 
-                    // todo: Notify the UI
+                    // Notify the UI
+                    lblIconAP.ImageKey = "AP-Yellow";
+                    lblStatus.Text = "Starting AP test";
 
                     // Set the unit to STA mode
                     WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413A, (ushort)0x5555);
@@ -344,13 +365,14 @@ namespace Electra_MAC_Printing
                     var strMACAddress = ConvertToMACAddress(macValue);
 
                     // Notify the UI of the MAC address 
-
+                    lblStatus.Text = string.Format("Device MAC address is {0}", strMACAddress);
 
                     var strSSID = clsCommon.ReadSingleConfigValue("APName", "GetSetGeneralSettings", "Settings") + strMACAddress.Substring(7);
                     var strAPPassword = clsCommon.ReadSingleConfigValue("APPassword", "GetSetGeneralSettings", "Settings");
 
                     var connectedToAP = false;
                     Console.WriteLine("Looking for SSID {0}", strSSID);
+                    lblStatus.Text = string.Format("Looking for SSID {0}", strSSID);
 
                     // Loop and wait for AP to be detected
                     for (i = 0; (i <= 20) && !(connectedToAP); i++)
@@ -370,6 +392,8 @@ namespace Electra_MAC_Printing
                                 } else
                                 {
                                     connectedToAP = true;
+                                    lblStatus.Text = "Connected to unit AP";
+
                                     await Task.Delay(3000);
                                     break;
                                 }
@@ -382,6 +406,8 @@ namespace Electra_MAC_Printing
                     }
                     else
                     {
+                        lblStatus.Text = "REST call to AP";
+
                         var restCallOK = false;
                         IRestResponse response = null;
                         for (i = 0; (i <= 5) && !(restCallOK); i++)
@@ -399,6 +425,8 @@ namespace Electra_MAC_Printing
                             throw new Exception(string.Format("Invalid http response code - {0} (expected 204)", response.StatusCode.ToString()));
                         }
 
+                        lblStatus.Text = "Reading PROD value";
+
                         await Task.Delay(3000);
 
                         var prod = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413C, 1);
@@ -407,6 +435,9 @@ namespace Electra_MAC_Printing
 
                     // Disconnect from the AP
                     wifi.Disconnect();
+
+                    lblIconAP.ImageKey = "AP-Green";
+                    lblStatus.Text = "AP Test PASSED";
 
                     // Exit AP mode
                     WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413A, (ushort)0xAAAA);
@@ -868,6 +899,7 @@ namespace Electra_MAC_Printing
 
                 case "logoff":
                     utcAppWizard.Tabs["login"].Selected = true;
+                    clearData();
                     clearControls();
                     clsVariables.variableClearSetDefaultValues();
                     tmrModbus.Enabled = false;

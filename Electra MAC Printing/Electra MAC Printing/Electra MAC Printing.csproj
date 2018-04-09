@@ -147,18 +147,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="images\AP-Gray-50.png" />
-    <Content Include="images\AP-Green-50.png" />
-    <Content Include="images\AP-Yellow-50.png" />
+    <Content Include="images\AP-Gray-100.png" />
+    <Content Include="images\AP-Green-100.png" />
+    <Content Include="images\AP-Yellow-100.png" />
     <Content Include="images\Electra.png" />
     <Content Include="images\ElectroMAC.ico" />
     <Content Include="images\InstructionImage.png" />
     <Content Include="images\logbook.png" />
     <Content Include="images\plussquare.png" />
     <Content Include="images\settings.png" />
-    <Content Include="images\STA-Gray-48.png" />
-    <Content Include="images\STA-Green-48.png" />
-    <Content Include="images\STA-Yellow-48.png" />
+    <Content Include="images\STA-Gray-96.png" />
+    <Content Include="images\STA-Green-96.png" />
+    <Content Include="images\STA-Yellow-96.png" />
     <Content Include="images\users.png" />
     <Content Include="lib\Assembly.Software.Profile.dll" />
     <Content Include="lib\Assembly.Software.Profile.xml" />
