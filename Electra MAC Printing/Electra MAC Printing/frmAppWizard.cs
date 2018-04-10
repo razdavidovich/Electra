@@ -75,9 +75,9 @@ namespace Electra_MAC_Printing
             foreach (ushort value in modbusValues)
             {
                 string hexValue = value.ToString("X").ToUpper().PadLeft(4, '0');
-                sb.Append(Convert.ToInt32(hexValue.Substring(0, 2), 16).ToString());
-                sb.Append(".");
                 sb.Append(Convert.ToInt32(hexValue.Substring(2), 16).ToString());
+                sb.Append(".");
+                sb.Append(Convert.ToInt32(hexValue.Substring(0, 2), 16).ToString());
                 sb.Append(".");
             }
 
@@ -278,6 +278,8 @@ namespace Electra_MAC_Printing
                     // If No WiFi card is found, do not start the test
                     if (wifi.NoWifiAvailable)
                     {
+                        lblStatus.Text = "No WiFi card was found for this PC";
+                        await Task.Delay(3000);
                         throw new Exception("NO WIFI CARD WAS FOUND");
                     }
 
@@ -287,8 +289,8 @@ namespace Electra_MAC_Printing
                         return;
                     }
 
-                    lblStatus.Text = "Starting STA test";
-                    lblIconSTA.ImageKey = "STA-Yellow";
+                    lblStatus.Text = "Wating for STA network components, expecting 192.168.1.1";
+
                     await Task.Delay(2000);
 
                     //===========================================
@@ -301,6 +303,9 @@ namespace Electra_MAC_Printing
 
                     if (strIPAddress == "192.168.1.1")
                     {
+                        lblStatus.Text = "Starting STA test";
+                        lblIconSTA.ImageKey = "STA-Yellow";
+
                         // Notify the UI
                         lblStatus.Text = "Connecting to access point";
 
@@ -344,7 +349,7 @@ namespace Electra_MAC_Printing
                         // Reset the unit address
                         WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0xAAAA);
 
-                        lblStatus.Text = "Wating for STA netwok components";
+                        lblStatus.Text = "Wating for STA network components (expecting 192.168.1.1)";
 
                         throw new Exception("Invalid Initial IP Address (expected 192.168.1.1)");
                     }
