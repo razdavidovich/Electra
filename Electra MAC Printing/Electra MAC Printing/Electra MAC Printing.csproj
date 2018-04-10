@@ -149,6 +149,7 @@
   <ItemGroup>
     <Content Include="images\AP-Gray-100.png" />
     <Content Include="images\AP-Green-100.png" />
+    <Content Include="images\AP-Red-100.png" />
     <Content Include="images\AP-Yellow-100.png" />
     <Content Include="images\Electra.png" />
     <Content Include="images\ElectroMAC.ico" />
@@ -158,6 +159,7 @@
     <Content Include="images\settings.png" />
     <Content Include="images\STA-Gray-96.png" />
     <Content Include="images\STA-Green-96.png" />
+    <Content Include="images\STA-Red-96.png" />
     <Content Include="images\STA-Yellow-96.png" />
     <Content Include="images\users.png" />
     <Content Include="lib\Assembly.Software.Profile.dll" />
