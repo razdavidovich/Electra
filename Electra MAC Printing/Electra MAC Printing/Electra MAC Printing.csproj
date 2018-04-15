@@ -61,10 +61,20 @@
     <Reference Include="NModbus4, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NModbus4.2.1.0\lib\net40\NModbus4.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=106.2.1.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.2.1\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleWifi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleWifi.1.0.0.0\lib\net40\SimpleWifi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -137,12 +147,20 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="images\AP-Gray-100.png" />
+    <Content Include="images\AP-Green-100.png" />
+    <Content Include="images\AP-Red-100.png" />
+    <Content Include="images\AP-Yellow-100.png" />
     <Content Include="images\Electra.png" />
     <Content Include="images\ElectroMAC.ico" />
     <Content Include="images\InstructionImage.png" />
     <Content Include="images\logbook.png" />
     <Content Include="images\plussquare.png" />
     <Content Include="images\settings.png" />
+    <Content Include="images\STA-Gray-96.png" />
+    <Content Include="images\STA-Green-96.png" />
+    <Content Include="images\STA-Red-96.png" />
+    <Content Include="images\STA-Yellow-96.png" />
     <Content Include="images\users.png" />
     <Content Include="lib\Assembly.Software.Profile.dll" />
     <Content Include="lib\Assembly.Software.Profile.xml" />

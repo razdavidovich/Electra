@@ -114,6 +114,16 @@
               <RemoveFile Id="Remove.NModbus4.dll" On="uninstall" Name="NModbus4.dll"/>
             </Component>
 
+            <Component Id="ServiceFile18" Guid="{22F5CF43-614D-457E-9B88-64423B80D541}">
+              <File Id="RestSharp.dll" Name="RestSharp.dll" Source="$(var.Electra MAC Printing.TargetDir)RestSharp.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.RestSharp.dll" On="uninstall" Name="RestSharp.dll"/>
+            </Component>
+
+            <Component Id="ServiceFile19" Guid="{53C7DB68-BB84-4CE8-97C4-AB25BD2F29BC}">
+              <File Id="SimpleWifi.dll" Name="SimpleWifi.dll" Source="$(var.Electra MAC Printing.TargetDir)SimpleWifi.dll" Vital="yes" KeyPath="yes" DiskId="1"/>
+              <RemoveFile Id="Remove.SimpleWifi.dll" On="uninstall" Name="SimpleWifi.dll"/>
+            </Component>
+
             <Component Id="SetupConfigFile1" Guid="{B0DD85B9-1369-444D-991B-424ED638BCAA}">
               <File Id="Electra_MAC_Printing.exe.config" Name="Electra MAC Printing.exe.config" Source="$(var.Electra MAC Printing.TargetDir)Electra MAC Printing.exe.config" Vital="yes" KeyPath="yes" DiskId="1"/>
               <RemoveFile Id="Remove.Electra_MAC_Printing.exe.config" On="uninstall" Name="Electra MAC Printing.exe.config"/>
@@ -203,6 +213,8 @@
       <ComponentRef Id="ServiceFile15"/>
       <ComponentRef Id="ServiceFile16"/>
       <ComponentRef Id="ServiceFile17"/>
+      <ComponentRef Id="ServiceFile18"/>
+      <ComponentRef Id="ServiceFile19"/>
 
       <ComponentRef Id="ApplicationShortcut1" />
       <ComponentRef Id="ApplicationShortcutDesktop" />

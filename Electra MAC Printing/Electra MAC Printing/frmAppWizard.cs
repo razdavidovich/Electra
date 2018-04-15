@@ -16,7 +16,10 @@ using System.IO.Ports;
 using Modbus.Data;
 using Modbus.Device;
 using Modbus.Utility;
-
+using System.Text.RegularExpressions;
+using SimpleWifi;
+using RestSharp;
+using System.Net;
 
 namespace Electra_MAC_Printing
 {
@@ -27,7 +30,10 @@ namespace Electra_MAC_Printing
         clsVariables clsVariables = new clsVariables();
         clsAppWizardAlign clsAppWizardAlign = new clsAppWizardAlign();
         clsAppWizardBAL clsappWizardBAL = new clsAppWizardBAL();
-        //clsSettingsBAL clsSettingsBAL = new clsSettingsBAL();
+        // Setup the computer WiFi object
+        Wifi wifi = new Wifi();
+        RestClient client = new RestClient("http://192.168.1.1");
+        RestRequest request = new RestRequest(Method.POST);
 
         private Dictionary<string, object> dicLanguageCaptions;
 
@@ -44,12 +50,43 @@ namespace Electra_MAC_Printing
             clsApplicationLogFile.LogFilePath = clsCommon.ReadSingleConfigValue("LogFilePath", "LogSettings", "Settings");
             clsApplicationLogFile.LogFileName = clsCommon.ReadSingleConfigValue("LogFileName", "LogSettings", "Settings");
             clsApplicationLogFile.LogFileExtension = clsCommon.ReadSingleConfigValue("LogFileExtension", "LogSettings", "Settings");
-            clsCommon.clsApplicationLogFileWriteLog(null, "Form Login Load : Success");
             clsVariables.variableClearSetDefaultValues();
             LoadLanugageCaptions();
+            request.AddParameter("__SL_P_UTO", "ProdTokenAP");
+
+            clsCommon.clsApplicationLogFileWriteLog(null, "Form Login Load : Success");
+
         }
 
         #region "Modbus"
+
+        private int ConvertRSSI(ushort modbusValue)
+        {
+                string hexValue = modbusValue.ToString("X").ToUpper().PadLeft(4, '0');
+                return Convert.ToInt32(hexValue, 16);
+
+        }
+
+        private string ConvertToIPAddress(ushort[] modbusValues)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            //Loop the array values
+            foreach (ushort value in modbusValues)
+            {
+                string hexValue = value.ToString("X").ToUpper().PadLeft(4, '0');
+                sb.Append(Convert.ToInt32(hexValue.Substring(2), 16).ToString());
+                sb.Append(".");
+                sb.Append(Convert.ToInt32(hexValue.Substring(0, 2), 16).ToString());
+                sb.Append(".");
+            }
+
+            //Remove the last "." at the end
+            sb.Remove(sb.Length - 1, 1);
+
+            return sb.ToString();
+
+        }
 
         private string ConvertToMACAddress(ushort[] modbusValues)
         {
@@ -132,6 +169,36 @@ namespace Electra_MAC_Printing
 
         }
 
+        private void WriteModbusRegisters(byte slaveId, ushort writeAddress, ushort value)
+        {
+            try
+            {
+                strSettingsArray = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings").Split(',');
+                string strSettingsTimeOut = clsCommon.ReadSingleConfigValue("TimeOut", "GetSetGeneralSettings", "Settings");
+                using (SerialPort port = new SerialPort(strSettingsArray[0]))
+                {
+                    // configure serial port
+                    port.BaudRate = Convert.ToInt32(strSettingsArray[1]);
+                    port.DataBits = Convert.ToInt32(strSettingsArray[3]);
+                    port.Parity = (Parity)Enum.Parse(typeof(Parity), strSettingsArray[2]);
+                    port.StopBits = (StopBits)Enum.Parse(typeof(StopBits), strSettingsArray[4]);
+                    port.ReadTimeout = Convert.ToInt32(strSettingsTimeOut);
+                    port.Open();
+
+                    // create modbus master
+                    IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(port);
+
+                    // Read the registers
+                    master.WriteSingleRegister(slaveId, writeAddress, value);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
         private void clearData()
         {
             txtUnitSerialNumber.Text = string.Empty;
@@ -140,6 +207,10 @@ namespace Electra_MAC_Printing
             txtunitMacAddress.Text = string.Empty;
             txtunitMacAddress.BackColor = Color.Red;
 
+            lblIconAP.ImageKey = "AP-Gray";
+            lblIconSTA.ImageKey = "STA-Gray";
+
+            lblStatus.Text = string.Empty;
             BtnRePrint.Hide();
 
             blnTimerRunning = false;
@@ -178,14 +249,18 @@ namespace Electra_MAC_Printing
         #endregion
         private void tmrModbusTickWorker()
         {
-            this.BeginInvoke((MethodInvoker)delegate
+            int i;
+
+            this.BeginInvoke((MethodInvoker)async delegate
             {
                 try
                 {
 
                     blnTimerRunning = true;
                     string strPrinterName = clsCommon.ReadSingleConfigValue("PrinterName", "GetSetGeneralSettings", "Settings");
-                    string strDataAddress = clsCommon.ReadSingleConfigValue("DataAddress", "GetSetGeneralSettings", "Settings");
+                    string strMACMBAddress = clsCommon.ReadSingleConfigValue("MACAddress", "GetSetGeneralSettings", "Settings");
+                    string strSTAIPAddress = clsCommon.ReadSingleConfigValue("STA_IP_Address", "GetSetGeneralSettings", "Settings");
+                    string strIPAddressRegEx = clsCommon.ReadSingleConfigValue("IPAddressRegEx", "GetSetGeneralSettings", "Settings");
                     string strSerialNumberAddress = clsCommon.ReadSingleConfigValue("SerialNumberAddress", "GetSetGeneralSettings", "Settings");
                     string strModbusSlaveAddress = clsCommon.ReadSingleConfigValue("ModbusSlaveAddress", "GetSetGeneralSettings", "Settings");
 
@@ -193,9 +268,185 @@ namespace Electra_MAC_Printing
                     var serialValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSerialNumberAddress, 16), 5);
                     var strSerialNumber = ConvertToSerialNumber(serialValue);
 
+                    lblStatus.Text = "Device conneceted";
+
+                    // Exit AP & STA mode (for unit recovery in case of any runtime issues)
+                    WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413A, (ushort)0xAAAA);
+                    WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0xAAAA);
+                    await Task.Delay(3000);
+
+                    // If No WiFi card is found, do not start the test
+                    if (wifi.NoWifiAvailable)
+                    {
+                        lblStatus.Text = "No WiFi card was found for this PC";
+                        await Task.Delay(3000);
+                        throw new Exception("NO WIFI CARD WAS FOUND");
+                    }
+
+                    if (BtnRePrint.Visible)
+                    {
+                        blnTimerRunning = false;
+                        return;
+                    }
+
+                    lblStatus.Text = "Wating for STA network components, expecting 192.168.1.1";
+
+                    await Task.Delay(2000);
+
+                    //===========================================
+                    // STA TESTS
+                    //===========================================
+
+                    // Read current STA IP address
+                    var ipAddressValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSTAIPAddress, 16), 2);
+                    var strIPAddress = ConvertToIPAddress(ipAddressValue);
+
+                    if (strIPAddress == "192.168.1.1")
+                    {
+                        lblStatus.Text = "Starting STA test";
+                        lblIconSTA.ImageKey = "STA-Yellow";
+
+                        // Notify the UI
+                        lblStatus.Text = "Connecting to access point";
+
+                        // Set the unit to STA mode
+                        WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0x5555);
+
+                        // Delay execution for up to 12 seconds until the unit recieves an IP address
+                        for (i = 0; i < 5; i++)
+                        {
+
+                            await Task.Delay(5000);
+
+                            // Read the RSSI value
+                            var rssi = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x4141, 1);
+
+                            // Valdate the RSSI value
+                            if (ConvertRSSI(rssi[0]) < 80) { break; }
+                        }
+
+                        if (i > 4) { throw new Exception("Invalid RSSI value"); }
+
+                        // Read the STA new IP address
+                        ipAddressValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSTAIPAddress, 16), 2);
+                        strIPAddress = ConvertToIPAddress(ipAddressValue);
+
+                        // Validate the new IP address                        
+                        if (!(Regex.Match(strIPAddress, strIPAddressRegEx).Success)) { throw new Exception("Invalid STA IP Address"); }
+
+                        lblStatus.Text = string.Format("Recieved IP address {0}", strIPAddress);
+
+                        //Exit STA mode
+                        WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0xAAAA);
+                        await Task.Delay(5000);
+
+                        lblIconSTA.ImageKey = "STA-Green";
+                        lblStatus.Text = "STA Test PASSED";
+
+                    }
+                    else
+                    {
+                        // Reset the unit address
+                        WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413B, (ushort)0xAAAA);
+
+                        lblStatus.Text = "Wating for STA network components (expecting 192.168.1.1)";
+
+                        throw new Exception("Invalid Initial IP Address (expected 192.168.1.1)");
+                    }
+
+                    //===========================================
+                    // AP TESTS
+                    //===========================================
+
+                    // Notify the UI
+                    lblIconAP.ImageKey = "AP-Yellow";
+                    lblStatus.Text = "Starting AP test";
+
+                    // Set the unit to STA mode
+                    WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413A, (ushort)0x5555);
+
                     // Read MAC ADDRESS (expecting A8 1B 6A 9C 7A 9C from test unit)
-                    var macValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strDataAddress, 16), 3);
+                    var macValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strMACMBAddress, 16), 3);
                     var strMACAddress = ConvertToMACAddress(macValue);
+
+                    // Notify the UI of the MAC address 
+                    lblStatus.Text = string.Format("Device MAC address is {0}", strMACAddress);
+
+                    var strSSID = clsCommon.ReadSingleConfigValue("APName", "GetSetGeneralSettings", "Settings") + strMACAddress.Substring(7);
+                    var strAPPassword = clsCommon.ReadSingleConfigValue("APPassword", "GetSetGeneralSettings", "Settings");
+
+                    var connectedToAP = false;
+                    Console.WriteLine("Looking for SSID {0}", strSSID);
+                    lblStatus.Text = string.Format("Looking for SSID {0}", strSSID);
+
+                    // Loop and wait for AP to be detected
+                    for (i = 0; (i <= 20) && !(connectedToAP); i++)
+                    {
+                        await Task.Delay(5000);
+                        IEnumerable<AccessPoint> accessPoints = wifi.GetAccessPoints().OrderByDescending(ap => ap.SignalStrength);
+
+                        foreach (AccessPoint ap in accessPoints)
+                            if (ap.Name == strSSID)
+                            {
+                                AuthRequest authRequest = new AuthRequest(ap)
+                                {
+                                    Password = strAPPassword
+                                };
+                                if (!ap.Connect(authRequest)) {
+                                    await Task.Delay(3000);
+                                } else
+                                {
+                                    connectedToAP = true;
+                                    lblStatus.Text = "Connected to unit AP";
+
+                                    await Task.Delay(3000);
+                                    break;
+                                }
+                            }
+                    }
+
+                    if ((i > 20) && !(connectedToAP)) 
+                    {
+                        throw new Exception("Unable to detect the unit AP");
+                    }
+                    else
+                    {
+                        lblStatus.Text = "REST call to AP";
+
+                        var restCallOK = false;
+                        IRestResponse response = null;
+                        for (i = 0; (i <= 5) && !(restCallOK); i++)
+                        {
+                            response = client.Execute(request);
+
+                            if (response.StatusCode == HttpStatusCode.NoContent) {
+                                restCallOK = true;
+                                break;
+                            }
+                        }
+
+                        if (!(restCallOK))
+                        {
+                            throw new Exception(string.Format("Invalid http response code - {0} (expected 204)", response.StatusCode.ToString()));
+                        }
+
+                        lblStatus.Text = "Reading PROD value";
+
+                        await Task.Delay(3000);
+
+                        var prod = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413C, 1);
+                        if (prod[0] != (ushort)0x0055) { throw new Exception("Invalid PROD result (expected 0x0055"); }
+                    }
+
+                    // Disconnect from the AP
+                    wifi.Disconnect();
+
+                    lblIconAP.ImageKey = "AP-Green";
+                    lblStatus.Text = "AP Test PASSED";
+
+                    // Exit AP mode
+                    WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413A, (ushort)0xAAAA);
+                    await Task.Delay(1000);
 
                     if (strMACAddress == "EFFFFFFFFFFFF") { throw new Exception("Invalid MAC address"); }
 
@@ -224,6 +475,7 @@ namespace Electra_MAC_Printing
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine("{0:HH:mm:ss tt} {1}", DateTime.Now, ex.ToString());
                     clearData();
                 }
             });
@@ -652,6 +904,7 @@ namespace Electra_MAC_Printing
 
                 case "logoff":
                     utcAppWizard.Tabs["login"].Selected = true;
+                    clearData();
                     clearControls();
                     clsVariables.variableClearSetDefaultValues();
                     tmrModbus.Enabled = false;
