@@ -403,7 +403,7 @@ namespace Electra_MAC_Printing
             /*Validate TXT_DataAddress Controls*/
             if (!string.IsNullOrEmpty(strTXT_DataAddress))
             {
-                clsCommon.SaveConfigSettingsValue("DataAddress", "GetSetGeneralSettings", "Settings", strTXT_DataAddress);
+                clsCommon.SaveConfigSettingsValue("MACAddress", "GetSetGeneralSettings", "Settings", strTXT_DataAddress);
             }
             else
             {
@@ -483,8 +483,7 @@ namespace Electra_MAC_Printing
             TXT_StationName.Text = clsCommon.ReadSingleConfigValue("StationName", "GetSetGeneralSettings", "Settings");            
             Txt_ModbusSlaveAddress.Text = clsCommon.ReadSingleConfigValue("ModbusSlaveAddress", "GetSetGeneralSettings", "Settings");
             TXT_SerialNumberAddress.Text = clsCommon.ReadSingleConfigValue("SerialNumberAddress", "GetSetGeneralSettings", "Settings");
-            TXT_DataAddress.Text = clsCommon.ReadSingleConfigValue("DataAddress", "GetSetGeneralSettings", "Settings");
-            //UltraPrinter.Text = clsCommon.ReadSingleConfigValue("PrinterSettings", "GetSetGeneralSettings", "Settings");
+            TXT_DataAddress.Text = clsCommon.ReadSingleConfigValue("MACAddress", "GetSetGeneralSettings", "Settings");
             GetPrinter();
 
             string[] strCOMSettings = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings").Split(',');
