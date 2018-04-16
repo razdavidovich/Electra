@@ -75,9 +75,9 @@ namespace Electra_MAC_Printing
             foreach (ushort value in modbusValues)
             {
                 string hexValue = value.ToString("X").ToUpper().PadLeft(4, '0');
-                sb.Append(Convert.ToInt32(hexValue.Substring(2), 16).ToString());
-                sb.Append(".");
                 sb.Append(Convert.ToInt32(hexValue.Substring(0, 2), 16).ToString());
+                sb.Append(".");
+                sb.Append(Convert.ToInt32(hexValue.Substring(2), 16).ToString());
                 sb.Append(".");
             }
 
