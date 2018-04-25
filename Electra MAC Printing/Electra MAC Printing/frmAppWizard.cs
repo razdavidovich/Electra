@@ -362,6 +362,9 @@ namespace Electra_MAC_Printing
                     lblIconAP.ImageKey = "AP-Yellow";
                     lblStatus.Text = "Starting AP test";
 
+                    // Disconnect from the AP
+                    wifi.Disconnect();
+
                     // Set the unit to STA mode
                     WriteModbusRegisters(Convert.ToByte(strModbusSlaveAddress), (ushort)0x413A, (ushort)0x5555);
 
