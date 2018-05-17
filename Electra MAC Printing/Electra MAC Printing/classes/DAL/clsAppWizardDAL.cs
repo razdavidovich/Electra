@@ -163,5 +163,41 @@ namespace Electra_MAC_Printing.classes.DAL
         }
         #endregion
 
+        #region GetLabelDetails
+        /****************************************************************************************************
+         * NAME         : GetLabelDetails                                                                   *
+         * DESCRIPTION  : Get the Label Details.                                                            *
+         * WRITTEN BY   : Prabakaran G                                                                      *
+         * DATE         : 17May2018                                                                         *
+         ****************************************************************************************************/
+        public DataSet GetLabelDetails(int intOperation, int intLabelID, string strLabelName)
+        {
+
+            try
+            {
+                DataSet ds = new DataSet();
+
+                using (DbCommand dbCommand = db.GetStoredProcCommand("Label_Sp"))
+                {
+                    db.AddInParameter(dbCommand, "Operation", DbType.Int32, intOperation);
+                    db.AddInParameter(dbCommand, "intLabelID", DbType.Int32, intLabelID);
+                    db.AddInParameter(dbCommand, "vchLabelName", DbType.String, null);
+                    db.AddInParameter(dbCommand, "vchZPL", DbType.String, null);
+                    db.AddInParameter(dbCommand, "Key1", DbType.Int32, intLabelID);
+
+                    ds = db.ExecuteDataSet(dbCommand);
+                }
+
+                return ds;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+        #endregion
+
     }
 }

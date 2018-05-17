@@ -488,11 +488,24 @@ namespace Electra_MAC_Printing
         #region "Print Label"
         private void printLabel(string serialNumber, string unitMACAddress)
         {
+
+            string strZPLFromDB = "";
+
             // Get ZPL and printer name from the settings
             string printerName = clsCommon.ReadSingleConfigValue("PrinterName", "GetSetGeneralSettings", "Settings");
 
+            int intZPLFromDB = Convert.ToInt32(clsCommon.ReadSingleConfigValue("ZPL", "GetSetGeneralSettings", "Settings"));
+            
+            /* Get the ZPL Details from DB */
+            DataTable dtLabelDetails = clsappWizardBAL.GetLabelDetails(4, intZPLFromDB, null);
+
+            if (0 < dtLabelDetails.Rows.Count)
+            {
+                strZPLFromDB = (string)dtLabelDetails.Rows[0]["ZPL"];
+            }
+
             // Setup the ZPL to print
-            string zpl = string.Format(clsCommon.ReadSingleConfigValue("ZPL", "GetSetGeneralSettings", "Settings"), serialNumber,unitMACAddress,unitMACAddress.Substring(0,7),unitMACAddress.Substring(7));
+            string zpl = string.Format(strZPLFromDB, serialNumber,unitMACAddress,unitMACAddress.Substring(0,7),unitMACAddress.Substring(7));
 
             // Print the label
             clsPrintUtility.SendStringToPrinter(printerName, zpl);
@@ -928,6 +941,7 @@ namespace Electra_MAC_Printing
                     break;
 
                 case "logbook":
+
                     tmrModbus.Enabled = false;
                     utcAppWizard.Tabs["logbook"].Selected = true;
                     DTP_LogBookFromDate.Value = DateTime.Now;

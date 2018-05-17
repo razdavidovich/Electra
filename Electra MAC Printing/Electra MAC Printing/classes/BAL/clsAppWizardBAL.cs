@@ -116,5 +116,29 @@ namespace Electra_MAC_Printing.classes.BAL
             }
         }
         #endregion
+
+        #region GetLabelDetails
+        /****************************************************************************************************
+         * NAME         : GetLabelDetails                                                                   *
+         * DESCRIPTION  : Get the Label Details.                                                            *
+         * WRITTEN BY   : Prabakaran G                                                                      *
+         * DATE         : 17May2018                                                                         *
+         ****************************************************************************************************/
+        public DataTable GetLabelDetails(int intOperation, int intLabelID, string strLabelName)
+        {
+
+            try
+            {
+                DataTable dt = new DataTable();
+                dt = clsAppWizardDAL.GetLabelDetails(intOperation, intLabelID, strLabelName).Tables[0];
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+        }
+        #endregion
     }
 }
