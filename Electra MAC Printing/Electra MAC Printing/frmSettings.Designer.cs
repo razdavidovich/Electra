@@ -66,6 +66,8 @@
             this.utcAppSettingsWizard = new Infragistics.Win.UltraWinTabControl.UltraTabControl();
             this.utscpAppSettingsWizard_SharedControl = new Infragistics.Win.UltraWinTabControl.UltraTabSharedControlsPage();
             this.panelSettings = new System.Windows.Forms.Panel();
+            this.uCE_ZPLSettings = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
+            this.LBL_ZPLSettings = new System.Windows.Forms.Label();
             this.utpcAppSettingsWizard_GeneralSettings.SuspendLayout();
             this.panelGeneralSettings.SuspendLayout();
             this.grpCommunicationSettings.SuspendLayout();
@@ -81,6 +83,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.utcAppSettingsWizard)).BeginInit();
             this.utcAppSettingsWizard.SuspendLayout();
             this.panelSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uCE_ZPLSettings)).BeginInit();
             this.SuspendLayout();
             // 
             // utpcAppSettingsWizard_GeneralSettings
@@ -103,8 +106,11 @@
             // 
             // grpCommunicationSettings
             // 
-            this.grpCommunicationSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.grpCommunicationSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpCommunicationSettings.Controls.Add(this.LBL_ZPLSettings);
+            this.grpCommunicationSettings.Controls.Add(this.uCE_ZPLSettings);
             this.grpCommunicationSettings.Controls.Add(this.UltraPrinter);
             this.grpCommunicationSettings.Controls.Add(this.uCBO_GS_StripeStopBits);
             this.grpCommunicationSettings.Controls.Add(this.uCBO_GS_StripeParity);
@@ -133,6 +139,7 @@
             this.UltraPrinter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.UltraPrinter.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Suggest;
+            this.UltraPrinter.DropDownStyle = Infragistics.Win.DropDownStyle.DropDownList;
             this.UltraPrinter.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.UltraPrinter.Location = new System.Drawing.Point(266, 247);
             this.UltraPrinter.Name = "UltraPrinter";
@@ -410,6 +417,28 @@
             this.panelSettings.Size = new System.Drawing.Size(984, 561);
             this.panelSettings.TabIndex = 3;
             // 
+            // uCE_ZPLSettings
+            // 
+            this.uCE_ZPLSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.uCE_ZPLSettings.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Suggest;
+            this.uCE_ZPLSettings.DropDownStyle = Infragistics.Win.DropDownStyle.DropDownList;
+            this.uCE_ZPLSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uCE_ZPLSettings.Location = new System.Drawing.Point(266, 299);
+            this.uCE_ZPLSettings.Name = "uCE_ZPLSettings";
+            this.uCE_ZPLSettings.Size = new System.Drawing.Size(641, 32);
+            this.uCE_ZPLSettings.TabIndex = 35;
+            // 
+            // LBL_ZPLSettings
+            // 
+            this.LBL_ZPLSettings.AutoSize = true;
+            this.LBL_ZPLSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LBL_ZPLSettings.Location = new System.Drawing.Point(10, 304);
+            this.LBL_ZPLSettings.Name = "LBL_ZPLSettings";
+            this.LBL_ZPLSettings.Size = new System.Drawing.Size(127, 24);
+            this.LBL_ZPLSettings.TabIndex = 36;
+            this.LBL_ZPLSettings.Text = "Label Settings";
+            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -439,6 +468,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.utcAppSettingsWizard)).EndInit();
             this.utcAppSettingsWizard.ResumeLayout(false);
             this.panelSettings.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.uCE_ZPLSettings)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -472,5 +502,7 @@
         private Infragistics.Win.UltraWinEditors.UltraComboEditor uCBO_GS_StripeCom;
         private System.Windows.Forms.Label LBL_UnitSettings;
         private Infragistics.Win.UltraWinEditors.UltraComboEditor UltraPrinter;
+        private System.Windows.Forms.Label LBL_ZPLSettings;
+        private Infragistics.Win.UltraWinEditors.UltraComboEditor uCE_ZPLSettings;
     }
 }
