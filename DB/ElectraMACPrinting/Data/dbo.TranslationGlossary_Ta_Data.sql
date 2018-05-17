@@ -1,3 +1,7 @@
+INSERT INTO [dbo].[TranslationGlossary_Ta] ([vchKey], [vchLanguageCode], [vchTranslation]) VALUES ('GeneralSettingsZPLSettingsCaption_en', 'en', N'Please Enter the Label Settings')
+INSERT INTO [dbo].[TranslationGlossary_Ta] ([vchKey], [vchLanguageCode], [vchTranslation]) VALUES ('GeneralSettingsZPLSettingsCaption_he', 'he', N'Please Enter the Label Settings')
+INSERT INTO [dbo].[TranslationGlossary_Ta] ([vchKey], [vchLanguageCode], [vchTranslation]) VALUES ('SettingslabelZPLSettingsCaption_en', 'en', N'Label Settings')
+INSERT INTO [dbo].[TranslationGlossary_Ta] ([vchKey], [vchLanguageCode], [vchTranslation]) VALUES ('SettingslabelZPLSettingsCaption_he', 'he', N'Label Settings')
 INSERT INTO [dbo].[TranslationGlossary_Ta] ([vchKey], [vchLanguageCode], [vchTranslation]) VALUES ('BtnLogBookExportCaption_en', 'en', N'Export to Excel')
 INSERT INTO [dbo].[TranslationGlossary_Ta] ([vchKey], [vchLanguageCode], [vchTranslation]) VALUES ('BtnLogBookExportCaption_he', 'he', N'יצוא לאקסל')
 INSERT INTO [dbo].[TranslationGlossary_Ta] ([vchKey], [vchLanguageCode], [vchTranslation]) VALUES ('BtnLogBookFilterCaption_en', 'en', N'Filter')
