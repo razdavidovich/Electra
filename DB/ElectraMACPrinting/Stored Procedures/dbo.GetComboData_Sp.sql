@@ -15,7 +15,7 @@ BEGIN
 
     IF (@intTable = 1)
     BEGIN
-        SELECT intRoleID AS [value],
+        SELECT intRoleID AS [Value],
                vchRoleDescription AS [Text]
         FROM dbo.Roles_Ta;
     END;
@@ -23,18 +23,11 @@ BEGIN
     IF (2 = @intTable)
     BEGIN
 
-        SELECT [intPartNumber] AS [value],
-               [intPartNumber] AS [Text]
-        FROM [PartNumbers_Ta];
+        SELECT intLabelID AS [Value],
+               vchLabelName AS [Text]
+        FROM dbo.Label_Ta;
     END;
 
-	 IF (3 = @intTable)
-    BEGIN
-
-        SELECT [intParameterID] AS [value],
-               [vchParameterName] AS [Text]
-        FROM [Parameters_Ta];
-    END;
 
     SET NOCOUNT OFF;
 END;

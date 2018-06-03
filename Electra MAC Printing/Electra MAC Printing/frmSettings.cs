@@ -21,7 +21,7 @@ namespace Electra_MAC_Printing
     {
         clsCommon clsCommon = new clsCommon();
         clsAppWizardAlign clsAppWizardAlign = new clsAppWizardAlign();
-       // clsSerialPort clsSerialPort = new clsSerialPort();
+        // clsSerialPort clsSerialPort = new clsSerialPort();
         clsSettingsBAL clsSettingsBAL = new clsSettingsBAL();
         clsCommonBAL clsCommonBAL = new clsCommonBAL();
         clsAppWizardBAL clsappWizardBAL = new clsAppWizardBAL();
@@ -51,8 +51,9 @@ namespace Electra_MAC_Printing
         {
             utcAppSettingsWizard.Tabs["general"].Selected = true;
 
-            uGrid_Users_Form_Load();
+            LoadControlCaption();
 
+            uGrid_Users_Form_Load();
 
             Common_COMPORT_DataBinding(uCBO_GS_StripeCom);
             Common_BaudRate_DataBinding(uCBO_GS_StripeBaudRate);
@@ -60,19 +61,36 @@ namespace Electra_MAC_Printing
             Common_DataBits_DataBinding(uCBO_GS_StripeDataBits);
             Common_StopBits_DataBinding(uCBO_GS_StripeStopBits);
 
-           
-
             /*General Settings*/
             GeneralSettings();
-            LoadControlCaption();
+            
         }
         #endregion
+
+        private void Fill_uCE_ZPLSettings_Combo()
+        {
+            try
+            {
+                int intSelectedValue = Convert.ToInt32(clsCommon.ReadSingleConfigValue("ZPL", "GetSetGeneralSettings", "Settings"));
+
+                uCE_ZPLSettings.ValueMember = "Value";
+                uCE_ZPLSettings.DisplayMember = "Text";
+                uCE_ZPLSettings.DataSource = clsCommonBAL.GetComboData(2);
+                uCE_ZPLSettings.Value = intSelectedValue;
+
+            }
+            catch (Exception ex)
+            {
+                clsCommon.clsApplicationLogFileWriteLog(ex);
+            }
+        }
 
         private void GetPrinter()
         {
             try
             {
                 string strPrinterName = clsCommon.ReadSingleConfigValue("PrinterName", "GetSetGeneralSettings", "Settings");
+
                 int index = 0;
                 int intselectedIndex = 0;
                 DataTable dt = new DataTable();
@@ -89,10 +107,10 @@ namespace Electra_MAC_Printing
                     row[0] = printer;
                     row[1] = printer;
                     dt.Rows.Add(row);
-                   
+
                     if (strPrinterName == printer)
                     {
-                       intselectedIndex = index;
+                        intselectedIndex = index;
                     }
                     index++;
                 }
@@ -102,11 +120,11 @@ namespace Electra_MAC_Printing
                 UltraPrinter.DataSource = dt;
                 UltraPrinter.DataBind();
                 UltraPrinter.SelectedIndex = intselectedIndex;
-                if(intselectedIndex == 0)
+                if (intselectedIndex == 0)
                 {
-                  clsCommon.SaveConfigSettingsValue("PrinterName", "GetSetGeneralSettings", "Settings", "");                           
+                    clsCommon.SaveConfigSettingsValue("PrinterName", "GetSetGeneralSettings", "Settings", "");
                 }
-               // UltraPrinter.Value = strPrinterName;
+                // UltraPrinter.Value = strPrinterName;
 
             }
             catch (Exception ex)
@@ -252,7 +270,7 @@ namespace Electra_MAC_Printing
          * DATE         : 24Feb18                                                                           *
          ****************************************************************************************************/
         private void LoadControlCaption()
-        {            
+        {
             LBL_StationName.Text = (string)dicLanguageCaptions[string.Format("SettingslabelStationNameCaption_{0}", strLanguage)];
             LBL_UnitSettings.Text = (string)dicLanguageCaptions[string.Format("SettingslabelUnitSettingsCaption_{0}", strLanguage)];
             LBL_ModbuSlaveAddress.Text = (string)dicLanguageCaptions[string.Format("SettingslabelModbusslaveCaption_{0}", strLanguage)];
@@ -260,12 +278,13 @@ namespace Electra_MAC_Printing
             LBL_SerialNumberAddress.Text = (string)dicLanguageCaptions[string.Format("SettingslabelSerialNumberCaption_{0}", strLanguage)];
             LBL_DataAddress.Text = (string)dicLanguageCaptions[string.Format("SettingslabelDataAddressCaption_{0}", strLanguage)];
             LBL_PrinterName.Text = (string)dicLanguageCaptions[string.Format("SettingslabelPrinterSettingsCaption_{0}", strLanguage)];
+            LBL_ZPLSettings.Text = (string)dicLanguageCaptions[string.Format("SettingslabelZPLSettingsCaption_{0}", strLanguage)];
 
             grpCommunicationSettings.Text = (string)dicLanguageCaptions[string.Format("SettingsGroupboxCaption_{0}", strLanguage)];
 
             uBTN_Settings_OK.Text = (string)dicLanguageCaptions[string.Format("SettingsButtonSaveCaption_{0}", strLanguage)];
             uBTN_Settings_Cancel.Text = (string)dicLanguageCaptions[string.Format("SettingsbuttonCancelCaption_{0}", strLanguage)];
-            utcAppSettingsWizard.Tabs[0].Text= (string)dicLanguageCaptions[string.Format("SettingsTabGeneralSettingsCaption_{0}", strLanguage)];
+            utcAppSettingsWizard.Tabs[0].Text = (string)dicLanguageCaptions[string.Format("SettingsTabGeneralSettingsCaption_{0}", strLanguage)];
             utcAppSettingsWizard.Tabs[1].Text = (string)dicLanguageCaptions[string.Format("SettingsTabUsersCaption_{0}", strLanguage)];
         }
         #endregion
@@ -290,7 +309,7 @@ namespace Electra_MAC_Printing
                 case "users":
                     uGrid_Users_Form_Load();
                     break;
-               
+
             }
         }
 
@@ -304,26 +323,31 @@ namespace Electra_MAC_Printing
          * DATE         : 20Mar15                                                                           *
          ****************************************************************************************************/
         private void uBTN_Settings_OK_Click(object sender, EventArgs e)
-        {                      
+        {
             try
             {
                 /*Variable Declaration*/
-
+                bool blnSuccess = false;
                 string strActiveTabKey = utcAppSettingsWizard.ActiveTab.Key;
 
                 switch (strActiveTabKey)
                 {
                     case "general":
-                        uBTN_Settings_OK_Click_GeneralSettings();
+                        blnSuccess = uBTN_Settings_OK_Click_GeneralSettings();
                         break;
                     case "users":
                         uGrid_Users_Form_Load();
-                        break;                    
+                        blnSuccess = true;
+                        break;
                 }
-                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsSaveSuccessCaption_{0}", strLanguage)]);
-                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "64");
-                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
-                clsCommon.commonGeneralDisplayMessageBox(0);
+
+                if (blnSuccess)
+                {
+                    clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsSaveSuccessCaption_{0}", strLanguage)]);
+                    clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "64");
+                    clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                    clsCommon.commonGeneralDisplayMessageBox(0);
+                }
 
             }
             catch (Exception ex)
@@ -345,16 +369,16 @@ namespace Electra_MAC_Printing
 
             /*Variable Declaration and Assign the Controls values*/
             string strTXT_StationName = TXT_StationName.Text,
-               
                    strTxt_ModbusSlaveAddress = Txt_ModbusSlaveAddress.Text,
                    strTXT_SerialNumberAddress = TXT_SerialNumberAddress.Text,
                    strTXT_DataAddress = TXT_DataAddress.Text,
-                    strTXT_PrinterName = UltraPrinter.Value.ToString(),
-            struCBO_GS_StripeCom = uCBO_GS_StripeCom.Value.ToString(),
+                   strTXT_PrinterName = UltraPrinter.Value.ToString(),
+                   struCBO_GS_StripeCom = uCBO_GS_StripeCom.Value.ToString(),
                    struCBO_GS_StripeBaudRate = uCBO_GS_StripeBaudRate.Value.ToString(),
                    struCBO_GS_StripeParity = uCBO_GS_StripeParity.Value.ToString(),
                    struCBO_GS_StripeDataBits = uCBO_GS_StripeDataBits.Value.ToString(),
-                   struCBO_GS_StripeStopBits = uCBO_GS_StripeStopBits.Value.ToString();
+                   struCBO_GS_StripeStopBits = uCBO_GS_StripeStopBits.Value.ToString(),
+                   struCE_ZPLSettings = uCE_ZPLSettings.Value.ToString();
 
             /*Validate TXT_StationName Controls*/
             if (!string.IsNullOrEmpty(strTXT_StationName))
@@ -367,11 +391,27 @@ namespace Electra_MAC_Printing
                 clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
                 clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
 
-                clsCommon.commonGeneralDisplayMessageBox(0);                
+                clsCommon.commonGeneralDisplayMessageBox(0);
                 return false;
             }
 
-          
+            /*Validate uCBO_GS_StripeCom Controls*/
+            if (!string.IsNullOrEmpty(struCBO_GS_StripeCom))
+            {
+                StringBuilder strBuilder = new StringBuilder();
+                strBuilder.AppendFormat("{0},{1},{2},{3},{4}", struCBO_GS_StripeCom, struCBO_GS_StripeBaudRate, struCBO_GS_StripeParity, struCBO_GS_StripeDataBits, struCBO_GS_StripeStopBits);
+                clsCommon.SaveConfigSettingsValue("UnitSettings", "GetSetGeneralSettings", "Settings", strBuilder.ToString());
+            }
+            else
+            {
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMagneticStripeCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
+                clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
+                clsCommon.commonGeneralDisplayMessageBox(0);
+                uCBO_GS_StripeCom.Focus();
+                return false;
+            }
+
             /*Validate Txt_ModbusSlaveAddress Controls*/
             if (!string.IsNullOrEmpty(strTxt_ModbusSlaveAddress))
             {
@@ -428,23 +468,21 @@ namespace Electra_MAC_Printing
                 return false;
             }
 
-            /*Validate uCBO_GS_StripeCom Controls*/
-            if (!string.IsNullOrEmpty(struCBO_GS_StripeCom))
+            /*Validate Label Settings Controls*/
+            if (!string.IsNullOrEmpty(struCE_ZPLSettings))
             {
-                StringBuilder strBuilder = new StringBuilder();
-                strBuilder.AppendFormat("{0},{1},{2},{3},{4}", struCBO_GS_StripeCom, struCBO_GS_StripeBaudRate, struCBO_GS_StripeParity, struCBO_GS_StripeDataBits, struCBO_GS_StripeStopBits);
-                clsCommon.SaveConfigSettingsValue("UnitSettings", "GetSetGeneralSettings", "Settings", strBuilder.ToString());
+                clsCommon.SaveConfigSettingsValue("ZPL", "GetSetGeneralSettings", "Settings", struCE_ZPLSettings);
             }
             else
             {
-                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMagneticStripeCaption_{0}", strLanguage)]);
+                clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsZPLSettingsCaption_{0}", strLanguage)]);
                 clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
                 clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("GeneralSettingsMesageTitleCaption_{0}", strLanguage)]);
                 clsCommon.commonGeneralDisplayMessageBox(0);
-                uCBO_GS_StripeCom.Focus();
                 return false;
             }
-            GeneralSettings();
+
+            //GeneralSettings();
             return true;
         }
         #endregion
@@ -460,12 +498,8 @@ namespace Electra_MAC_Printing
         {
             this.Close();
         }
-
-
-
         #endregion
 
-       
         // General Settings
         #region GeneralSettings
         /****************************************************************************************************
@@ -477,14 +511,14 @@ namespace Electra_MAC_Printing
         private void GeneralSettings()
         {
 
-         
-
-
-            TXT_StationName.Text = clsCommon.ReadSingleConfigValue("StationName", "GetSetGeneralSettings", "Settings");            
+            TXT_StationName.Text = clsCommon.ReadSingleConfigValue("StationName", "GetSetGeneralSettings", "Settings");
             Txt_ModbusSlaveAddress.Text = clsCommon.ReadSingleConfigValue("ModbusSlaveAddress", "GetSetGeneralSettings", "Settings");
             TXT_SerialNumberAddress.Text = clsCommon.ReadSingleConfigValue("SerialNumberAddress", "GetSetGeneralSettings", "Settings");
             TXT_DataAddress.Text = clsCommon.ReadSingleConfigValue("MACAddress", "GetSetGeneralSettings", "Settings");
+
             GetPrinter();
+
+            Fill_uCE_ZPLSettings_Combo();
 
             string[] strCOMSettings = clsCommon.ReadSingleConfigValue("UnitSettings", "GetSetGeneralSettings", "Settings").Split(',');
             uCBO_GS_StripeCom.Value = strCOMSettings[0];
@@ -496,7 +530,6 @@ namespace Electra_MAC_Printing
         #endregion
 
         //User Grid
-
         #region uGrid_Users_Form_Load
         /****************************************************************************************************
          * NAME         : uGrid_Users_Form_Load                                                      *
@@ -565,13 +598,13 @@ namespace Electra_MAC_Printing
                 col.Header.Appearance.ForeColor = Color.Black;
                 col.Header.Appearance.FontData.Bold = Infragistics.Win.DefaultableBoolean.True;
 
-                col.Header.Caption = (string)dicLanguageCaptions[string.Format("{0}_{1}", col.Key,strLanguage)];
-                
+                col.Header.Caption = (string)dicLanguageCaptions[string.Format("{0}_{1}", col.Key, strLanguage)];
+
             }
 
             uGrid_Users.DisplayLayout.Bands[0].Columns[2].Hidden = true;
             uGrid_Users.DisplayLayout.Bands[0].Columns[3].Hidden = true;
-           
+
             if ("0" == clsCommon.ReadSingleConfigValue("Default", "LanguageDirection", "LanguageSupport"))
             {
                 uGrid_Users.DisplayLayout.Bands[0].Override.HeaderAppearance.TextHAlign = Infragistics.Win.HAlign.Left;
@@ -608,7 +641,7 @@ namespace Electra_MAC_Printing
          * WRITTEN BY   : RajaSekar J                                                                       *
          * DATE         : 15Feb2018                                                                           *
          ****************************************************************************************************/
-        private void uGrid_Users_Insert_Update_Delete(int intOperation, int intUserID, int intRoleID, string strRFID,int intKey)
+        private void uGrid_Users_Insert_Update_Delete(int intOperation, int intUserID, int intRoleID, string strRFID, int intKey)
         {
             clsSettingsBAL.setUsersDetails(intOperation, intUserID, intRoleID, strRFID, intKey);
         }
@@ -640,7 +673,7 @@ namespace Electra_MAC_Printing
                 {
                     if (0 != uGrid_Users.ActiveRow.Index)
                     {
-                        clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("SettingsGridUsersErrorMessageCaption_{0}", strLanguage)]);                        
+                        clsCommon.SaveConfigSettingsValue("MessageText", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("SettingsGridUsersErrorMessageCaption_{0}", strLanguage)]);
                         clsCommon.SaveConfigSettingsValue("MessageType", "ID_0", "Messages", "16");
                         clsCommon.SaveConfigSettingsValue("MessageTitle", "ID_0", "Messages", (string)dicLanguageCaptions[string.Format("SettingsGridUsersErrorMessageTitleCaption_{0}", strLanguage)]);
                         clsCommon.commonGeneralDisplayMessageBox(0);
@@ -727,6 +760,6 @@ namespace Electra_MAC_Printing
         }
         #endregion
 
-        
+
     }
 }
