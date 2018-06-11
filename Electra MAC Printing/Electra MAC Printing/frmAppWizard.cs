@@ -124,7 +124,7 @@ namespace Electra_MAC_Printing
                 sb.Append(HexString2Ascii(hexValue.Substring(0, 2)));
             }
 
-            return sb.ToString().Substring(11);
+            return sb.ToString().Trim();
 
         }
 
