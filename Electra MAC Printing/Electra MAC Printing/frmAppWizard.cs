@@ -124,7 +124,7 @@ namespace Electra_MAC_Printing
                 sb.Append(HexString2Ascii(hexValue.Substring(0, 2)));
             }
 
-            return sb.ToString();
+            return sb.ToString().Trim();
 
         }
 
@@ -265,7 +265,7 @@ namespace Electra_MAC_Printing
                     string strModbusSlaveAddress = clsCommon.ReadSingleConfigValue("ModbusSlaveAddress", "GetSetGeneralSettings", "Settings");
 
                     // Read Serial number (expecting 6153320000 from test unit)
-                    var serialValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSerialNumberAddress, 16), 5);
+                    var serialValue = ReadModbusRegisters(Convert.ToByte(strModbusSlaveAddress), Convert.ToUInt16(strSerialNumberAddress, 16), 6);
                     var strSerialNumber = ConvertToSerialNumber(serialValue);
 
                     lblStatus.Text = "Device conneceted";
